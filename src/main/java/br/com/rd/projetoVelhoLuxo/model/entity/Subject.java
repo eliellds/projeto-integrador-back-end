@@ -4,7 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 
-@Entity(name = "tb_subject")
+@Entity(name = "tb_assunto")
 @Data
 public class Subject {
 
@@ -13,7 +13,7 @@ public class Subject {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Byte id;
 
-    @Column(nullable = false, name = "cl_subject_description", length = 20)
+    @Column(nullable = false, name = "cl_descricao_assunto", length = 20)
     private String subjectDescription;
 
 }

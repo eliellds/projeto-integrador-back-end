@@ -5,7 +5,7 @@ import lombok.Data;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Entity(name = "tb_contact")
+@Entity(name = "tb_contato")
 @Data
 public class Contact {
 
@@ -15,18 +15,18 @@ public class Contact {
     private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "cl_id_subject", nullable = false)
+    @JoinColumn(name = "cl_id_assunto", nullable = false)
     private Subject subject;
 
-    @Column(name = "cl_phone_number", length = 11)
+    @Column(name = "cl_nr_telefone", length = 11)
     private String phoneNumber;
     @Column(nullable = false, name = "cl_email", length = 100)
     private String email;
-    @Column(nullable = false, name = "cl_content", length = 300)
+    @Column(nullable = false, name = "cl_conteudo", length = 300)
     private String content;
-    @Column(nullable = false, name = "cl_contact_date")
+    @Column(nullable = false, name = "cl_data_contato")
     private LocalDateTime contactDate;
-    @Column(name = "cl_reply_date")
+    @Column(name = "cl_data_resposta")
     private LocalDateTime replyDate;
 
     @ManyToOne(fetch = FetchType.EAGER)
