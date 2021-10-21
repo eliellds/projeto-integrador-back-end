@@ -1,8 +1,8 @@
 package br.com.rd.projetoVelhoLuxo.service;
 
-import br.com.rd.projetoVelhoLuxo.model.Flag;
+import br.com.rd.projetoVelhoLuxo.model.entity.Flag;
 import br.com.rd.projetoVelhoLuxo.model.dto.FlagDTO;
-import br.com.rd.projetoVelhoLuxo.repository.FlagRepository;
+import br.com.rd.projetoVelhoLuxo.repository.contract.FlagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
