@@ -28,7 +28,7 @@ public class SubjectService {
         return listToDto(allList);
     }
 
-    public SubjectDTO searchById(Byte id) {
+    public SubjectDTO searchById(Long id) {
         Optional<Subject> option = subjectRepository.findById(id);
 
         if (option.isPresent()) {
@@ -37,7 +37,7 @@ public class SubjectService {
         return null;
     }
 
-    public SubjectDTO updateById(SubjectDTO dto, Byte id) {
+    public SubjectDTO updateById(SubjectDTO dto, Long id) {
         Optional<Subject> option = subjectRepository.findById(id);
 
         if (option.isPresent()) {
@@ -58,7 +58,7 @@ public class SubjectService {
         return null;
     }
 
-    public SubjectDTO deleteByIdReturningDTO(Byte id) {
+    public SubjectDTO deleteByIdReturningDTO(Long id) {
         SubjectDTO dto = searchById(id);
 
         if (subjectRepository.existsById(id)) {

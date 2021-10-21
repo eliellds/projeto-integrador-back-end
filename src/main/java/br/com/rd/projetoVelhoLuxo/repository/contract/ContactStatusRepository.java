@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ContactStatusRepository extends JpaRepository<ContactStatus, Byte> {
+public interface ContactStatusRepository extends JpaRepository<ContactStatus, Long> {
 
 
 

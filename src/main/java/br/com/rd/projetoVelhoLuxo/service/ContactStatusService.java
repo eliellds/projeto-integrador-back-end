@@ -28,7 +28,7 @@ public class ContactStatusService {
         return listToDto(allList);
     }
 
-    public ContactStatusDTO searchById(Byte id) {
+    public ContactStatusDTO searchById(Long id) {
         Optional<ContactStatus> option = statusRepository.findById(id);
 
         if (option.isPresent()) {
@@ -37,7 +37,7 @@ public class ContactStatusService {
         return null;
     }
 
-    public ContactStatusDTO updateById(ContactStatusDTO dto, Byte id) {
+    public ContactStatusDTO updateById(ContactStatusDTO dto, Long id) {
         Optional<ContactStatus> option = statusRepository.findById(id);
 
         if (option.isPresent()) {
@@ -58,7 +58,7 @@ public class ContactStatusService {
         return null;
     }
 
-    public ContactStatusDTO deleteByIdReturningDTO(Byte id) {
+    public ContactStatusDTO deleteByIdReturningDTO(Long id) {
         ContactStatusDTO dto = searchById(id);
 
         if (statusRepository.existsById(id)) {

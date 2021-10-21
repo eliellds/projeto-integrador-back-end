@@ -37,7 +37,7 @@ public class ContactService {
             Subject subject = contact.getSubject();
 
             if (contact.getSubject().getId() != null) {
-                Byte id = contact.getSubject().getId();
+                Long id = contact.getSubject().getId();
 
                 if (subjectRepository.existsById(id)) {
                     subject = subjectRepository.getById(id);
@@ -54,7 +54,7 @@ public class ContactService {
             ContactStatus status = contact.getStatus();
 
             if (contact.getStatus().getId() != null) {
-                Byte id = contact.getStatus().getId();
+                Long id = contact.getStatus().getId();
 
                 if (statusRepository.existsById(id)) {
                     status = statusRepository.getById(id);
@@ -68,6 +68,7 @@ public class ContactService {
         }
 
         contact.setContactDate(LocalDateTime.now());
+        contact.setStatus(statusRepository.getById(3L));
 
         contact = contactRepository.save(contact);
         return businessToDto(contact);
@@ -100,7 +101,7 @@ public class ContactService {
                 Subject subject = new Subject();
 
                 if (dto.getSubject().getId() != null) {
-                    Byte subjectId = dto.getSubject().getId();
+                    Long subjectId = dto.getSubject().getId();
 
                     if (subjectRepository.existsById(subjectId)) {
                         subject = subjectRepository.getById(subjectId);
@@ -136,7 +137,7 @@ public class ContactService {
                 ContactStatus status = new ContactStatus();
 
                 if (dto.getStatus().getId() != null) {
-                    Byte statusId = dto.getStatus().getId();
+                    Long statusId = dto.getStatus().getId();
 
                     if (statusRepository.existsById(statusId)) {
                         status = statusRepository.getById(statusId);

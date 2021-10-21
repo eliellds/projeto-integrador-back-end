@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/subject")
+@RequestMapping("/subjects")
 public class SubjectController {
 
     @Autowired
@@ -26,18 +26,18 @@ public class SubjectController {
     }
 
     @GetMapping("/{id}")
-    public SubjectDTO searchById(@PathVariable("id") Byte id) {
+    public SubjectDTO searchById(@PathVariable("id") Long id) {
         return subjectService.searchById(id);
     }
 
     @PutMapping("/{id}")
-    public SubjectDTO updateById(@RequestBody SubjectDTO dto, @PathVariable("id") Byte id) {
+    public SubjectDTO updateById(@RequestBody SubjectDTO dto, @PathVariable("id") Long id) {
         return subjectService.updateById(dto, id);
     }
 
     @DeleteMapping("/delete/{id}")
     @ResponseStatus(code = HttpStatus.ACCEPTED)
-    public SubjectDTO deleteByIdReturningDTO(@PathVariable("id") Byte id) {
+    public SubjectDTO deleteByIdReturningDTO(@PathVariable("id") Long id) {
         return subjectService.deleteByIdReturningDTO(id);
     }
 

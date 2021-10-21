@@ -27,18 +27,18 @@ public class ContactStatusController {
     }
 
     @GetMapping("/{id}")
-    public ContactStatusDTO searchById(@PathVariable("id") Byte id) {
+    public ContactStatusDTO searchById(@PathVariable("id") Long id) {
         return statusService.searchById(id);
     }
 
     @PutMapping("/{id}")
-    public ContactStatusDTO updateById(@RequestBody ContactStatusDTO dto, @PathVariable("id") Byte id) {
+    public ContactStatusDTO updateById(@RequestBody ContactStatusDTO dto, @PathVariable("id") Long id) {
         return statusService.updateById(dto, id);
     }
 
     @DeleteMapping("/delete/{id}")
     @ResponseStatus(code = HttpStatus.ACCEPTED)
-    public ContactStatusDTO deleteByIdReturningDTO(@PathVariable("id") Byte id) {
+    public ContactStatusDTO deleteByIdReturningDTO(@PathVariable("id") Long id) {
         return statusService.deleteByIdReturningDTO(id);
     }
 

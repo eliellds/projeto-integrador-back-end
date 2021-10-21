@@ -10,7 +10,7 @@ import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/contact")
+@RequestMapping("/contacts")
 public class ContactController {
 
     @Autowired

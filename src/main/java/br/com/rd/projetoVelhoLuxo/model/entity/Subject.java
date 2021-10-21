@@ -11,7 +11,7 @@ public class Subject {
     @Id
     @Column(name = "cl_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Byte id;
+    private Long id;
 
     @Column(nullable = false, name = "cl_descricao_assunto", length = 20)
     private String subjectDescription;

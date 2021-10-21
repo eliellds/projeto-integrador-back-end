@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class SubjectDTO {
 
-    private Byte id;
+    private Long id;
     private String subjectDescription;
 
 }
