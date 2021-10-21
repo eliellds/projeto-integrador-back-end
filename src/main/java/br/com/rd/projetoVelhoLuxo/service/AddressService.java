@@ -1,4 +1,4 @@
-package br.com.rd.projetoVelhoLuxo.servico;
+package br.com.rd.projetoVelhoLuxo.service;
 
 import br.com.rd.projetoVelhoLuxo.model.entity.Address;
 import br.com.rd.projetoVelhoLuxo.model.dto.AddressDTO;
