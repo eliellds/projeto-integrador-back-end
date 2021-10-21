@@ -1,4 +1,4 @@
-package br.com.rd.projetoVelhoLuxo.model.Entity;
+package br.com.rd.projetoVelhoLuxo.model.entity;
 
 import lombok.Data;
 

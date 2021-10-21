@@ -1,8 +1,8 @@
 package br.com.rd.projetoVelhoLuxo.servico;
 
-import br.com.rd.projetoVelhoLuxo.model.Entity.Address;
+import br.com.rd.projetoVelhoLuxo.model.entity.Address;
 import br.com.rd.projetoVelhoLuxo.model.dto.AddressDTO;
-import br.com.rd.projetoVelhoLuxo.repository.AddressRepository;
+import br.com.rd.projetoVelhoLuxo.repository.contract.AddressRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -87,6 +87,16 @@ AddressRepository addressRepository;
             return convertToDTO(updated);
         }
         return null;
+    }
+
+    public AddressDTO findById(Long id){
+        if(addressRepository.existsById(id)){
+            Address find = addressRepository.getById(id);
+            return convertToDTO(find);
+
+        }
+        return null;
+
     }
 
 

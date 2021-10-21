@@ -39,4 +39,9 @@ public class AddressController {
         service.deleteById(id);
     }
 
+    @GetMapping("/find/{id}")
+    public AddressDTO findById(@PathVariable("id") Long id){
+        return service.findById(id);
+    }
+
 }
