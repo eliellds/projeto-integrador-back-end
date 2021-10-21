@@ -14,7 +14,7 @@ public class Contact {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(cascade = { CascadeType.PERSIST }, fetch = FetchType.EAGER)
     @JoinColumn(name = "cl_id_assunto", nullable = false)
     private Subject subject;
 
@@ -29,7 +29,7 @@ public class Contact {
     @Column(name = "cl_data_resposta")
     private LocalDateTime replyDate;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(cascade = { CascadeType.PERSIST }, fetch = FetchType.EAGER)
     @JoinColumn(name = "cl_id_status", nullable = false)
     private ContactStatus status;
 
