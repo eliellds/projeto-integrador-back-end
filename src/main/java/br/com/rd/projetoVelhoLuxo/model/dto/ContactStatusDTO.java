@@ -6,6 +6,6 @@ import lombok.Data;
 public class ContactStatusDTO {
 
     private Byte id;
-    private String contactDescription;
+    private String statusDescription;
 
 }

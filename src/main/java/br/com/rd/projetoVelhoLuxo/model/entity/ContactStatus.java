@@ -14,6 +14,6 @@ public class ContactStatus {
     private Byte id;
 
     @Column(nullable = false, name = "cl_descricao_contato", length = 50)
-    private String contactDescription;
+    private String statusDescription;
 
 }
