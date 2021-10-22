@@ -1,6 +1,7 @@
-package br.com.rd.projetoVelhoLuxo.model;
+package br.com.rd.projetoVelhoLuxo.model.entity;
 
 
+import br.com.rd.projetoVelhoLuxo.model.entity.Category;
 import lombok.Data;
 
 import javax.persistence.*;

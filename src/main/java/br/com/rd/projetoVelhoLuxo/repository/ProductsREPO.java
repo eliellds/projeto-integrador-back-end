@@ -1,6 +1,6 @@
 package br.com.rd.projetoVelhoLuxo.repository;
 
-import br.com.rd.projetoVelhoLuxo.model.Products;
+import br.com.rd.projetoVelhoLuxo.model.entity.Products;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,13 +1,12 @@
 package br.com.rd.projetoVelhoLuxo.service;
 
-import br.com.rd.projetoVelhoLuxo.model.Category;
+import br.com.rd.projetoVelhoLuxo.model.entity.Category;
 import br.com.rd.projetoVelhoLuxo.model.dto.CategoryDTO;
 import br.com.rd.projetoVelhoLuxo.repository.CategoryREPO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 

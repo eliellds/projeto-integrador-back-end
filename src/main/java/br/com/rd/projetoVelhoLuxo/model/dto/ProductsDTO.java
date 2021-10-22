@@ -1,6 +1,5 @@
 package br.com.rd.projetoVelhoLuxo.model.dto;
 
-import br.com.rd.projetoVelhoLuxo.model.Category;
 import lombok.Data;
 
 @Data

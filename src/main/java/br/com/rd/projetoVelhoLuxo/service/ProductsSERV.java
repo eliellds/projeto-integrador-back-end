@@ -1,8 +1,8 @@
 package br.com.rd.projetoVelhoLuxo.service;
 
 
-import br.com.rd.projetoVelhoLuxo.model.Category;
-import br.com.rd.projetoVelhoLuxo.model.Products;
+import br.com.rd.projetoVelhoLuxo.model.entity.Category;
+import br.com.rd.projetoVelhoLuxo.model.entity.Products;
 import br.com.rd.projetoVelhoLuxo.model.dto.CategoryDTO;
 import br.com.rd.projetoVelhoLuxo.model.dto.ProductsDTO;
 import br.com.rd.projetoVelhoLuxo.repository.CategoryREPO;
