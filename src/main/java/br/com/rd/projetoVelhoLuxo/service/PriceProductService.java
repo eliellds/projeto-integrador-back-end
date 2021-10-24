@@ -60,6 +60,9 @@ public class PriceProductService {
 
     private Products dtoToBusiness(ProductsDTO dto) {
         Products business = new Products();
+        if(dto.getId() !=null){
+        business.setId(dto.getId());
+        }
         business.setProduct(dto.getProduct());
         business.setDescription(dto.getDescription());
         business.setFeature(dto.getFeature());
@@ -82,8 +85,9 @@ public class PriceProductService {
     private PriceProduct dtoToBusiness(PriceProductDTO dto){
         PriceProduct business = new PriceProduct();
         PriceProductKey key = new PriceProductKey();
+        Products produto = dtoToBusiness(dto.getPriceProductKey().getProduct());
 
-        key.setProduct(dtoToBusiness(dto.getPriceProductKey().getProduct()));
+        key.setProduct(produto);
         key.setEffectiveDate(dto.getPriceProductKey().getEffectiveDate());
 
         business.setPriceProductKey(key);
