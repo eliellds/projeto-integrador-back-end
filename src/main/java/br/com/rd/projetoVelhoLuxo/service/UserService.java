@@ -11,9 +11,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService {
     @Autowired
-    UserRepository UserRepository;
+    UserRepository userRepository;
 
-    public UserDTO createUser()
+    public UserDTO createUser(UserDTO toCreate){
+        User create= convertToUser(toCreate);
+        create = userRepository.save(create);
+        return convertToDTO(create);
+    }
 
     //conversões
     private UserDTO convertToDTO(User toConvert){
