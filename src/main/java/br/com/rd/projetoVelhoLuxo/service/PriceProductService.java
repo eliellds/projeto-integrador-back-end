@@ -5,8 +5,8 @@ import br.com.rd.projetoVelhoLuxo.model.embeddable.PriceProductKey;
 import br.com.rd.projetoVelhoLuxo.model.entity.Category;
 import br.com.rd.projetoVelhoLuxo.model.entity.PriceProduct;
 import br.com.rd.projetoVelhoLuxo.model.entity.Products;
-import br.com.rd.projetoVelhoLuxo.repository.ProductsREPO;
 import br.com.rd.projetoVelhoLuxo.repository.contract.PriceProductRepository;
+import br.com.rd.projetoVelhoLuxo.repository.contract.ProductsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +23,7 @@ public class PriceProductService {
     PriceProductRepository priceProductRepository;
 
     @Autowired
-    ProductsREPO productsREPO;
+    ProductsRepository productsREPO;
 
     private ProductsDTO businessToDto(Products business) {
         ProductsDTO dto = new ProductsDTO();
