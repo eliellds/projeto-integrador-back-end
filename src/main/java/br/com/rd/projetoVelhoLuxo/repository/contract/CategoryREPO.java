@@ -1,4 +1,4 @@
-package br.com.rd.projetoVelhoLuxo.repository;
+package br.com.rd.projetoVelhoLuxo.repository.contract;
 
 
 import br.com.rd.projetoVelhoLuxo.model.entity.Category;
