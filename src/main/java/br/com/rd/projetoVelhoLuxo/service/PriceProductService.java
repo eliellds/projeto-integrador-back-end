@@ -1,9 +1,6 @@
 package br.com.rd.projetoVelhoLuxo.service;
 
-import br.com.rd.projetoVelhoLuxo.model.dto.CategoryDTO;
-import br.com.rd.projetoVelhoLuxo.model.dto.PriceProductDTO;
-import br.com.rd.projetoVelhoLuxo.model.dto.PriceProductKeyDTO;
-import br.com.rd.projetoVelhoLuxo.model.dto.ProductsDTO;
+import br.com.rd.projetoVelhoLuxo.model.dto.*;
 import br.com.rd.projetoVelhoLuxo.model.embeddable.PriceProductKey;
 import br.com.rd.projetoVelhoLuxo.model.entity.Category;
 import br.com.rd.projetoVelhoLuxo.model.entity.PriceProduct;
@@ -111,9 +108,22 @@ public class PriceProductService {
         if (priceProductRepository.existsById(pp.getPriceProductKey())){
             throw new Exception("Primary Key already exists!");
         }
+
+//       Long id = pp.getPriceProductKey().getProduct().getId())
+
+        if(pp.getPriceProductKey().getProduct() != null){
+            if (pp.getPriceProductKey().getProduct().getId() != null) {
+                if(productsREPO.existsById(pp.getPriceProductKey().getProduct().getId())){
+                    pp.getPriceProductKey().setProduct(productsREPO.getById(pp.getPriceProductKey().getProduct().getId()));
+                }
+            }else{
+                Products products = productsREPO.save(pp.getPriceProductKey().getProduct());
+                pp.getPriceProductKey().setProduct(products);
+            }
+        }
+
         pp = priceProductRepository.save(pp);
         return businessToDto(pp);
-
     }
 
     public List<PriceProductDTO> findAll(){
