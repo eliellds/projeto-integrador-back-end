@@ -1,10 +1,8 @@
 package br.com.rd.projetoVelhoLuxo.controller;
 
 import br.com.rd.projetoVelhoLuxo.model.dto.AddressDTO;
-import br.com.rd.projetoVelhoLuxo.servico.AddressService;
-import lombok.Data;
+import br.com.rd.projetoVelhoLuxo.service.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
