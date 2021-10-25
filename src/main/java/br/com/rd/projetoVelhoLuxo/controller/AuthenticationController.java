@@ -2,8 +2,8 @@ package br.com.rd.projetoVelhoLuxo.controller;
 
 import br.com.rd.projetoVelhoLuxo.model.dto.request.AuthenticationRequestDTO;
 import br.com.rd.projetoVelhoLuxo.model.dto.response.AuthenticationResponseDTO;
+import br.com.rd.projetoVelhoLuxo.service.util.JwtUtil;
 import br.com.rd.projetoVelhoLuxo.service.MyUserDetailsService;
-import br.com.rd.projetoVelhoLuxo.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -28,7 +28,7 @@ public class AuthenticationController {
     @Autowired
     private JwtUtil jwtTokenUtil;
 
-    @PostMapping("/authenticate")
+    @PostMapping("/login")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequestDTO authenticationRequest) throws Exception {
         try {
             authenticationManager.authenticate(

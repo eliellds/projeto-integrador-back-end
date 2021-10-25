@@ -1,4 +1,4 @@
-package br.com.rd.projetoVelhoLuxo.util;
+package br.com.rd.projetoVelhoLuxo.service.util;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
