@@ -1,11 +1,13 @@
 package br.com.rd.projetoVelhoLuxo.service;
 
 
+import br.com.rd.projetoVelhoLuxo.model.dto.PriceProductDTO;
 import br.com.rd.projetoVelhoLuxo.model.entity.Category;
 import br.com.rd.projetoVelhoLuxo.model.entity.Products;
 import br.com.rd.projetoVelhoLuxo.model.dto.CategoryDTO;
 import br.com.rd.projetoVelhoLuxo.model.dto.ProductsDTO;
 import br.com.rd.projetoVelhoLuxo.repository.contract.CategoryREPO;
+import br.com.rd.projetoVelhoLuxo.repository.contract.PriceProductRepository;
 import br.com.rd.projetoVelhoLuxo.repository.contract.ProductsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,8 @@ public class ProductsSERV {
     ProductsRepository productsRepository;
     @Autowired
     CategoryREPO categoryREPO;
+    @Autowired
+    PriceProductRepository priceProductRepository;
 
     public List<ProductsDTO> listToDto(List<Products> list) {
         List<ProductsDTO> listDto = new ArrayList<>();
