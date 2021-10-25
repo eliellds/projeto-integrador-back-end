@@ -8,7 +8,8 @@ import br.com.rd.projetoVelhoLuxo.model.entity.Products;
 import br.com.rd.projetoVelhoLuxo.model.dto.CategoryDTO;
 import br.com.rd.projetoVelhoLuxo.model.dto.ProductsDTO;
 import br.com.rd.projetoVelhoLuxo.repository.contract.CategoryREPO;
-import br.com.rd.projetoVelhoLuxo.repository.contract.ProductsREPO;
+import br.com.rd.projetoVelhoLuxo.repository.contract.ProductsRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +21,7 @@ import java.util.Optional;
 public class ProductsSERV {
 
     @Autowired
-    ProductsREPO productsREPO;
+    ProductsRepository productsRepository;
     @Autowired
     CategoryREPO categoryREPO;
 
@@ -45,17 +46,17 @@ public class ProductsSERV {
             }
             newProduct.setCategoryID(c);
         }
-        newProduct = productsREPO.save(newProduct);
+        newProduct = productsRepository.save(newProduct);
         return this.businessToDto(newProduct);
     }
 
     public List<ProductsDTO> showProducts() {
-        List<Products> allList = productsREPO.findAll();
+        List<Products> allList = productsRepository.findAll();
         return this.listToDto(allList);
     }
 
     public ProductsDTO showProductsById(Long id) {
-        Optional<Products> opProducts = productsREPO.findById(id);
+        Optional<Products> opProducts = productsRepository.findById(id);
         if (opProducts.isPresent()) {
             return businessToDto(opProducts.get());
         }
@@ -63,7 +64,7 @@ public class ProductsSERV {
     }
 
     public ProductsDTO updateProduct(ProductsDTO dto, Long id) {
-        Optional<Products> opProducts = productsREPO.findById(id);
+        Optional<Products> opProducts = productsRepository.findById(id);
 
         if (opProducts.isPresent()) {
             Products pAux = opProducts.get();
@@ -88,7 +89,7 @@ public class ProductsSERV {
                 pAux.setQuantity(dto.getQuantity());
             }
 
-            productsREPO.save(pAux);
+            productsRepository.save(pAux);
             return businessToDto(pAux);
         }
         return null;
@@ -96,10 +97,30 @@ public class ProductsSERV {
 
      public ProductsDTO deleteProduct(Long id) {
         ProductsDTO message = this.showProductsById(id);
-        if (productsREPO.existsById(id)) {
-            productsREPO.deleteById(id);
+        if (productsRepository.existsById(id)) {
+            productsRepository.deleteById(id);
         }
         return message;
+     }
+
+     public List<ProductsDTO> searchByDescription(String description) {
+        return listToDto(productsRepository.searchByDescription(description));
+     }
+
+     public List<ProductsDTO> searchByCategory(String categoryName) {
+        return listToDto(productsRepository.findAllByCategoryIDCategoryContaining(categoryName));
+     }
+
+     public List<ProductsDTO> searchByYearNewer() {
+        return listToDto(productsRepository.findAllByOrderByYearDesc());
+     }
+
+     public List<ProductsDTO> searchByYearOlder() {
+        return listToDto(productsRepository.findAllByOrderByYearAsc());
+     }
+
+     public List<ProductsDTO> searchByOffers() {
+        return listToDto(productsRepository.searchByOffers());
      }
 
     private Products dtoToBusiness(ProductsDTO dto) {
@@ -142,15 +163,19 @@ public class ProductsSERV {
         dto.setFeature(business.getFeature());
         dto.setYear  (business.getYear());
         dto.setQuantity(business.getQuantity());
+
         if (business.getCategoryID() != null) {
             CategoryDTO categoryDTO = new CategoryDTO();
             categoryDTO.setId(business.getCategoryID().getId());
             categoryDTO.setCategory(business.getCategoryID().getCategory());
+
+            dto.setCategoryDTO(categoryDTO);
         }
         if (business.getConservationState() != null) {
             ConservationStateDTO conservationStateDTO = new ConservationStateDTO();
             conservationStateDTO.setDescription(business.getConservationState().getDescription());
         }
+
         return dto;
     }
 }

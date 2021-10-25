@@ -38,7 +38,23 @@ public class ProductCONTR {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(code = HttpStatus.ACCEPTED)
-    public  ProductsDTO deleteProducts(@PathVariable("id") Long id) {
+    public ProductsDTO deleteProducts(@PathVariable("id") Long id) {
         return productsSERV.deleteProduct(id);
     }
+
+    @GetMapping("/category/{categoryName}")
+    public List<ProductsDTO> searchByCategory(@PathVariable("categoryName") String categoryName) {
+        return productsSERV.searchByCategory(categoryName);
+    }
+
+    @GetMapping("/newer")
+    public List<ProductsDTO> searchByYearNewer() {
+        return productsSERV.searchByYearNewer(); // retorna uma lista com os mais novos
+    }
+
+    @GetMapping("/older")
+    public List<ProductsDTO> searchByYearOlder() {
+        return productsSERV.searchByYearOlder(); // retorna uma lista com os mais antigos
+    }
+
 }
