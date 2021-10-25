@@ -57,4 +57,9 @@ public class ProductCONTR {
         return productsSERV.searchByYearOlder(); // retorna uma lista com os mais antigos
     }
 
+    @GetMapping("/offers")
+    public List<ProductsDTO> searchByOffers() {
+        return productsSERV.searchByOffers();
+    }
+
 }

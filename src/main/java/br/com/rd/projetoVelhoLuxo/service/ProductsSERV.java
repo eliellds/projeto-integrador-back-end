@@ -1,6 +1,5 @@
 package br.com.rd.projetoVelhoLuxo.service;
 
-
 import br.com.rd.projetoVelhoLuxo.model.dto.ConservationStateDTO;
 import br.com.rd.projetoVelhoLuxo.model.entity.Category;
 import br.com.rd.projetoVelhoLuxo.model.entity.ConservationState;
