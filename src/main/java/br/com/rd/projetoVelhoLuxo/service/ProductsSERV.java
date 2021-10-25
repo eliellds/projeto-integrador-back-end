@@ -116,6 +116,10 @@ public class ProductsSERV {
         return listToDto(productsRepository.findAllByOrderByYearAsc());
      }
 
+     public List<ProductsDTO> searchByOffers() {
+        return listToDto(productsRepository.searchByOffers());
+     }
+
     private Products dtoToBusiness(ProductsDTO dto) {
         Products business = new Products();
         business.setProduct(dto.getProduct());

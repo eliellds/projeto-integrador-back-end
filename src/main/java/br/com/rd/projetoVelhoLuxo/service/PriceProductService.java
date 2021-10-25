@@ -37,6 +37,8 @@ public class PriceProductService {
             CategoryDTO categoryDTO = new CategoryDTO();
             categoryDTO.setId(business.getCategoryID().getId());
             categoryDTO.setCategory(business.getCategoryID().getCategory());
+
+            dto.setCategoryDTO(categoryDTO);
         }
         return dto;
     }

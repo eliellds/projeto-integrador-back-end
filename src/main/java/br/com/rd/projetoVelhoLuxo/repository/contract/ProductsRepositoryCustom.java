@@ -8,4 +8,6 @@ public interface ProductsRepositoryCustom {
 
     List<Products> searchByDescription(String description);
 
+    List<Products> searchByOffers();
+
 }

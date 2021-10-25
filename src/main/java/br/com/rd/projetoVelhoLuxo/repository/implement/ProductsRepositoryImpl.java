@@ -32,4 +32,17 @@ public class ProductsRepositoryImpl implements ProductsRepositoryCustom {
 
     }
 
+    @Override
+    public List<Products> searchByOffers() {
+
+        Query sql = entityManager.createNativeQuery
+                ("SELECT * FROM tb_produtos " +
+                                "INNER JOIN tb_preco_produto ON (tb_preco_produto.id_produto = tb_produtos.id)" +
+                                "WHERE id_promocao IS NOT NULL",
+                        Products.class);
+
+        return sql.getResultList();
+
+    }
+
 }
