@@ -1,12 +1,14 @@
 package br.com.rd.projetoVelhoLuxo.service;
 
 
+import br.com.rd.projetoVelhoLuxo.model.dto.ConservationStateDTO;
 import br.com.rd.projetoVelhoLuxo.model.entity.Category;
+import br.com.rd.projetoVelhoLuxo.model.entity.ConservationState;
 import br.com.rd.projetoVelhoLuxo.model.entity.Products;
 import br.com.rd.projetoVelhoLuxo.model.dto.CategoryDTO;
 import br.com.rd.projetoVelhoLuxo.model.dto.ProductsDTO;
-import br.com.rd.projetoVelhoLuxo.repository.CategoryREPO;
-import br.com.rd.projetoVelhoLuxo.repository.ProductsREPO;
+import br.com.rd.projetoVelhoLuxo.repository.contract.CategoryREPO;
+import br.com.rd.projetoVelhoLuxo.repository.contract.ProductsREPO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -110,13 +112,24 @@ public class ProductsSERV {
 
         if (dto.getCategoryDTO() != null) {
             Category category = new Category();
+
             if (dto.getCategoryDTO().getId() != null) {
                 category.setId(dto.getCategoryDTO().getId());
             } else {
                 category.setCategory(dto.getCategoryDTO().getCategory());
             }
-
             business.setCategoryID(category);
+        }
+
+        if (dto.getConservationState() != null) {
+            ConservationState conservationState = new ConservationState();
+
+            if (dto.getConservationState().getId() != null) {
+                conservationState.setId(dto.getConservationState().getId());
+            } else {
+                conservationState.setDescription(dto.getConservationState().getDescription());
+            }
+            business.setConservationState(conservationState);
         }
         return business;
     }
@@ -133,6 +146,10 @@ public class ProductsSERV {
             CategoryDTO categoryDTO = new CategoryDTO();
             categoryDTO.setId(business.getCategoryID().getId());
             categoryDTO.setCategory(business.getCategoryID().getCategory());
+        }
+        if (business.getConservationState() != null) {
+            ConservationStateDTO conservationStateDTO = new ConservationStateDTO();
+            conservationStateDTO.setDescription(business.getConservationState().getDescription());
         }
         return dto;
     }

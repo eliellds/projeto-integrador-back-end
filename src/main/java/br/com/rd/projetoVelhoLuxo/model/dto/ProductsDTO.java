@@ -6,6 +6,7 @@ import lombok.Data;
 public class ProductsDTO {
     private Long id;
     private String product;
+    private ConservationStateDTO conservationState;
     private String description;
     private String feature;
     private String year;
