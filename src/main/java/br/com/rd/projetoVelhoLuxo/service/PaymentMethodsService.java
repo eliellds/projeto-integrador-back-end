@@ -19,6 +19,7 @@ public class PaymentMethodsService {
         PaymentMethods business = new PaymentMethods();
         business.setId(dto.getId());
         business.setDescription(dto.getDescription());
+        business.setInstallments(dto.getInstallments());
 
         return business;
     }
@@ -27,6 +28,7 @@ public class PaymentMethodsService {
         PaymentMethodsDTO dto = new PaymentMethodsDTO();
         dto.setId(business.getId());
         dto.setDescription(business.getDescription());
+        dto.setInstallments(business.getInstallments());
 
         return dto;
     }
@@ -58,6 +60,9 @@ public class PaymentMethodsService {
 
             if (dto.getDescription() != null){
                 obj.setDescription(dto.getDescription());
+            }
+            if (dto.getInstallments() != null) {
+                obj.setInstallments(dto.getInstallments());
             }
 
             paymentMethodsRepository.save(obj);
