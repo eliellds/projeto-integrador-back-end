@@ -7,4 +7,5 @@ import lombok.Data;
 public class PaymentMethodsDTO {
     private Long id;
     private String description;
+    private String installments;
 }

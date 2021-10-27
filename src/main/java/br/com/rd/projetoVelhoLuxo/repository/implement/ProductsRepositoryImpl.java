@@ -1,5 +1,6 @@
 package br.com.rd.projetoVelhoLuxo.repository.implement;
 
+import br.com.rd.projetoVelhoLuxo.model.entity.PriceProduct;
 import br.com.rd.projetoVelhoLuxo.model.entity.Products;
 import br.com.rd.projetoVelhoLuxo.repository.contract.ProductsRepositoryCustom;
 import org.springframework.stereotype.Repository;
@@ -36,8 +37,8 @@ public class ProductsRepositoryImpl implements ProductsRepositoryCustom {
     public List<Products> searchByOffers() {
 
         Query sql = entityManager.createNativeQuery
-                ("SELECT * FROM tb_produtos " +
-                                "INNER JOIN tb_preco_produto ON (tb_preco_produto.id_produto = tb_produtos.id)" +
+                ("SELECT * FROM tb_preco_produto " +
+                                "INNER JOIN tb_produtos ON (tb_produtos.id = tb_preco_produto.id_produto)" +
                                 "WHERE id_promocao IS NOT NULL",
                         Products.class);
 

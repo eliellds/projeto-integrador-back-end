@@ -14,4 +14,7 @@ public class PaymentMethods {
 
     @Column(nullable = false, name = "cl_descricao")
     private String description;
+
+    @Column(nullable = true, name = "cl_parcela")
+    private String installments;
 }
