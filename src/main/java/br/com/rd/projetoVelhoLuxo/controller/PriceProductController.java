@@ -32,9 +32,14 @@ public class PriceProductController {
         return priceProductService.searchById(id, date);
     }
 
-    @GetMapping("/allprices")
-    public List<PriceProductDTO> searchAllPrices(){
-        return this.priceProductService.findAllPrices();
+    @GetMapping("/allpricesasc")
+    public List<PriceProductDTO> searchAllPricesAsc(){
+        return this.priceProductService.findAllPricesAsc();
+    }
+
+    @GetMapping("/allpricesdesc")
+    public List<PriceProductDTO> searchAllPricesDesc(){
+        return this.priceProductService.findAllPricesDesc();
     }
 
 }

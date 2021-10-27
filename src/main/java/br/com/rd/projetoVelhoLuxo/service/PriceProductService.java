@@ -147,8 +147,13 @@ public class PriceProductService {
         return null;
     }
 
-    public List<PriceProductDTO> findAllPrices(){
+    public List<PriceProductDTO> findAllPricesAsc(){
         List<PriceProduct> priceList = this.priceProductRepository.findByOrderByPriceAsc();
+        return listToDto(priceList);
+    }
+
+    public List<PriceProductDTO> findAllPricesDesc(){
+        List<PriceProduct> priceList = this.priceProductRepository.findByOrderByPriceDesc();
         return listToDto(priceList);
     }
 
