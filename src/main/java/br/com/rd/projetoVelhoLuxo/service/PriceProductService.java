@@ -149,4 +149,9 @@ public class PriceProductService {
         return null;
     }
 
+    public List<PriceProductDTO> findAllPrices(){
+        List<PriceProduct> priceList = this.priceProductRepository.findByOrderByPriceAsc();
+        return listToDto(priceList);
+    }
+
 }
