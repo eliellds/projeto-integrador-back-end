@@ -1,14 +1,20 @@
 package br.com.rd.projetoVelhoLuxo.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.springframework.data.repository.cdi.Eager;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity(name = "tb_usuario")
 @Data
-public class User {
+public class User  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="cl_id")
@@ -28,4 +34,9 @@ public class User {
     private LocalDate born;
     @Column(name = "cl_senha",nullable = false)
     private String password;
+
+    @EqualsAndHashCode.Exclude
+    @OneToMany(mappedBy = "user")
+    @JsonIgnore
+    private Set<UserAddress> user = new HashSet<>();
 }

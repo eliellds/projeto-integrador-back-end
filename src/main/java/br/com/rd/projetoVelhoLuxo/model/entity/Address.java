@@ -1,12 +1,18 @@
 package br.com.rd.projetoVelhoLuxo.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity(name = "tb_endereco")
 @Data
-public class Address {
+public class Address  {
     @Id
     @Column(name="cl_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,4 +33,8 @@ public class Address {
     private String complement;
     @Column(name="cl_ponto_referencia")
     private String reference;
+    @EqualsAndHashCode.Exclude
+    @OneToMany(mappedBy = "address")
+    @JsonIgnore
+    private Set<UserAddress> address = new HashSet<>();
 }
