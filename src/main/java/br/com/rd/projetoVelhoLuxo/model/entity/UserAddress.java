@@ -1,6 +1,5 @@
 package br.com.rd.projetoVelhoLuxo.model.entity;
 
-import br.com.rd.projetoVelhoLuxo.model.dto.UserAddressCompositeKeyDTO;
 import br.com.rd.projetoVelhoLuxo.model.embeddable.UserAddressCompositeKey;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -18,7 +17,7 @@ public class UserAddress {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="cl_id_usuario")
     @MapsId("idUser")
-    private User user;
+    private MyUser myUser;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @MapsId("idAddress")

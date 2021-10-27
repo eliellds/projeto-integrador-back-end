@@ -6,7 +6,7 @@ import br.com.rd.projetoVelhoLuxo.model.dto.UserAddressDTO;
 import br.com.rd.projetoVelhoLuxo.model.dto.UserAddressViewDTO;
 import br.com.rd.projetoVelhoLuxo.model.embeddable.UserAddressCompositeKey;
 import br.com.rd.projetoVelhoLuxo.model.entity.Address;
-import br.com.rd.projetoVelhoLuxo.model.entity.User;
+import br.com.rd.projetoVelhoLuxo.model.entity.MyUser;
 import br.com.rd.projetoVelhoLuxo.model.entity.UserAddress;
 import br.com.rd.projetoVelhoLuxo.repository.contract.AddressRepository;
 import br.com.rd.projetoVelhoLuxo.repository.contract.UserAddressRepository;
@@ -31,9 +31,9 @@ public class UserAddressService {
 
         if (userRepository.existsById(linked.getId().getIdUser())) {
             Address address;
-            User user = userRepository.getById(linked.getId().getIdUser());
+            MyUser myUser = userRepository.getById(linked.getId().getIdUser());
 
-            linked.setUser(user);
+            linked.setMyUser(myUser);
             //verifica se o endereço não esta nulo
 
             //verifica se tem um id no endereço

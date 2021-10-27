@@ -14,7 +14,7 @@ import java.util.Set;
 
 @Entity(name = "tb_usuario")
 @Data
-public class User  {
+public class MyUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="cl_id")
@@ -36,7 +36,7 @@ public class User  {
     private String password;
 
     @EqualsAndHashCode.Exclude
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "myUser")
     @JsonIgnore
     private Set<UserAddress> user = new HashSet<>();
 }
