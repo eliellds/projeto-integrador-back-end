@@ -8,6 +8,7 @@ import br.com.rd.projetoVelhoLuxo.model.entity.Products;
 import br.com.rd.projetoVelhoLuxo.model.dto.CategoryDTO;
 import br.com.rd.projetoVelhoLuxo.model.dto.ProductsDTO;
 import br.com.rd.projetoVelhoLuxo.repository.contract.CategoryREPO;
+import br.com.rd.projetoVelhoLuxo.repository.contract.ConservationStateRepository;
 import br.com.rd.projetoVelhoLuxo.repository.contract.ProductsRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,8 @@ public class ProductsSERV {
     ProductsRepository productsRepository;
     @Autowired
     CategoryREPO categoryREPO;
+    @Autowired
+    ConservationStateRepository conservationStateRepository;
 
     public List<ProductsDTO> listToDto(List<Products> list) {
         List<ProductsDTO> listDto = new ArrayList<>();
@@ -46,6 +49,16 @@ public class ProductsSERV {
             }
             newProduct.setCategoryID(c);
         }
+//        if (newProduct.getConservationState()!= null) {
+//            Long id = newProduct.getConservationState().getId();
+//            ConservationState cc;
+//            if (id != null) {
+//                cc = this.conservationStateRepository.getById(id);
+//            } else {
+//                cc = this.conservationStateRepository.save(newProduct.getConservationState());
+//            }
+//            newProduct.setConservationState(cc);
+//        }
         newProduct = productsRepository.save(newProduct);
         return this.businessToDto(newProduct);
     }
