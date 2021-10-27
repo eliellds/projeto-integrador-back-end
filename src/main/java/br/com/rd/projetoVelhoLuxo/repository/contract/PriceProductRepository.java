@@ -11,4 +11,5 @@ import java.util.List;
 public interface PriceProductRepository extends JpaRepository <PriceProduct, PriceProductKey> {
 
     List<PriceProduct> findByOrderByPriceAsc();
+    List<PriceProduct> findByOrderByPriceDesc();
 }
