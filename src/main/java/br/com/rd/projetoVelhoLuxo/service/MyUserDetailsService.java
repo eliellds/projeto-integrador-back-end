@@ -1,5 +1,6 @@
 package br.com.rd.projetoVelhoLuxo.service;
 
+import br.com.rd.projetoVelhoLuxo.model.entity.MyUser;
 import br.com.rd.projetoVelhoLuxo.repository.contract.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
@@ -20,17 +21,15 @@ public class MyUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         // atribuindo o usuário encontrado pelo método findByEmailEquals ao objeto user
-        br.com.rd.projetoVelhoLuxo.model.entity.User user = userRepository.findByEmailEquals(username);
+        MyUser myUser = userRepository.findByEmailEquals(username);
 
-        if (user == null) { // conferindo se o usuário retornou null
-            throw new UsernameNotFoundException("User not found");
+        if (myUser == null) { // conferindo se o usuário retornou null
+            throw new UsernameNotFoundException(username);
         }
 
-        // caso encontre o usuário, o email(username) e o password são passados
-        // para o objeto User da spring security,
-        // então o email e a senha serão comparados com o que foi digitado
-        // para gerar a autorização
-        return new User(user.getEmail(), user.getPassword(), new ArrayList<>());
+        // retorna novo objeto User (classe UserDetails)
+        return new User(myUser.getEmail(), myUser.getPassword(), new ArrayList<>());
 
     }
+
 }
