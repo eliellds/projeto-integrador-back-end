@@ -12,4 +12,5 @@ public interface PriceProductRepository extends JpaRepository <PriceProduct, Pri
 
     List<PriceProduct> findByOrderByPriceAsc();
     List<PriceProduct> findByOrderByPriceDesc();
+    List<PriceProduct> findByOrderBySalePriceDesc();
 }
