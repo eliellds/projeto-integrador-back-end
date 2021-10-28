@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+// classe de verificação e autorização de requisições pelo token
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
 
@@ -38,7 +39,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             jwt = authorizationHeader.substring(7);
             username = jwtUtil.extractUsername(jwt);
         }
-
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 

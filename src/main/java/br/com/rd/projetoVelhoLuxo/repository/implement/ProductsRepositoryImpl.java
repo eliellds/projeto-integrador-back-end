@@ -21,10 +21,11 @@ public class ProductsRepositoryImpl implements ProductsRepositoryCustom {
 
         Query sql = entityManager.createNativeQuery
                 ("SELECT * FROM tb_produtos " +
-                                "INNER JOIN tb_categoria ON (tb_categoria.id = tb_produtos.id)" +
+                                "INNER JOIN tb_categoria ON (tb_categoria.id = tb_produtos.cl_id_categoria)" +
                                 "WHERE cl_info_produto LIKE '%' :descript '%' " +
                                 "OR cl_nm_produto LIKE '%' :descript '%' " +
                                 "OR cl_caracteristica_produto LIKE '%' :descript '%' " +
+                                "OR cl_ano_fabricacao LIKE '%' :descript '%'" +
                                 "OR cl_nm_categoria LIKE '%' :descript '%'",
                         Products.class);
         sql.setParameter("descript", description);
@@ -37,8 +38,8 @@ public class ProductsRepositoryImpl implements ProductsRepositoryCustom {
     public List<Products> searchByOffers() {
 
         Query sql = entityManager.createNativeQuery
-                ("SELECT * FROM tb_preco_produto " +
-                                "INNER JOIN tb_produtos ON (tb_produtos.id = tb_preco_produto.id_produto)" +
+                ("SELECT * FROM tb_produtos " +
+                                "INNER JOIN tb_preco_produto ON (tb_preco_produto.id_produto = tb_produtos.id)" +
                                 "WHERE id_promocao IS NOT NULL",
                         Products.class);
 

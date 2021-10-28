@@ -5,10 +5,11 @@ import org.springframework.data.repository.cdi.Eager;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.Collection;
 
 @Entity(name = "tb_usuario")
 @Data
-public class User {
+public class MyUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="cl_id")
@@ -28,4 +29,17 @@ public class User {
     private LocalDate born;
     @Column(name = "cl_senha",nullable = false)
     private String password;
+
+//    private Boolean enabled;
+//    private Boolean tokenExpired;
+//
+//    @ManyToMany
+//    @JoinTable(
+//            name = "users_roles",
+//            joinColumns = @JoinColumn(
+//                    name = "user_id", referencedColumnName = "id"),
+//            inverseJoinColumns = @JoinColumn(
+//                    name = "role_id", referencedColumnName = "id"))
+//    private Collection<Role> roles;
+
 }
