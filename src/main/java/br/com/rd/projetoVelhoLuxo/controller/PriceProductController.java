@@ -42,4 +42,9 @@ public class PriceProductController {
         return this.priceProductService.findAllPricesDesc();
     }
 
+    @GetMapping("/allsaleprices")
+    public List<PriceProductDTO> findByOrderBySalePriceDesc(){
+        return this.priceProductService.findByOrderBySalePriceDesc();
+    }
+
 }

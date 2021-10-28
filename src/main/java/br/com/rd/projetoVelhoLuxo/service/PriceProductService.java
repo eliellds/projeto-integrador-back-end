@@ -159,4 +159,8 @@ public class PriceProductService {
         return listToDto(priceList);
     }
 
+    public List<PriceProductDTO> findByOrderBySalePriceDesc(){
+        List<PriceProduct> priceList = this.priceProductRepository.findByOrderBySalePriceDesc();
+        return listToDto(priceList);
+    }
 }
