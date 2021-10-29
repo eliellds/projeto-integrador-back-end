@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Entity(name = "tb_tipo_entrega")
 @Data
-public class Entrega {
+public class Delivery {
 
     @Id
     @Column(name = "cl_id")

@@ -1,8 +1,8 @@
 package br.com.rd.projetoVelhoLuxo.service;
 
 import br.com.rd.projetoVelhoLuxo.model.dto.EntregaDTO;
-import br.com.rd.projetoVelhoLuxo.model.entity.Entrega;
-import br.com.rd.projetoVelhoLuxo.repository.contract.EntregaRepository;
+import br.com.rd.projetoVelhoLuxo.model.entity.Delivery;
+import br.com.rd.projetoVelhoLuxo.repository.contract.DeliveryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,29 +14,29 @@ import java.util.Optional;
 public class EntregaService {
 
     @Autowired
-    EntregaRepository entregaRepository;
+    DeliveryRepository deliveryRepository;
 
     public EntregaDTO addEntrega(EntregaDTO entrega) {
-        Entrega newEntrega = this.dtoToBusiness(entrega);
-        newEntrega = entregaRepository.save(newEntrega);
-        return this.businessToDto(newEntrega);
+        Delivery newDelivery = this.dtoToBusiness(entrega);
+        newDelivery = deliveryRepository.save(newDelivery);
+        return this.businessToDto(newDelivery);
     }
 
     public List<EntregaDTO> findAllEntrega() {
-        List<Entrega> allList = entregaRepository.findAll();
+        List<Delivery> allList = deliveryRepository.findAll();
         return this.listToDto(allList);
     }
 
-    private List<EntregaDTO> listToDto(List<Entrega> list) {
+    private List<EntregaDTO> listToDto(List<Delivery> list) {
         List<EntregaDTO> listDto = new ArrayList<EntregaDTO>();
-        for (Entrega e : list) {
+        for (Delivery e : list) {
             listDto.add(this.businessToDto(e));
         }
         return listDto;
     }
 
     public EntregaDTO searchEntregaById(Long id) {
-        Optional<Entrega> op = entregaRepository.findById(id);
+        Optional<Delivery> op = deliveryRepository.findById(id);
 
         if (op.isPresent()) {
             return businessToDto(op.get());
@@ -45,16 +45,16 @@ public class EntregaService {
     }
 
     public EntregaDTO updateById(EntregaDTO dto, Long id) {
-        Optional<Entrega> op = entregaRepository.findById(id);
+        Optional<Delivery> op = deliveryRepository.findById(id);
 
         if (op.isPresent()) {
-            Entrega obj = op.get();
+            Delivery obj = op.get();
 
             if (dto.getDescricao() != null) {
                 obj.setDescricao(dto.getDescricao());
             }
 
-            entregaRepository.save(obj);
+            deliveryRepository.save(obj);
             return businessToDto(obj);
         }
         return null;
@@ -62,18 +62,18 @@ public class EntregaService {
 
 
     public void deleteById(Long id){
-        if(entregaRepository.existsById(id)){
-            entregaRepository.deleteById(id);
+        if(deliveryRepository.existsById(id)){
+            deliveryRepository.deleteById(id);
         }
     }
 
-    private Entrega dtoToBusiness(EntregaDTO dto){
-        Entrega business = new Entrega();
+    private Delivery dtoToBusiness(EntregaDTO dto){
+        Delivery business = new Delivery();
         business.setDescricao(dto.getDescricao());
         return business;
     }
 
-    private EntregaDTO businessToDto(Entrega business){
+    private EntregaDTO businessToDto(Delivery business){
         EntregaDTO dto = new EntregaDTO();
         dto.setId(business.getId());
         dto.setDescricao(business.getDescricao());

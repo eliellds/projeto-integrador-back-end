@@ -5,7 +5,7 @@ import br.com.rd.projetoVelhoLuxo.model.dto.UserDTO;
 import br.com.rd.projetoVelhoLuxo.model.entity.MyUser;
 import br.com.rd.projetoVelhoLuxo.model.entity.Telephone;
 import br.com.rd.projetoVelhoLuxo.repository.contract.TelephoneRepository;
-import br.com.rd.projetoVelhoLuxo.repository.contract.UserRepository;
+import br.com.rd.projetoVelhoLuxo.repository.contract.MyUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +15,7 @@ import java.util.List;
 @Service
 public class UserService {
     @Autowired
-    UserRepository userRepository;
+    MyUserRepository myUserRepository;
     @Autowired
     TelephoneRepository telephoneRepository;
 
@@ -41,7 +41,7 @@ public class UserService {
                 create.setTelephone(savedTel);
             }
         }
-        create = userRepository.save(create);
+        create = myUserRepository.save(create);
         return convertToDTO(create);
     }
 
@@ -51,8 +51,8 @@ public class UserService {
     //update user
     public UserDTO update (UserDTO toUpdate) {
         if (toUpdate.getId() != null) {
-            if (userRepository.existsById(toUpdate.getId())) {
-                MyUser update = userRepository.getById(toUpdate.getId());
+            if (myUserRepository.existsById(toUpdate.getId())) {
+                MyUser update = myUserRepository.getById(toUpdate.getId());
                 //data de nascimento
                 if (toUpdate.getBorn() != null) {
                     update.setBorn(toUpdate.getBorn());
@@ -92,7 +92,7 @@ public class UserService {
                     //ao fim das verificações adiciona no update
                     update.setTelephone(telephoneToUpdate);
                 }
-                update = userRepository.save(update);
+                update = myUserRepository.save(update);
                 return convertToDTO(update);
             }
 
@@ -102,25 +102,25 @@ public class UserService {
     }
 
     public List<UserDTO> showList(){
-        List<MyUser> list = userRepository.findAll();
+        List<MyUser> list = myUserRepository.findAll();
 
         return convertListToDTO(list);
     }
 
     //recuperar usuario
     public UserDTO findById(Long id){
-        if(userRepository.existsById(id)){
+        if(myUserRepository.existsById(id)){
 
-            return convertToDTO( userRepository.getById(id));
+            return convertToDTO( myUserRepository.getById(id));
         }
         return null;
 
     }
     //deletenaod usuario
     public void deleteById(Long id){
-        if(userRepository.existsById(id)){
+        if(myUserRepository.existsById(id)){
 
-             userRepository.deleteById(id);
+             myUserRepository.deleteById(id);
         }
 
     }

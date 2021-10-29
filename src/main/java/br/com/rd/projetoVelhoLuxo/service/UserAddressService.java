@@ -10,7 +10,7 @@ import br.com.rd.projetoVelhoLuxo.model.entity.MyUser;
 import br.com.rd.projetoVelhoLuxo.model.entity.UserAddress;
 import br.com.rd.projetoVelhoLuxo.repository.contract.AddressRepository;
 import br.com.rd.projetoVelhoLuxo.repository.contract.UserAddressRepository;
-import br.com.rd.projetoVelhoLuxo.repository.contract.UserRepository;
+import br.com.rd.projetoVelhoLuxo.repository.contract.MyUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,16 +22,16 @@ public class UserAddressService {
     @Autowired
     UserAddressRepository repositoryUAddress;
     @Autowired
-    UserRepository userRepository;
+    MyUserRepository myUserRepository;
     @Autowired
     AddressRepository addressRepository;
 
     public UserAddressViewDTO linkUAddress(UserAddressDTO toLink) {
         UserAddress linked = convertToUAddress(toLink);
 
-        if (userRepository.existsById(linked.getId().getIdUser())) {
+        if (myUserRepository.existsById(linked.getId().getIdUser())) {
             Address address;
-            MyUser myUser = userRepository.getById(linked.getId().getIdUser());
+            MyUser myUser = myUserRepository.getById(linked.getId().getIdUser());
 
             linked.setMyUser(myUser);
             //verifica se o endereço não esta nulo
