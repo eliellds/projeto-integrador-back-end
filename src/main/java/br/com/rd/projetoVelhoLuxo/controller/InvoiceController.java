@@ -1,6 +1,5 @@
 package br.com.rd.projetoVelhoLuxo.controller;
 
-import br.com.rd.projetoVelhoLuxo.model.dto.FlagDTO;
 import br.com.rd.projetoVelhoLuxo.model.dto.InvoiceDTO;
 import br.com.rd.projetoVelhoLuxo.service.InvoiceService;
 import org.springframework.beans.factory.annotation.Autowired;
