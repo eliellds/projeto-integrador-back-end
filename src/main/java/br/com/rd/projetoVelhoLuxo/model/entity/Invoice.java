@@ -44,10 +44,10 @@ public class Invoice {
     @JoinColumn(nullable = false, name = "id_user")
     private MyUser userId;
 
-////    ID_TIPO_NF (FK) TINY INT NOT NULL
-//    @ManyToOne(fetch = FetchType.EAGER)
-//    @JoinColumn(nullable = false, name = "id_tipo_nf")
-//    private tipoNF invoiceTypeId;
+//    ID_TIPO_NF (FK) TINY INT NOT NULL
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(nullable = false, name = "id_tipo_nf")
+    private TipoNf invoiceTypeId;
 
 ////    ID_PEDIDO (UK, FK) INT NOT NULL
 //    @ManyToOne(fetch = FetchType.EAGER)

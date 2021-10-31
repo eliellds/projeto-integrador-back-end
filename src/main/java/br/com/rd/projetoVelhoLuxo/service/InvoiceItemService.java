@@ -24,7 +24,7 @@ public class InvoiceItemService {
         InvoiceDTO dto = new InvoiceDTO();
 
         dto.setId(business.getId());
-        dto.setDescription(business.getDescription());
+//        dto.setDescription(business.getDescription());
 
         return dto;
     }
@@ -56,7 +56,7 @@ public class InvoiceItemService {
         if(dto.getId() !=null){
             business.setId(dto.getId());
         }
-        business.setDescription(dto.getDescription());
+//        business.setDescription(dto.getDescription());
 
         return business;
     }

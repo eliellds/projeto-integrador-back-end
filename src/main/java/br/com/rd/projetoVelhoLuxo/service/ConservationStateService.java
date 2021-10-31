@@ -50,6 +50,16 @@ public class ConservationStateService {
         List<ConservationState> allList = conservationStateRepository.findAll();
         return this.listToDto(allList);
     }
+
+    public ConservationStateDTO searchById(Long id) {
+        Optional<ConservationState> option = conservationStateRepository.findById(id);
+
+        if (option.isPresent()) {
+            return businessToDto(option.get());
+        }
+        return null;
+    }
+
     public ConservationStateDTO updateConservationState(ConservationStateDTO dto, Long id) {
         Optional<ConservationState> op = conservationStateRepository.findById(id);
 

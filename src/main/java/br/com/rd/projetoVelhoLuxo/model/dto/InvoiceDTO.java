@@ -1,6 +1,5 @@
 package br.com.rd.projetoVelhoLuxo.model.dto;
 
-import br.com.rd.projetoVelhoLuxo.model.entity.MyUser;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -18,7 +17,7 @@ public class InvoiceDTO {
     private Double totalIPI;
     private Double totalPrice;
     private UserDTO userId;
-//    private tipoNF invoiceTypeId;
+    private TipoNfDTO invoiceTypeId;
 //    private Pedido salesId;
 //    private Loja lojaid;
 }

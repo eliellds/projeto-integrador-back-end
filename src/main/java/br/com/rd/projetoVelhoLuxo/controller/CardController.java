@@ -24,6 +24,11 @@ public class CardController {
         return cardService.findAllCards();
     }
 
+    @GetMapping("/{id}")
+    public CardDTO searchById(@PathVariable("id") Long id) {
+        return cardService.searchById(id);
+    }
+
     @PutMapping("/{number}")
     public CardDTO updateByNumber(@RequestBody CardDTO dto, @PathVariable("number") Long number){
         return cardService.updateCard(dto, number);
