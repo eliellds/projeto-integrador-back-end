@@ -1,6 +1,6 @@
 package br.com.rd.projetoVelhoLuxo.service;
 
-import br.com.rd.projetoVelhoLuxo.model.dto.EntregaDTO;
+import br.com.rd.projetoVelhoLuxo.model.dto.DeliveryDTO;
 import br.com.rd.projetoVelhoLuxo.model.entity.Delivery;
 import br.com.rd.projetoVelhoLuxo.repository.contract.DeliveryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,31 +11,31 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class EntregaService {
+public class DeliveryService {
 
     @Autowired
     DeliveryRepository deliveryRepository;
 
-    public EntregaDTO addEntrega(EntregaDTO entrega) {
+    public DeliveryDTO addEntrega(DeliveryDTO entrega) {
         Delivery newDelivery = this.dtoToBusiness(entrega);
         newDelivery = deliveryRepository.save(newDelivery);
         return this.businessToDto(newDelivery);
     }
 
-    public List<EntregaDTO> findAllEntrega() {
+    public List<DeliveryDTO> findAllEntrega() {
         List<Delivery> allList = deliveryRepository.findAll();
         return this.listToDto(allList);
     }
 
-    private List<EntregaDTO> listToDto(List<Delivery> list) {
-        List<EntregaDTO> listDto = new ArrayList<EntregaDTO>();
+    private List<DeliveryDTO> listToDto(List<Delivery> list) {
+        List<DeliveryDTO> listDto = new ArrayList<DeliveryDTO>();
         for (Delivery e : list) {
             listDto.add(this.businessToDto(e));
         }
         return listDto;
     }
 
-    public EntregaDTO searchEntregaById(Long id) {
+    public DeliveryDTO searchEntregaById(Long id) {
         Optional<Delivery> op = deliveryRepository.findById(id);
 
         if (op.isPresent()) {
@@ -44,7 +44,7 @@ public class EntregaService {
         return null;
     }
 
-    public EntregaDTO updateById(EntregaDTO dto, Long id) {
+    public DeliveryDTO updateById(DeliveryDTO dto, Long id) {
         Optional<Delivery> op = deliveryRepository.findById(id);
 
         if (op.isPresent()) {
@@ -67,14 +67,14 @@ public class EntregaService {
         }
     }
 
-    private Delivery dtoToBusiness(EntregaDTO dto){
+    private Delivery dtoToBusiness(DeliveryDTO dto){
         Delivery business = new Delivery();
         business.setDescricao(dto.getDescricao());
         return business;
     }
 
-    private EntregaDTO businessToDto(Delivery business){
-        EntregaDTO dto = new EntregaDTO();
+    private DeliveryDTO businessToDto(Delivery business){
+        DeliveryDTO dto = new DeliveryDTO();
         dto.setId(business.getId());
         dto.setDescricao(business.getDescricao());
         return dto;

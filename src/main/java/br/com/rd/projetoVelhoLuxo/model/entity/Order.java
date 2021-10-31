@@ -15,35 +15,40 @@ public class Order {
 
     // cliente
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(nullable = false, name = "cl_id_cliente", referencedColumnName = "cl_id" )
+    @JoinColumn( name = "cl_id_cliente" )
     private MyUser myUser;
+
+
+    @ManyToOne
+    @JoinColumn(name = "cl_nr_cartao")
+    private Card card;
 
     // forma de pagamento
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "cl_id_forma_pagamento",nullable = false )
+    @JoinColumn(name = "cl_id_forma_pagamento" )
     private PaymentMethods payment;
 
     // endereço de entrega
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn( name="cl_id_endereço_entrega",nullable = false, referencedColumnName = "cl_id")
+    @JoinColumn(name="cl_id_endereço_entrega")
     private Address address;
 
     //telefone entrega
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn (name="cl_id_telefone_entrega", referencedColumnName = "cl_id")
+    @ManyToOne(cascade = {CascadeType.PERSIST},fetch = FetchType.EAGER)
+    @JoinColumn (name="cl_id_telefone_entrega")
     private Telephone telephone;
 
 
     //Tipo de entrega
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="cl_id_tipo_entrega", nullable = false , referencedColumnName = "cl_id")
+    @JoinColumn(name="cl_id_tipo_entrega" )
     private Delivery delivery;
 
 
-    @Column(name = "cl_data_pedido", nullable = false)
+    @Column(name = "cl_data_pedido")
     private LocalDate dateOrder;
 
-    @Column(name="cl_prazo_entrega", nullable = false)
+    @Column(name="cl_prazo_entrega" )
     private LocalDate deliveryDate;
 
     @Column(name="cl_qtd_itens")

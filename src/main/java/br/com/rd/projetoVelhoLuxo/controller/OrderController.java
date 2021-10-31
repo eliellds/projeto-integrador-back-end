@@ -1,24 +1,21 @@
 package br.com.rd.projetoVelhoLuxo.controller;
 
-import br.com.rd.projetoVelhoLuxo.model.dto.MyUserDTO;
-import br.com.rd.projetoVelhoLuxo.service.UserService;
+import br.com.rd.projetoVelhoLuxo.model.dto.OrderDTO;
+import br.com.rd.projetoVelhoLuxo.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-// controler para cadastrar novos usuários
 @RestController
-@RequestMapping("/sign-up") // endpoint da página de cadastro
-public class RegistrationController {
-
+@RequestMapping("/orders")
+public class OrderController {
     @Autowired
-    UserService userService;
+    OrderService service;
 
     @PostMapping
-    public MyUserDTO registerUser(@RequestBody MyUserDTO myUserDTO) {
-        return userService.createUser(myUserDTO);
+    public OrderDTO createOrder(@RequestBody OrderDTO toCreate){
+        return service.create(toCreate);
     }
-
 }

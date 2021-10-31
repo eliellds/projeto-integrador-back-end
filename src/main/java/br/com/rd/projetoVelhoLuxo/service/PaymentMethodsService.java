@@ -26,7 +26,9 @@ public class PaymentMethodsService {
 
     private PaymentMethodsDTO businessToDto(PaymentMethods business) {
         PaymentMethodsDTO dto = new PaymentMethodsDTO();
-        dto.setId(business.getId());
+        if(business.getId()!=null){
+            dto.setId(business.getId());
+        }
         dto.setDescription(business.getDescription());
         dto.setInstallments(business.getInstallments());
 
