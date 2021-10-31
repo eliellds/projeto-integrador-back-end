@@ -39,12 +39,10 @@ public class Invoice {
     @Column(nullable = false, name = "cl_valor_total")
     private Double totalPrice;
 
-    //    ID_USUARIO (FK) INT NOT NULL
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(nullable = false, name = "id_user")
     private MyUser userId;
 
-//    ID_TIPO_NF (FK) TINY INT NOT NULL
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(nullable = false, name = "id_tipo_nf")
     private TipoNf invoiceTypeId;
