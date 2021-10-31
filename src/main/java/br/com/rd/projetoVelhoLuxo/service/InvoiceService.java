@@ -3,6 +3,8 @@ package br.com.rd.projetoVelhoLuxo.service;
 import br.com.rd.projetoVelhoLuxo.model.dto.*;
 import br.com.rd.projetoVelhoLuxo.model.entity.*;
 import br.com.rd.projetoVelhoLuxo.repository.contract.InvoiceRepository;
+import br.com.rd.projetoVelhoLuxo.repository.contract.TipoNfRepository;
+import br.com.rd.projetoVelhoLuxo.repository.contract.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
@@ -14,6 +16,13 @@ public class InvoiceService {
 
     @Autowired
     InvoiceRepository invoiceRepository;
+
+    @Autowired
+    TipoNfRepository tipoNfRepository;
+
+    @Autowired
+    UserRepository userRepository;
+
 
 /*    conversão business to dto (Nota Fiscal)*/
     private InvoiceDTO businessToDto(Invoice business) {
@@ -32,22 +41,33 @@ public class InvoiceService {
 //        Tipo Nota Fiscal
         if (business.getInvoiceTypeId() != null){
             TipoNfDTO invoiceTypeDTO  = new TipoNfDTO();
+
             invoiceTypeDTO.setId(business.getInvoiceTypeId().getId());
             invoiceTypeDTO.setDescription(business.getInvoiceTypeId().getDescription());
+
             dto.setInvoiceTypeId(invoiceTypeDTO);
         }
 
 //      Usuário
         if (business.getUserId() != null){
             UserDTO userDTO = new UserDTO();
+
             userDTO.setId(business.getUserId().getId());
             userDTO.setFirstName(business.getUserId().getFirstName());
             userDTO.setLastName(business.getUserId().getLastName());
             userDTO.setBorn(business.getUserId().getBorn());
             userDTO.setEmail(business.getUserId().getEmail());
             userDTO.setCpf(business.getUserId().getCpf());
-//            userDTO.setTelephone(business.getUserId().getTelephone());
 
+//            if (business.getUserId().getTelephone() != null) {
+//                TelephoneDTO telephoneDTO = new TelephoneDTO();
+//
+//                telephoneDTO.setId(business.getUserId().getTelephone().getId());
+//                telephoneDTO.setNumber(business.getUserId().getTelephone().getNumber());
+//
+//                dto.getUserId().setTelephone(telephoneDTO);
+//
+//            }
             dto.setUserId(userDTO);
         }
 
@@ -91,7 +111,13 @@ public class InvoiceService {
                 myUser.setCpf(dto.getUserId().getCpf());
                 myUser.setBorn(dto.getUserId().getBorn());
                 myUser.setEmail(dto.getUserId().getEmail());
-//                myUser.setTelephone(dto.getUserId().getTelephone());
+
+//                if (dto.getUserId().getTelephone().getId() != null) {
+//                    myUser.setId(dto.getUserId().getTelephone().getId());
+//                } else {
+//                    myUser.setTelephone(dto.getUserId().getTelephone().getId());
+//                }
+//                business.setId(business.getId();
             }
 
             business.setUserId(myUser);
@@ -112,6 +138,31 @@ public class InvoiceService {
 /*     Criar nova Nota Fiscal            */
     public InvoiceDTO createInvoice(InvoiceDTO invoice){
         Invoice newInvoice = this.dtoToBusiness(invoice);
+
+        if (newInvoice.getInvoiceTypeId() != null) {
+            Long id = newInvoice.getInvoiceTypeId().getId();
+            TipoNf invoiceType;
+
+            if (id != null) {
+                invoiceType = this.tipoNfRepository.getById(id);
+            } else {
+                invoiceType = this.tipoNfRepository.save(newInvoice.getInvoiceTypeId());
+            }
+           newInvoice.setInvoiceTypeId(invoiceType);
+        }
+
+        if (newInvoice.getUserId() != null) {
+            Long id = newInvoice.getUserId().getId();
+            MyUser user;
+
+            if (id != null) {
+                user = this.userRepository.getById(id);
+            } else {
+                user = this.userRepository.save(newInvoice.getUserId());
+            }
+            newInvoice.setUserId(user);
+        }
+
         newInvoice = invoiceRepository.save(newInvoice);
         return this.businessToDto(newInvoice);
     }
