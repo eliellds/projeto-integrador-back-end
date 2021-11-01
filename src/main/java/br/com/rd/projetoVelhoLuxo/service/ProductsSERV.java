@@ -150,6 +150,7 @@ public class ProductsSERV {
                 category.setId(dto.getCategoryDTO().getId());
             } else {
                 category.setCategory(dto.getCategoryDTO().getCategory());
+                category.setDescription(dto.getCategoryDTO().getDescription());
             }
             business.setCategoryID(category);
         }
@@ -180,6 +181,7 @@ public class ProductsSERV {
             CategoryDTO categoryDTO = new CategoryDTO();
             categoryDTO.setId(business.getCategoryID().getId());
             categoryDTO.setCategory(business.getCategoryID().getCategory());
+            categoryDTO.setDescription(business.getCategoryID().getDescription());
 
             dto.setCategoryDTO(categoryDTO);
         }
