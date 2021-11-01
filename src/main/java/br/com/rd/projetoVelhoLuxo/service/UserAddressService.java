@@ -69,7 +69,7 @@ public class UserAddressService {
 
     public List<UserAddressViewDTO> findAllByUser(Long userId){
 
-        return convertToListView(repositoryUAddress.findAllByUser(userId));
+        return convertToListView(repositoryUAddress.findAllByUserId(userId));
 
 
     }

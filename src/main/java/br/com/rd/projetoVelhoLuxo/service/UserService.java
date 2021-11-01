@@ -4,8 +4,8 @@ import br.com.rd.projetoVelhoLuxo.model.dto.TelephoneDTO;
 import br.com.rd.projetoVelhoLuxo.model.dto.MyUserDTO;
 import br.com.rd.projetoVelhoLuxo.model.entity.MyUser;
 import br.com.rd.projetoVelhoLuxo.model.entity.Telephone;
-import br.com.rd.projetoVelhoLuxo.repository.contract.TelephoneRepository;
 import br.com.rd.projetoVelhoLuxo.repository.contract.MyUserRepository;
+import br.com.rd.projetoVelhoLuxo.repository.contract.TelephoneRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -16,15 +16,14 @@ import java.util.List;
 @Service
 public class UserService {
     @Autowired
-    MyUserRepository myUserRepository;
+    MyUserRepository userRepository;
     @Autowired
     TelephoneRepository telephoneRepository;
 
     public MyUserDTO createUser(MyUserDTO toCreate){
         String encryptedPassword = new BCryptPasswordEncoder().encode(toCreate.getPassword());
         toCreate.setPassword(encryptedPassword);
-
-        MyUser create = convertToUser(toCreate);
+        MyUser create= convertToUser(toCreate);
         //verifica se tem o "produto"
         if(create.getTelephone()!=null){
             //verifica se tem um id
@@ -35,8 +34,6 @@ public class UserService {
 
                 }
 
-
-
             //se ele não ta nulo mas não tem o id ele tem os atributos
             }else{
                 //salva os atributos como um novo "produto" e recebe um id
@@ -45,7 +42,7 @@ public class UserService {
                 create.setTelephone(savedTel);
             }
         }
-        create = myUserRepository.save(create);
+        create = userRepository.save(create);
         return convertToDTO(create);
     }
 
@@ -56,9 +53,8 @@ public class UserService {
     public MyUserDTO update (MyUserDTO toUpdate) {
         if (toUpdate.getId() != null) {
 
-            if (myUserRepository.existsById(toUpdate.getId())) {
-                MyUser update = myUserRepository.getById(toUpdate.getId());
-
+            if (userRepository.existsById(toUpdate.getId())) {
+                MyUser update = userRepository.getById(toUpdate.getId());
                 //data de nascimento
                 if (toUpdate.getBorn() != null) {
                     update.setBorn(toUpdate.getBorn());
@@ -98,36 +94,34 @@ public class UserService {
                     //ao fim das verificações adiciona no update
                     update.setTelephone(telephoneToUpdate);
                 }
-                update = myUserRepository.save(update);
+                update = userRepository.save(update);
                 return convertToDTO(update);
             }
-
 
         }
         return null;
     }
 
-
     public List<MyUserDTO> showList(){
-        List<MyUser> list = myUserRepository.findAll();
+        List<MyUser> list = userRepository.findAll();
 
         return convertListToDTO(list);
     }
 
     //recuperar usuario
     public MyUserDTO findById(Long id){
-        if(myUserRepository.existsById(id)){
+        if(userRepository.existsById(id)){
 
-            return convertToDTO(myUserRepository.getById(id));
+            return convertToDTO( userRepository.getById(id));
         }
         return null;
 
     }
     //deletenaod usuario
     public void deleteById(Long id){
-        if(myUserRepository.existsById(id)){
+        if(userRepository.existsById(id)){
 
-             myUserRepository.deleteById(id);
+             userRepository.deleteById(id);
         }
 
     }

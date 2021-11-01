@@ -15,15 +15,13 @@ import java.util.ArrayList;
 public class MyUserDetailsService implements UserDetailsService {
 
     @Autowired
-    MyUserRepository myUserRepository;
+    MyUserRepository userRepository;
 
     @Override // método que encontra o usuário pelo email (aqui passado como parametro username)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         // atribuindo o usuário encontrado pelo método findByEmailEquals ao objeto user
-        MyUser myUser = myUserRepository.findByEmailEquals(username);
-
-        br.com.rd.projetoVelhoLuxo.model.entity.MyUser user = myUserRepository.findByEmailEquals(username);
+        MyUser myUser = userRepository.findByEmailEquals(username);
 
         if (myUser == null) { // conferindo se o usuário retornou null
             throw new UsernameNotFoundException(username);
