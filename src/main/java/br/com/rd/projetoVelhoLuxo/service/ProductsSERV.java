@@ -101,6 +101,10 @@ public class ProductsSERV {
                 pAux.setQuantity(dto.getQuantity());
             }
 
+            if (dto.getImage() != null) {
+                pAux.setImage(dto.getImage());
+            }
+
             productsRepository.save(pAux);
             return businessToDto(pAux);
         }
@@ -142,6 +146,7 @@ public class ProductsSERV {
         business.setFeature(dto.getFeature());
         business.setYear(dto.getYear());
         business.setQuantity(dto.getQuantity());
+        business.setImage(dto.getImage());
 
         if (dto.getCategoryDTO() != null) {
             Category category = new Category();
@@ -176,6 +181,7 @@ public class ProductsSERV {
         dto.setFeature(business.getFeature());
         dto.setYear  (business.getYear());
         dto.setQuantity(business.getQuantity());
+        dto.setImage(business.getImage());
 
         if (business.getCategoryID() != null) {
             CategoryDTO categoryDTO = new CategoryDTO();
