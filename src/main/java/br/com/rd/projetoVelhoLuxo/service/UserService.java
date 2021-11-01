@@ -1,11 +1,11 @@
 package br.com.rd.projetoVelhoLuxo.service;
 
 import br.com.rd.projetoVelhoLuxo.model.dto.TelephoneDTO;
-import br.com.rd.projetoVelhoLuxo.model.dto.UserDTO;
+import br.com.rd.projetoVelhoLuxo.model.dto.MyUserDTO;
 import br.com.rd.projetoVelhoLuxo.model.entity.MyUser;
 import br.com.rd.projetoVelhoLuxo.model.entity.Telephone;
 import br.com.rd.projetoVelhoLuxo.repository.contract.TelephoneRepository;
-import br.com.rd.projetoVelhoLuxo.repository.contract.UserRepository;
+import br.com.rd.projetoVelhoLuxo.repository.contract.MyUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -16,14 +16,15 @@ import java.util.List;
 @Service
 public class UserService {
     @Autowired
-    UserRepository userRepository;
+    MyUserRepository myUserRepository;
     @Autowired
     TelephoneRepository telephoneRepository;
 
-    public UserDTO createUser(UserDTO toCreate){
+    public MyUserDTO createUser(MyUserDTO toCreate){
         String encryptedPassword = new BCryptPasswordEncoder().encode(toCreate.getPassword());
         toCreate.setPassword(encryptedPassword);
-        MyUser create= convertToUser(toCreate);
+
+        MyUser create = convertToUser(toCreate);
         //verifica se tem o "produto"
         if(create.getTelephone()!=null){
             //verifica se tem um id
@@ -44,7 +45,7 @@ public class UserService {
                 create.setTelephone(savedTel);
             }
         }
-        create = userRepository.save(create);
+        create = myUserRepository.save(create);
         return convertToDTO(create);
     }
 
@@ -52,10 +53,12 @@ public class UserService {
 
 
     //update user
-    public UserDTO update (UserDTO toUpdate) {
+    public MyUserDTO update (MyUserDTO toUpdate) {
         if (toUpdate.getId() != null) {
-            if (userRepository.existsById(toUpdate.getId())) {
-                MyUser update = userRepository.getById(toUpdate.getId());
+
+            if (myUserRepository.existsById(toUpdate.getId())) {
+                MyUser update = myUserRepository.getById(toUpdate.getId());
+
                 //data de nascimento
                 if (toUpdate.getBorn() != null) {
                     update.setBorn(toUpdate.getBorn());
@@ -95,7 +98,7 @@ public class UserService {
                     //ao fim das verificações adiciona no update
                     update.setTelephone(telephoneToUpdate);
                 }
-                update = userRepository.save(update);
+                update = myUserRepository.save(update);
                 return convertToDTO(update);
             }
 
@@ -104,34 +107,35 @@ public class UserService {
         return null;
     }
 
-    public List<UserDTO> showList(){
-        List<MyUser> list = userRepository.findAll();
+
+    public List<MyUserDTO> showList(){
+        List<MyUser> list = myUserRepository.findAll();
 
         return convertListToDTO(list);
     }
 
     //recuperar usuario
-    public UserDTO findById(Long id){
-        if(userRepository.existsById(id)){
+    public MyUserDTO findById(Long id){
+        if(myUserRepository.existsById(id)){
 
-            return convertToDTO( userRepository.getById(id));
+            return convertToDTO(myUserRepository.getById(id));
         }
         return null;
 
     }
     //deletenaod usuario
     public void deleteById(Long id){
-        if(userRepository.existsById(id)){
+        if(myUserRepository.existsById(id)){
 
-             userRepository.deleteById(id);
+             myUserRepository.deleteById(id);
         }
 
     }
 
 
     //conversões
-    private UserDTO convertToDTO(MyUser toConvert){
-        UserDTO converted = new UserDTO();
+    private MyUserDTO convertToDTO(MyUser toConvert){
+        MyUserDTO converted = new MyUserDTO();
         //nascimento
         converted.setBorn(toConvert.getBorn());
         //cpf
@@ -156,7 +160,7 @@ public class UserService {
 
     }
     //convert para usuario final
-    private MyUser convertToUser(UserDTO toConvert){
+    private MyUser convertToUser(MyUserDTO toConvert){
         MyUser converted = new MyUser();
         //nascimento
         converted.setBorn(toConvert.getBorn());
@@ -180,8 +184,8 @@ public class UserService {
 
     }
     //convert list
-    private List<UserDTO> convertListToDTO (List<MyUser> toConvert){
-        List<UserDTO> converted = new ArrayList<>();
+    private List<MyUserDTO> convertListToDTO (List<MyUser> toConvert){
+        List<MyUserDTO> converted = new ArrayList<>();
 
         for (MyUser a: toConvert) {
             converted.add(convertToDTO(a));

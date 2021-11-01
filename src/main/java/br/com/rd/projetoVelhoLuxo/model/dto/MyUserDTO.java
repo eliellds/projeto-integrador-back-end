@@ -6,7 +6,7 @@ import lombok.Data;
 import javax.persistence.*;
 import java.time.LocalDate;
 @Data
-public class UserDTO {
+public class MyUserDTO {
     private Long id;
     private String firstName;
     private String lastName;

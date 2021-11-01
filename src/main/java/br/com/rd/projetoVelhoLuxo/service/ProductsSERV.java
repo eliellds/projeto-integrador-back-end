@@ -62,6 +62,11 @@ public class ProductsSERV {
         return this.businessToDto(newProduct);
     }
 
+    //produtos mais recentes adicionados
+    public List<ProductsDTO> findAllByOrderByIdDesc(){
+        return listToDto(productsRepository.findFirst5ByOrderByIdDesc());
+    }
+
     public List<ProductsDTO> showProducts() {
         List<Products> allList = productsRepository.findAll();
         return this.listToDto(allList);

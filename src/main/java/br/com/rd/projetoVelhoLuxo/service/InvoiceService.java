@@ -4,7 +4,7 @@ import br.com.rd.projetoVelhoLuxo.model.dto.*;
 import br.com.rd.projetoVelhoLuxo.model.entity.*;
 import br.com.rd.projetoVelhoLuxo.repository.contract.InvoiceRepository;
 import br.com.rd.projetoVelhoLuxo.repository.contract.TipoNfRepository;
-import br.com.rd.projetoVelhoLuxo.repository.contract.UserRepository;
+import br.com.rd.projetoVelhoLuxo.repository.contract.MyUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
@@ -21,7 +21,7 @@ public class InvoiceService {
     TipoNfRepository tipoNfRepository;
 
     @Autowired
-    UserRepository userRepository;
+    MyUserRepository userRepository;
 
 
 /*    conversão business to dto (Nota Fiscal)*/
@@ -50,7 +50,7 @@ public class InvoiceService {
 
 //      Usuário
         if (business.getUserId() != null){
-            UserDTO userDTO = new UserDTO();
+            MyUserDTO userDTO = new MyUserDTO();
 
             userDTO.setId(business.getUserId().getId());
             userDTO.setFirstName(business.getUserId().getFirstName());

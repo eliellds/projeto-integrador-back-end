@@ -68,4 +68,8 @@ public class ProductCONTR {
         return priceProductService.searchByOffers();
     }
 
+    @GetMapping("/recentlyAdd")
+    public List<ProductsDTO> searchByNewerAdd(){
+        return productsSERV.findAllByOrderByIdDesc();
+    }
 }

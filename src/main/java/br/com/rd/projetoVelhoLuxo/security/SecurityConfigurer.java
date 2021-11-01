@@ -36,8 +36,9 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
                 // abaixo, endpoints sem restrições de acesso por login
                 .authorizeRequests()
                     .antMatchers("/", "/login", "/home", "/contacts",
-                                            "/products", "/categories",
-                                            "/sign-up", "/search", "/prices").permitAll()
+                                            "/products", "/categories","/products/recentlyAdd",
+                                            "/sign-up", "/products/older", "/products/newer",
+                                            "/search", "/prices").permitAll()
                     .anyRequest().authenticated()
                     .and()
 //                .formLogin()

@@ -5,6 +5,7 @@ import lombok.Data;
 import javax.persistence.Column;
 @Data
 public class UserAddressCompositeKeyDTO {
+
     private Long idUser;
 
     private Long idAddress;
