@@ -1,6 +1,5 @@
 package br.com.rd.projetoVelhoLuxo.repository.contract;
 
-import br.com.rd.projetoVelhoLuxo.model.entity.PriceProduct;
 import br.com.rd.projetoVelhoLuxo.model.entity.Products;
 
 import java.util.List;

@@ -1,7 +1,10 @@
 package br.com.rd.projetoVelhoLuxo.controller;
 
 
+import br.com.rd.projetoVelhoLuxo.model.dto.PriceProductDTO;
 import br.com.rd.projetoVelhoLuxo.model.dto.ProductsDTO;
+import br.com.rd.projetoVelhoLuxo.model.entity.PriceProduct;
+import br.com.rd.projetoVelhoLuxo.service.PriceProductService;
 import br.com.rd.projetoVelhoLuxo.service.ProductsSERV;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +18,9 @@ public class ProductCONTR {
 
     @Autowired
     ProductsSERV productsSERV;
+
+    @Autowired
+    PriceProductService priceProductService;
 
     @PostMapping
     public ProductsDTO newProduct(@RequestBody ProductsDTO product) {
@@ -43,8 +49,8 @@ public class ProductCONTR {
     }
 
     @GetMapping("/category/{categoryName}")
-    public List<ProductsDTO> searchByCategory(@PathVariable("categoryName") String categoryName) {
-        return productsSERV.searchByCategory(categoryName);
+    public List<PriceProductDTO> searchByCategory(@PathVariable("categoryName") String categoryName) {
+        return priceProductService.searchByCategory(categoryName);
     }
 
     @GetMapping("/newer")
@@ -58,8 +64,8 @@ public class ProductCONTR {
     }
 
     @GetMapping("/offers")
-    public List<ProductsDTO> searchByOffers() {
-        return productsSERV.searchByOffers();
+    public List<PriceProductDTO> searchByOffers() {
+        return priceProductService.searchByOffers();
     }
 
 }

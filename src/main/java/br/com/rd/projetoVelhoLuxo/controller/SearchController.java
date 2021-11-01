@@ -1,7 +1,9 @@
 package br.com.rd.projetoVelhoLuxo.controller;
 
+import br.com.rd.projetoVelhoLuxo.model.dto.PriceProductDTO;
 import br.com.rd.projetoVelhoLuxo.model.dto.ProductsDTO;
 import br.com.rd.projetoVelhoLuxo.model.dto.SearchDTO;
+import br.com.rd.projetoVelhoLuxo.service.PriceProductService;
 import br.com.rd.projetoVelhoLuxo.service.ProductsSERV;
 import br.com.rd.projetoVelhoLuxo.service.SearchService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,9 @@ public class SearchController {
     SearchService searchService;
 
     @Autowired
+    PriceProductService priceProductService;
+
+    @Autowired
     ProductsSERV productsSERV;
 
     // grava a busca no banco de dados e retorna o json da busca criada
@@ -30,7 +35,12 @@ public class SearchController {
 
     // retorna uma lista com todos os produtos que contenham nome, descrição ou categoria buscada
     @GetMapping()
-    public List<ProductsDTO> searchByDescription(@RequestParam("content") String description) {
+    public List<PriceProductDTO> searchByDescription(@RequestParam("description") String description) {
+        return priceProductService.searchByDescription(description);
+    }
+
+    @GetMapping("/product")
+    public  List<ProductsDTO> searchByProductDescription(@RequestParam("description") String description) {
         return productsSERV.searchByDescription(description);
     }
 

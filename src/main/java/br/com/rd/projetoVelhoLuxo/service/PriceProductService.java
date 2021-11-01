@@ -8,6 +8,7 @@ import br.com.rd.projetoVelhoLuxo.model.entity.Products;
 import br.com.rd.projetoVelhoLuxo.repository.contract.PriceProductRepository;
 import br.com.rd.projetoVelhoLuxo.repository.contract.ProductsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 
@@ -163,4 +164,17 @@ public class PriceProductService {
         List<PriceProduct> priceList = this.priceProductRepository.findByOrderBySalePriceDesc();
         return listToDto(priceList);
     }
+
+    public List<PriceProductDTO> searchByDescription(String description) {
+        return listToDto(priceProductRepository.searchByDescription(description));
+    }
+
+    public List<PriceProductDTO> searchByOffers() {
+        return listToDto(priceProductRepository.searchByOffers());
+    }
+
+    public List<PriceProductDTO> searchByCategory(String categoryName) {
+        return listToDto(priceProductRepository.searchByCategory(categoryName));
+    }
+
 }

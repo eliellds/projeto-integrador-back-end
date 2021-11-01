@@ -1,6 +1,5 @@
 package br.com.rd.projetoVelhoLuxo.repository.implement;
 
-import br.com.rd.projetoVelhoLuxo.model.entity.PriceProduct;
 import br.com.rd.projetoVelhoLuxo.model.entity.Products;
 import br.com.rd.projetoVelhoLuxo.repository.contract.ProductsRepositoryCustom;
 import org.springframework.stereotype.Repository;
@@ -21,12 +20,12 @@ public class ProductsRepositoryImpl implements ProductsRepositoryCustom {
 
         Query sql = entityManager.createNativeQuery
                 ("SELECT * FROM tb_produtos " +
-                                "INNER JOIN tb_categoria ON (tb_categoria.id = tb_produtos.cl_id_categoria)" +
-                                "WHERE cl_info_produto LIKE '%' :descript '%' " +
-                                "OR cl_nm_produto LIKE '%' :descript '%' " +
-                                "OR cl_caracteristica_produto LIKE '%' :descript '%' " +
-                                "OR cl_ano_fabricacao LIKE '%' :descript '%'" +
-                                "OR cl_nm_categoria LIKE '%' :descript '%'",
+                                "INNER JOIN tb_categoria ON (tb_categoria.id = tb_produtos.cl_id_categoria) " +
+                                "WHERE tb_produtos.cl_info_produto LIKE '%' :descript '%' " +
+                                "OR tb_produtos.cl_nm_produto LIKE '%' :descript '%' " +
+                                "OR tb_produtos.cl_caracteristica_produto LIKE '%' :descript '%' " +
+                                "OR tb_produtos.cl_ano_fabricacao LIKE '%' :descript '%' " +
+                                "OR tb_categoria.cl_nm_categoria LIKE '%' :descript '%'",
                         Products.class);
         sql.setParameter("descript", description);
 
