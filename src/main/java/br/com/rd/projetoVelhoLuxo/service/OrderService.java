@@ -148,7 +148,11 @@ public class OrderService {
 
         return convertToDTO(created);
     }
+    public List<OrderDTO> findOrderByUser(Long id){
 
+        return convertList(orderRepository.findAllByMyUserId(id));
+
+    }
 
 
 
