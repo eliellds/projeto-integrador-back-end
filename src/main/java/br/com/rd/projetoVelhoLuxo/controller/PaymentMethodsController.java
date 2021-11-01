@@ -25,6 +25,11 @@ public class PaymentMethodsController {
         return paymentMethodsService.findAllPaymentMethods();
     }
 
+    @GetMapping("/{id}")
+    public PaymentMethodsDTO searchById(@PathVariable("id") Long id) {
+        return paymentMethodsService.searchById(id);
+    }
+
     @PutMapping("/{id}")
     public PaymentMethodsDTO updateById(@RequestBody PaymentMethodsDTO dto, @PathVariable("id") Long id){
         return paymentMethodsService.updatePaymentMethod(dto, id);

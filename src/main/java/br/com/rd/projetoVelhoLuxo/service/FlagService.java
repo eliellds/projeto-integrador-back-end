@@ -50,6 +50,16 @@ public class FlagService {
         List<Flag> allList = flagRepository.findAll();
         return this.listToDto(allList);
     }
+
+    public FlagDTO searchById(Long id) {
+        Optional<Flag> option = flagRepository.findById(id);
+
+        if (option.isPresent()) {
+            return businessToDto(option.get());
+        }
+        return null;
+    }
+
     public FlagDTO updateFlag(FlagDTO dto, Long id) {
         Optional<Flag> op = flagRepository.findById(id);
 

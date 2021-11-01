@@ -26,6 +26,7 @@ public class PriceProductService {
     @Autowired
     ProductsRepository productsREPO;
 
+//    Conversão Business para DTO (Produto)
     private ProductsDTO businessToDto(Products business) {
         ProductsDTO dto = new ProductsDTO();
         dto.setId(business.getId());
@@ -44,6 +45,7 @@ public class PriceProductService {
         return dto;
     }
 
+    //    Conversão Business para DTO (Preço Produto)
     private PriceProductDTO businessToDto(PriceProduct pp){
         PriceProductDTO dto = new PriceProductDTO();
         PriceProductKeyDTO key = new PriceProductKeyDTO();
@@ -58,6 +60,7 @@ public class PriceProductService {
         return dto;
     }
 
+    //    Conversão DTO para Business (Produto)
     private Products dtoToBusiness(ProductsDTO dto) {
         Products business = new Products();
         if(dto.getId() !=null){
@@ -82,6 +85,7 @@ public class PriceProductService {
         return business;
     }
 
+//    Conversão DTO para Business (Preço produto)
     private PriceProduct dtoToBusiness(PriceProductDTO dto){
         PriceProduct business = new PriceProduct();
         PriceProductKey key = new PriceProductKey();
@@ -97,6 +101,7 @@ public class PriceProductService {
         return business;
     }
 
+
     private List<PriceProductDTO> listToDto(List<PriceProduct> list){
         List<PriceProductDTO> listDto = new ArrayList<PriceProductDTO>();
         for (PriceProduct pp: list) {
@@ -105,6 +110,7 @@ public class PriceProductService {
         return listDto;
     }
 
+//    Criar Preço produto
     public PriceProductDTO createPriceProduct(PriceProductDTO priceProduct) throws Exception {
         PriceProduct pp = dtoToBusiness(priceProduct);
 
@@ -129,6 +135,7 @@ public class PriceProductService {
         return businessToDto(pp);
     }
 
+//    Encontrar Todos os Produtos
     public List<PriceProductDTO> findAll(){
         List<PriceProduct> list = priceProductRepository.findAll();
         return listToDto(list);
@@ -150,16 +157,19 @@ public class PriceProductService {
         return null;
     }
 
+//    Encontrar por preços menor para maior
     public List<PriceProductDTO> findAllPricesAsc(){
         List<PriceProduct> priceList = this.priceProductRepository.findByOrderByPriceAsc();
         return listToDto(priceList);
     }
 
+//    Encontrar por preços maior para menor
     public List<PriceProductDTO> findAllPricesDesc(){
         List<PriceProduct> priceList = this.priceProductRepository.findByOrderByPriceDesc();
         return listToDto(priceList);
     }
 
+//    Encontrar por maior desconto
     public List<PriceProductDTO> findByOrderBySalePriceDesc(){
         List<PriceProduct> priceList = this.priceProductRepository.findByOrderBySalePriceDesc();
         return listToDto(priceList);

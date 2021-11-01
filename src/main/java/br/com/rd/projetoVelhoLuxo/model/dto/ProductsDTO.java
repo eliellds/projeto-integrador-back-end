@@ -12,4 +12,5 @@ public class ProductsDTO {
     private String year;
     private CategoryDTO categoryDTO;
     private Integer quantity;
+    private String image;
 }
