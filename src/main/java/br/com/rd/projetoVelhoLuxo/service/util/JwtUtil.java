@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+// classe de criação e verificação de tokens
 @Service
 public class JwtUtil {
 

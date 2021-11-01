@@ -50,6 +50,16 @@ public class SalesService {
         List<Sales> allList = salesRepository.findAll();
         return this.listToDto(allList);
     }
+
+    public SalesDTO searchById(Long id) {
+        Optional<Sales> option = salesRepository.findById(id);
+
+        if (option.isPresent()) {
+            return businessToDto(option.get());
+        }
+        return null;
+    }
+
     public SalesDTO updateSale(SalesDTO dto, Long id) {
         Optional<Sales> op = salesRepository.findById(id);
 

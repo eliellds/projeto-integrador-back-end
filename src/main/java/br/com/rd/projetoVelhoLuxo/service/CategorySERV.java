@@ -49,6 +49,7 @@ public class CategorySERV {
 
             if(dto.getCategory() != null){
                 category.setCategory(dto.getCategory());
+                category.setDescription(dto.getDescription());
             }
 
             category = this.categoryREPO.save(category);
@@ -68,6 +69,7 @@ public class CategorySERV {
     private Category dtoToBusiness(CategoryDTO dto) {
         Category business = new Category();
         business.setCategory(dto.getCategory());
+        business.setCategory(dto.getDescription());
         return business;
     }
 
@@ -75,6 +77,7 @@ public class CategorySERV {
         CategoryDTO dto = new CategoryDTO();
         dto.setId(business.getId());
         dto.setCategory(business.getCategory());
+        dto.setCategory(business.getDescription());
         return dto;
     }
 }

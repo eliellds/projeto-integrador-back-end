@@ -91,6 +91,15 @@ public class CardService {
         return this.listToDto(allList);
     }
 
+    public CardDTO searchById(Long id) {
+        Optional<Card> option = cardRepository.findById(id);
+
+        if (option.isPresent()) {
+            return businessToDto(option.get());
+        }
+        return null;
+    }
+
 
     public CardDTO updateCard(CardDTO dto, Long numero) {
         Optional<Card> op = cardRepository.findById(numero);

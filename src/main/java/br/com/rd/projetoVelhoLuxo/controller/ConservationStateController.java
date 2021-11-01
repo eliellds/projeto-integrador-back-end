@@ -25,6 +25,11 @@ public class ConservationStateController {
         return conservationStateService.findAllStates();
     }
 
+    @GetMapping("/{id}")
+    public ConservationStateDTO searchById(@PathVariable("id") Long id) {
+        return conservationStateService.searchById(id);
+    }
+
     @PutMapping("/{id}")
     public ConservationStateDTO updateById(@RequestBody ConservationStateDTO dto, @PathVariable("id") Long id){
         return conservationStateService.updateConservationState(dto, id);

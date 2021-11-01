@@ -32,4 +32,7 @@ public class Products {
 
     @Column(nullable = false, name = "cl_qtd_pecas")
     private Integer quantity;
+
+    @Column(nullable = false, name = "cl_imagem")
+    private String image;
 }
