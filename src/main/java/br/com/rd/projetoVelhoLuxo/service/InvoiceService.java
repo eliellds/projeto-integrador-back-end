@@ -59,15 +59,14 @@ public class InvoiceService {
             userDTO.setEmail(business.getUserId().getEmail());
             userDTO.setCpf(business.getUserId().getCpf());
 
-//            if (business.getUserId().getTelephone() != null) {
-//                TelephoneDTO telephoneDTO = new TelephoneDTO();
-//
-//                telephoneDTO.setId(business.getUserId().getTelephone().getId());
-//                telephoneDTO.setNumber(business.getUserId().getTelephone().getNumber());
-//
-//                dto.getUserId().setTelephone(telephoneDTO);
-//
-//            }
+            if (business.getUserId().getTelephone() != null) {
+                TelephoneDTO telephoneDTO = new TelephoneDTO();
+
+                telephoneDTO.setId(business.getUserId().getTelephone().getId());
+                telephoneDTO.setNumber(business.getUserId().getTelephone().getNumber());
+
+                userDTO.setTelephone(telephoneDTO);
+            }
             dto.setUserId(userDTO);
         }
 
@@ -111,13 +110,6 @@ public class InvoiceService {
                 myUser.setCpf(dto.getUserId().getCpf());
                 myUser.setBorn(dto.getUserId().getBorn());
                 myUser.setEmail(dto.getUserId().getEmail());
-
-//                if (dto.getUserId().getTelephone().getId() != null) {
-//                    myUser.setId(dto.getUserId().getTelephone().getId());
-//                } else {
-//                    myUser.setTelephone(dto.getUserId().getTelephone().getId());
-//                }
-//                business.setId(business.getId();
             }
 
             business.setUserId(myUser);
