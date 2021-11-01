@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class OrderService {
@@ -137,7 +139,7 @@ public class OrderService {
             created.setPayment(pay);
         }
         LocalDate today = LocalDate.now();
-        LocalDate deliveryDate = LocalDate.of(today.getYear(), (today.getMonth()), today.getDayOfMonth());
+        LocalDate deliveryDate = LocalDate.now().plusDays(120);
 
         created.setDateOrder(today);
         created.setDeliveryDate(deliveryDate);
@@ -252,6 +254,16 @@ public class OrderService {
         }
 
         return converted;
+    }
+
+    //convert to List()
+    private List<OrderDTO> convertList (List<Order> list){
+        List<OrderDTO> listDTO = new ArrayList<>();
+        for (Order a : list) {
+            listDTO.add(convertToDTO(a));
+        }
+
+        return listDTO;
     }
 
     //convert to final
