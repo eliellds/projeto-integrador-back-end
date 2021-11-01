@@ -14,7 +14,7 @@ public class UserAddressRepositoryImpl implements UserAddressRepositoryCustom {
     @PersistenceContext
     EntityManager em;
     @Override
-    public List<UserAddress> findAllByUser(Long id) {
+    public List<UserAddress> findAllByUserId(Long id) {
         Query sql = em.createNativeQuery("SELECT * FROM endereco_usuario WHERE cl_id_usuario = ?", UserAddress.class);
 
         sql.setParameter(1, id);
