@@ -16,7 +16,7 @@ public class Products {
     private String product;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "cl_estado_conservacao")
+    @JoinColumn(name = "cl_id_categoria")
     private Category categoryID;
 
     @Column(nullable = false, name = "cl_info_produto", length = 500)
@@ -27,7 +27,7 @@ public class Products {
     private String year;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "cl_id_categoria")
+    @JoinColumn(name = "cl_estado_conservacao")
     private ConservationState conservationState;
 
     @Column(nullable = false, name = "cl_qtd_pecas")

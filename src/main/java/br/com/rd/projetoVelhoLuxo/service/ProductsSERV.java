@@ -48,16 +48,16 @@ public class ProductsSERV {
             }
             newProduct.setCategoryID(c);
         }
-//        if (newProduct.getConservationState()!= null) {
-//            Long id = newProduct.getConservationState().getId();
-//            ConservationState cc;
-//            if (id != null) {
-//                cc = this.conservationStateRepository.getById(id);
-//            } else {
-//                cc = this.conservationStateRepository.save(newProduct.getConservationState());
-//            }
-//            newProduct.setConservationState(cc);
-//        }
+        if (newProduct.getConservationState()!= null) {
+            Long id = newProduct.getConservationState().getId();
+            ConservationState cc;
+            if (id != null) {
+                cc = this.conservationStateRepository.getById(id);
+            } else {
+                cc = this.conservationStateRepository.save(newProduct.getConservationState());
+            }
+            newProduct.setConservationState(cc);
+        }
         newProduct = productsRepository.save(newProduct);
         return this.businessToDto(newProduct);
     }
@@ -186,6 +186,7 @@ public class ProductsSERV {
         if (business.getConservationState() != null) {
             ConservationStateDTO conservationStateDTO = new ConservationStateDTO();
             conservationStateDTO.setDescription(business.getConservationState().getDescription());
+            dto.setConservationState(conservationStateDTO);
         }
 
         return dto;
