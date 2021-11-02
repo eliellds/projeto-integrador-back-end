@@ -47,10 +47,9 @@ public class Invoice {
     @JoinColumn(nullable = false, name = "id_tipo_nf")
     private TipoNf invoiceTypeId;
 
-////    ID_PEDIDO (UK, FK) INT NOT NULL
-//    @ManyToOne(fetch = FetchType.EAGER)
-//    @JoinColumn(nullable = false, name = "id_pedido")
-//    private Pedido salesId;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(nullable = false, name = "id_pedido")
+    private Order orderID;
 
 //    ID_LOJA (FK) TINY INT NOT NULL
 //    @ManyToOne(fetch = FetchType.EAGER)

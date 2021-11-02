@@ -18,7 +18,7 @@ public class InvoiceDTO {
     private Double totalPrice;
     private MyUserDTO userId;
     private TipoNfDTO invoiceTypeId;
-//    private Pedido salesId;
+    private OrderDTO orderId;
 //    private Loja lojaid;
 }
 

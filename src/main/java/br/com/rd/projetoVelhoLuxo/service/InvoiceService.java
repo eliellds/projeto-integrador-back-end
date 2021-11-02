@@ -4,6 +4,7 @@ import br.com.rd.projetoVelhoLuxo.model.dto.*;
 import br.com.rd.projetoVelhoLuxo.model.entity.*;
 import br.com.rd.projetoVelhoLuxo.repository.contract.InvoiceRepository;
 import br.com.rd.projetoVelhoLuxo.repository.contract.MyUserRepository;
+import br.com.rd.projetoVelhoLuxo.repository.contract.OrderRepository;
 import br.com.rd.projetoVelhoLuxo.repository.contract.TipoNfRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,8 @@ public class InvoiceService {
     @Autowired
     MyUserRepository userRepository;
 
+    @Autowired
+    OrderRepository orderRepository;
 
 /*    conversão business to dto (Nota Fiscal)*/
     private InvoiceDTO businessToDto(Invoice business) {
@@ -70,6 +73,84 @@ public class InvoiceService {
             dto.setUserId(userDTO);
         }
 
+//        Pedido
+        if (business.getOrderID() != null){
+            OrderDTO orderDTO = new OrderDTO();
+
+            orderDTO.setId(business.getOrderID().getId());
+            orderDTO.setDateOrder(business.getOrderID().getDateOrder());
+            orderDTO.setAmount(business.getOrderID().getAmount());
+            orderDTO.setDeliveryValue(business.getOrderID().getDeliveryValue());
+            orderDTO.setQtyTotal(business.getOrderID().getQtyTotal());
+            orderDTO.setTotalDiscounts(business.getOrderID().getTotalDiscounts());
+//            orderDTO.setBankSlip(business.getOrderID().getBankSlip());
+
+//            tipo entrega
+            if (business.getOrderID().getDelivery() != null) {
+                DeliveryDTO deliveryDTO = new DeliveryDTO();
+
+                deliveryDTO.setId(business.getOrderID().getDelivery().getId());
+                deliveryDTO.setDescricao(business.getOrderID().getDelivery().getDescricao());
+
+                orderDTO.setDelivery(deliveryDTO);
+            }
+
+//            endereço
+            if (business.getOrderID().getAddress() != null) {
+                AddressDTO addressDTO = new AddressDTO();
+
+                addressDTO.setId(business.getOrderID().getAddress().getId());
+                addressDTO.setStreet(business.getOrderID().getAddress().getStreet());
+                addressDTO.setNumber(business.getOrderID().getAddress().getNumber());
+                addressDTO.setComplement(business.getOrderID().getAddress().getComplement());
+                addressDTO.setDistrict(business.getOrderID().getAddress().getDistrict());
+                addressDTO.setCity(business.getOrderID().getAddress().getCity());
+                addressDTO.setReference(business.getOrderID().getAddress().getReference());
+                addressDTO.setState(business.getOrderID().getAddress().getState());
+                addressDTO.setState(business.getOrderID().getAddress().getState());
+                addressDTO.setCep(business.getOrderID().getAddress().getCep());
+
+                orderDTO.setAddress(addressDTO);
+            }
+
+//            forma de pagamento
+            if (business.getOrderID().getPayment()!= null) {
+                PaymentMethodsDTO paymentMethodsDTO = new PaymentMethodsDTO();
+
+                paymentMethodsDTO.setId(business.getOrderID().getPayment().getId());
+                paymentMethodsDTO.setDescription(business.getOrderID().getPayment().getDescription());
+                paymentMethodsDTO.setInstallments(business.getOrderID().getPayment().getInstallments());
+
+                orderDTO.setPayment(paymentMethodsDTO);
+            }
+
+//            cartão
+            if (business.getOrderID().getCard()!= null) {
+                CardDTO cardDTO = new CardDTO();
+
+                cardDTO.setName(business.getOrderID().getCard().getName());
+                cardDTO.setCardNumber(business.getOrderID().getCard().getCardNumber());
+                cardDTO.setCpf(business.getOrderID().getCard().getCpf());
+                cardDTO.setDueDate(business.getOrderID().getCard().getDueDate());
+                cardDTO.setBirthDate(business.getOrderID().getCard().getBirthDate());
+
+//                bandeira
+                if (business.getOrderID().getCard().getIdBandeira() != null) {
+                    FlagDTO flagDTO = new FlagDTO();
+                    Flag flag = business.getOrderID().getCard().getIdBandeira();
+
+                    flagDTO.setId(flag.getId());
+                    flagDTO.setDescription(flag.getDescription());
+
+                    cardDTO.setFlag(flagDTO);
+                }
+
+                orderDTO.setCard(cardDTO);
+            }
+
+            dto.setOrderId(orderDTO);
+        }
+
         return dto;
     }
 
@@ -91,6 +172,7 @@ public class InvoiceService {
 //       Tipo Nota Fiscal
         if (dto.getInvoiceTypeId() != null){
             TipoNf invoiceType  = new TipoNf();
+
             if (dto.getInvoiceTypeId().getId() != null){
                 invoiceType.setId(dto.getInvoiceTypeId().getId());
             } else {
@@ -102,6 +184,7 @@ public class InvoiceService {
 //      Usuário
         if (dto.getUserId() != null){
             MyUser myUser  = new MyUser();
+
             if (dto.getUserId().getId() != null){
                 myUser.setId(dto.getUserId().getId());
             } else {
@@ -113,6 +196,25 @@ public class InvoiceService {
             }
 
             business.setUserId(myUser);
+        }
+
+//        Pedido
+        if (dto.getOrderId() != null){
+            Order order = new Order();
+
+            if (dto.getOrderId().getId() != null){
+                order.setId(dto.getOrderId().getId());
+            } else {
+                order.setDateOrder(dto.getOrderId().getDateOrder());
+                order.setDeliveryValue(dto.getOrderId().getDeliveryValue());
+                order.setDateOrder(dto.getOrderId().getDateOrder());
+                order.setAmount(dto.getOrderId().getAmount());
+                order.setQtyTotal(dto.getOrderId().getQtyTotal());
+                order.setTotalDiscounts(dto.getOrderId().getTotalDiscounts());
+//                order.setBankSlip(dto.getOrderId().getBankSlip());
+            }
+
+            business.setOrderID(order);
         }
 
         return business;
@@ -131,6 +233,7 @@ public class InvoiceService {
     public InvoiceDTO createInvoice(InvoiceDTO invoice){
         Invoice newInvoice = this.dtoToBusiness(invoice);
 
+//        Tipo de nota
         if (newInvoice.getInvoiceTypeId() != null) {
             Long id = newInvoice.getInvoiceTypeId().getId();
             TipoNf invoiceType;
@@ -143,6 +246,7 @@ public class InvoiceService {
            newInvoice.setInvoiceTypeId(invoiceType);
         }
 
+//        Usuario
         if (newInvoice.getUserId() != null) {
             Long id = newInvoice.getUserId().getId();
             MyUser user;
@@ -153,6 +257,19 @@ public class InvoiceService {
                 user = this.userRepository.save(newInvoice.getUserId());
             }
             newInvoice.setUserId(user);
+        }
+
+//        Pedido
+        if (newInvoice.getOrderID() != null) {
+            Long id = newInvoice.getOrderID().getId();
+            Order order;
+
+            if (id != null) {
+                order = this.orderRepository.getById(id);
+            } else {
+                order = this.orderRepository.save(newInvoice.getOrderID());
+            }
+            newInvoice.setOrderID(order);
         }
 
         newInvoice = invoiceRepository.save(newInvoice);
@@ -176,81 +293,4 @@ public class InvoiceService {
         return null;
     }
 
-//    public InvoiceDTO createInvoice(InvoiceDTO invoice){
-//        Invoice newInvoice = this.dtoToBusiness(invoice);
-//
-//        if (newInvoice.getUserId() != null) {
-//            Long id = newInvoice.getUserId().getId();
-//            MyUser myUser;
-//
-//            if (id != null) {
-//                myUser = this.userRepository.getById(id);
-//            } else {
-//                myUser = this.userRepository.save(newInvoice.getUserId());
-//            }
-//            newInvoice.setUserId(myUser);
-//        }
-//        newInvoice = invoiceRepository.save(newInvoice);
-//        return this.businessToDto(newInvoice);
-//    }
-//
-//    public InvoiceDTO updateInvoice(InvoiceDTO dto, Long id) {
-//        Optional<Invoice> op = invoiceRepository.findById(id);
-//
-//        if(op.isPresent()){
-//            Invoice obj = op.get();
-//
-//            if (dto.getInvoiceNumber() != null){
-//                obj.setInvoiceNumber(dto.getInvoiceNumber());
-//            }
-//            if (dto.getStateInvoice() != null){
-//                obj.setStateInvoice(dto.getStateInvoice());
-//            }
-//            if (dto.getShipping() != null){
-//                obj.setShipping(dto.getShipping());
-//            }
-//            if (dto.getAccessKeyNumber() != null){
-//                obj.setAccessKeyNumber(dto.getAccessKeyNumber());
-//            }
-//            if (dto.getIssueDate() != null){
-//                obj.setIssueDate(dto.getIssueDate());
-//            }
-//            if (dto.getTotalIPI() != null){
-//                obj.setTotalIPI(dto.getTotalIPI());
-//            }
-//            if (dto.getTotalICMS() != null){
-//                obj.setTotalICMS(dto.getTotalICMS());
-//            }
-//            if (dto.getTotalDiscount() != null){
-//                obj.setTotalDiscount(dto.getTotalDiscount());
-//            }
-//            if (dto.getTotalPrice() != null){
-//                obj.setTotalPrice(dto.getTotalPrice());
-//            }
-//
-//            if (dto.getUserId() != null){
-//                if (dto.getUserId().getId() != null){
-//                    if (userRepository.existsById(obj.getUserId().getId())){
-//                        obj.setUserId(userRepository.getById(dto.getUserId().getId()));
-//                    } else {
-//                        obj.getIdBandeira().setDescription(dto.getFlag().getDescription());
-//                        obj.setIdBandeira(flagRepository.save(obj.getIdBandeira()));
-//                    }
-//                } else {
-//                    obj.getIdBandeira().setDescription(dto.getFlag().getDescription());
-//                    obj.setIdBandeira(flagRepository.save(obj.getIdBandeira()));
-//                }
-//            }
-//
-//            invoiceRepository.save(obj);
-//            return businessToDto(obj);
-//        }
-//        return null;
-//    }
-//
-//    public void deleteInvoice(Long id) {
-//        if (invoiceRepository.existsById(id)){
-//            invoiceRepository.deleteById(id);
-//        }
-//    }
 }
