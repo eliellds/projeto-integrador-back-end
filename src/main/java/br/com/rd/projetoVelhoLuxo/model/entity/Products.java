@@ -2,9 +2,13 @@ package br.com.rd.projetoVelhoLuxo.model.entity;
 
 
 import br.com.rd.projetoVelhoLuxo.model.entity.Category;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity(name = "tb_produtos")
 @Data
@@ -35,4 +39,5 @@ public class Products {
 
     @Column(nullable = false, name = "cl_imagem")
     private String image;
+
 }

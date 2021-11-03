@@ -1,9 +1,15 @@
 package br.com.rd.projetoVelhoLuxo.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 @Data
 @Entity(name = "tb_pedido")
 public class Order {
@@ -65,4 +71,5 @@ public class Order {
 
     @Column(name="cl_nr_boleto")
     private String bankSlip;
+
 }
