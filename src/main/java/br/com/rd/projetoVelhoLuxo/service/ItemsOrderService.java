@@ -1,168 +1,278 @@
 package br.com.rd.projetoVelhoLuxo.service;
 
 import br.com.rd.projetoVelhoLuxo.model.dto.*;
+import br.com.rd.projetoVelhoLuxo.model.embeddable.ItemsOrderKey;
 import br.com.rd.projetoVelhoLuxo.model.entity.*;
-import br.com.rd.projetoVelhoLuxo.repository.contract.*;
+import br.com.rd.projetoVelhoLuxo.repository.contract.ItemsOrderRepository;
+import br.com.rd.projetoVelhoLuxo.repository.contract.OrderRepository;
+import br.com.rd.projetoVelhoLuxo.repository.contract.ProductsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
-public class OrderService {
+public class ItemsOrderService {
+
+    @Autowired
+    ItemsOrderRepository itemsOrderRepository;
+
+    @Autowired
+    ProductsRepository productsRepository;
+
     @Autowired
     OrderRepository orderRepository;
-    @Autowired
-    AddressRepository addressRepository;
-    @Autowired
-    TelephoneRepository telephoneRepository;
-    @Autowired
-    DeliveryRepository deliveryRepository;
-    @Autowired
-    CardRepository cardRepository;
-    @Autowired
-    MyUserRepository myUserRepository;
-    @Autowired
-    FlagRepository flagRepository;
-    @Autowired
-    PaymentMethodsRepository paymentRepository;
 
-    public OrderDTO create(OrderDTO toCreate){
-        Order created = convertToOrder(toCreate);
+    //////////////////////////////////
+    // cria relacao de item com pedido
+    public ItemsOrderDTO linkItemsToOrder(ItemsOrderDTO toLink) throws Exception {
+        ItemsOrder itemOrder = new ItemsOrder();
 
-        if(toCreate.getAddress()!=null) {
-            Address address = new Address();
-            if (toCreate.getAddress().getId() != null) {
+        itemOrder.setTotalPrice(toLink.getTotalPrice());
+        itemOrder.setQuantity(toLink.getQuantity());
+        itemOrder.setTotalDicount(toLink.getTotalDiscount());
+        itemOrder.setUnitDiscount(toLink.getUnityDiscount());
 
-                if (addressRepository.existsById(created.getAddress().getId())) {
-                    address = addressRepository.getById(toCreate.getAddress().getId());
+        // conferindo se a composite key foi preenchida
+        if (toLink.getCompositeKey() != null) {
+            ItemsOrderKey key = new ItemsOrderKey();
+            key.setIdItem(toLink.getCompositeKey().getIdItem());
+            key.setOrder(orderRepository.getById(toLink.getCompositeKey().getOrderDTO().getId()));
 
-                }
-            }else{
-                address = addressRepository.save(convertToAddress(toCreate.getAddress()));
-            }
+            // conferindo se a combinacao item id e pedido(order) ja existe
+            if (!itemsOrderRepository.existsById(key)) {
 
-            created.setAddress(address);
-        }
+                // conferindo se order foi preenchida
+                if (key.getOrder() != null) {
+                    Order order = new Order();
 
-        //user
-        if(toCreate.getMyUser()!=null) {
-            if (toCreate.getMyUser().getId() != null) {
-                MyUser myUser = new MyUser();
-                if (myUserRepository.existsById(toCreate.getMyUser().getId())) {
-                    myUser = myUserRepository.getById(toCreate.getMyUser().getId());
-                }
+                    if (key.getOrder().getId() != null) {
 
-                created.setMyUser(myUser);
-            }
-        }
+                        if (orderRepository.existsById(key.getOrder().getId())) {
+                            order = orderRepository.getById(key.getOrder().getId());
 
-        //telephone
-        if(created.getTelephone()!=null) {
-            Telephone tel = new Telephone();
-            if (created.getTelephone().getId() != null) {
+                        }
 
-                if (telephoneRepository.existsById(created.getTelephone().getId())) {
-                    tel = telephoneRepository.getById(created.getTelephone().getId());
-                }
-            }else{
-                tel = telephoneRepository.save(created.getTelephone());
-            }
-            created.setTelephone(tel);
-        }
-        //delivery
-        if(created.getDelivery()!=null) {
-            Delivery delivery = new Delivery();
-            if (created.getDelivery().getId() != null) {
+                    } else {
+                        throw new NullPointerException("Order id must be inserted!");
+                    }
 
-                if (deliveryRepository.existsById(created.getDelivery().getId())) {
-                    delivery = deliveryRepository.getById(created.getDelivery().getId());
+                    key.setOrder(order);
+
+                } else {
+                    throw new NullPointerException("Order must be inserted!");
                 }
 
-            }else{
-                delivery = deliveryRepository.save(created.getDelivery());
-            }
-            created.setDelivery(delivery);
-        }
-        if(created.getCard().getIdBandeira() != null){
+                // conferindo ultimo item do pedido e adicionando + 1 ao valor do id item atual
+                if (!findByOrderId(key.getOrder().getId()).isEmpty()) {
+                    List<ItemsOrderDTO> list = findByOrderId(toLink.getCompositeKey().getOrderDTO().getId());
+                    key.setIdItem(
+                            (list.get(0).getCompositeKey().getIdItem()) + 1
+                    );
 
-            Flag flag = new Flag();
-            if(flag.getId()!=null){
-                if(flagRepository.existsById(created.getCard().getIdBandeira().getId())){
-
-                    flag = flagRepository.getById(created.getCard().getIdBandeira().getId());
-
+                } else {
+                    key.setIdItem(1L);
                 }
-            }else{
-                flag = flagRepository.save(created.getCard().getIdBandeira());
 
+            } else {
+                throw new Exception("Composite key already exists!");
             }
 
-            created.getCard().setIdBandeira(flag);
+            itemOrder.setCompositeKey(key);
 
+        } else {
+            throw new NullPointerException("Composite key must be inserted!");
         }
 
-        //
-        if(created.getCard()!=null) {
-            Card card = new Card();
-            if (created.getCard().getCardNumber() != null) {
+        // conferindo se produto foi preenchido
+        if (toLink.getProductsDTO() != null) {
+            Products product = new Products();
 
-                if (cardRepository.existsById(created.getCard().getCardNumber())) {
-                    card = cardRepository.getById(created.getCard().getCardNumber());
-                }else{
-                    card = cardRepository.save(created.getCard());
+            if (toLink.getProductsDTO().getId() != null) {
+                Long id = toLink.getProductsDTO().getId();
+
+                if (productsRepository.existsById(id)) {
+                    product = productsRepository.getById(id);
 
                 }
 
+                itemOrder.setProduct(product);
+
+            } else {
+                throw new NullPointerException("Product id must be inserted!");
             }
 
-
-
-            created.setCard(card);
+        } else {
+            throw new NullPointerException("Product id must be inserted!");
         }
-        if(created.getPayment()!=null) {
-            PaymentMethods pay = new PaymentMethods();
-            if (created.getPayment().getId() != null) {
 
-                if (paymentRepository.existsById(created.getPayment().getId())) {
-                    pay = paymentRepository.getById(created.getPayment().getId());
-                }else{
-                    pay = paymentRepository.save(created.getPayment());
+        itemOrder = itemsOrderRepository.save(itemOrder);
 
-                }
-
-            }
-
-
-
-            created.setPayment(pay);
-        }
-        LocalDate today = LocalDate.now();
-        LocalDate deliveryDate = LocalDate.now().plusDays(120);
-
-        created.setDateOrder(today);
-        created.setDeliveryDate(deliveryDate);
-
-        created = orderRepository.save(created);
-
-        return convertToDTO(created);
-    }
-    public List<OrderDTO> findOrderByUser(Long id){
-
-        return convertList(orderRepository.findAllByMyUserId(id));
+        return businessToDto(itemOrder);
 
     }
 
+    /////////////////////////////////////////////////
+    // encontra lista de itemsOrder pelo compositeKey
+    private ItemsOrderDTO findByCompositeKey(Long idItem, Order order) {
+        ItemsOrderKey key = new ItemsOrderKey();
+        key.setIdItem(idItem);
+        key.setOrder(order);
 
+        Optional<ItemsOrder> opt = itemsOrderRepository.findById(key);
 
+        if (opt.isPresent()) {
+            return businessToDto(opt.get());
+        }
 
-    //Conversões
+        return null;
+
+    }
+
+    private List<ItemsOrderDTO> findByOrderId(Long id) {
+        return listToDto(itemsOrderRepository.findFirst1ByCompositeKeyOrderIdOrderByCompositeKeyIdItemDesc(id));
+
+    }
+
+//    ////////////////////////////////////////////////
+//    // encontra lista de itemsOrder pelo id de Order
+//    public List<ItemsOrderDTO> findAllByOrderId(Long orderId) {
+//
+//        return listToDto(itemsOrderRepository.findAllByOrderId(orderId));
+//
+//    }
+
+    ////////////////////////////////////////////////////
+    // converter lista de objeto final order para lista de dto
+    private List<ItemsOrderDTO> listToDto(List<ItemsOrder> itemsOrderList) {
+        List<ItemsOrderDTO> list = new ArrayList<>();
+
+        for (ItemsOrder convert : itemsOrderList) {
+            list.add(businessToDto(convert));
+        }
+
+        return list;
+
+    }
+
+    //////////////////////////////////////////
+    // convertendo dto para objeto final order
+    private ItemsOrder dtoToBusiness(ItemsOrderDTO dto) {
+        ItemsOrder business = new ItemsOrder();
+        ItemsOrderKey key = new ItemsOrderKey();
+
+        if (dto.getCompositeKey().getOrderDTO() != null) {
+            key.setOrder(convertToOrder(dto.getCompositeKey().getOrderDTO()));
+        }
+        key.setIdItem(dto.getCompositeKey().getIdItem());
+
+        business.setCompositeKey(key);
+
+        business.setProduct(dtoToBusiness(dto.getProductsDTO()));
+        business.setQuantity(dto.getQuantity());
+        business.setUnitDiscount(dto.getUnityDiscount());
+        business.setTotalDicount(dto.getTotalDiscount());
+        business.setTotalPrice(dto.getTotalPrice());
+
+        return business;
+
+    }
+
+    //////////////////////////////////////////
+    // convertendo objeto final order para dto
+    private ItemsOrderDTO businessToDto(ItemsOrder business) {
+        ItemsOrderDTO dto = new ItemsOrderDTO();
+        ItemsOrderKeyDTO key = new ItemsOrderKeyDTO();
+        key.setIdItem(business.getCompositeKey().getIdItem());
+        key.setOrderDTO(convertToDTO(business.getCompositeKey().getOrder()));
+
+        dto.setCompositeKey(key);
+
+        dto.setProductsDTO(businessToDto(business.getProduct()));
+        dto.setQuantity(business.getQuantity());
+        dto.setUnityDiscount(business.getUnitDiscount());
+        dto.setTotalDiscount(business.getTotalDicount());
+        dto.setTotalPrice(business.getTotalPrice());
+
+        return dto;
+
+    }
+
+    //////////////////////////////////////////
+    // converte dto para objeto final products
+    private Products dtoToBusiness(ProductsDTO dto) {
+        Products business = new Products();
+        business.setProduct(dto.getProduct());
+        business.setDescription(dto.getDescription());
+        business.setFeature(dto.getFeature());
+        business.setYear(dto.getYear());
+        business.setQuantity(dto.getQuantity());
+        business.setImage(dto.getImage());
+
+        if (dto.getCategoryDTO() != null) {
+            Category category = new Category();
+
+            if (dto.getCategoryDTO().getId() != null) {
+                category.setId(dto.getCategoryDTO().getId());
+            } else {
+                category.setCategory(dto.getCategoryDTO().getCategory());
+                category.setDescription(dto.getCategoryDTO().getDescription());
+            }
+            business.setCategoryID(category);
+        }
+
+        if (dto.getConservationState() != null) {
+            ConservationState conservationState = new ConservationState();
+
+            if (dto.getConservationState().getId() != null) {
+                conservationState.setId(dto.getConservationState().getId());
+            } else {
+                conservationState.setDescription(dto.getConservationState().getDescription());
+            }
+            business.setConservationState(conservationState);
+        }
+        return business;
+    }
+
+    //////////////////////////////////////////
+    // converte objeto final products para dto
+    private ProductsDTO businessToDto(Products business) {
+        ProductsDTO dto = new ProductsDTO();
+        dto.setId(business.getId());
+        dto.setProduct(business.getProduct());
+        dto.setDescription(business.getDescription());
+        dto.setFeature(business.getFeature());
+        dto.setYear  (business.getYear());
+        dto.setQuantity(business.getQuantity());
+        dto.setImage(business.getImage());
+
+        if (business.getCategoryID() != null) {
+            CategoryDTO categoryDTO = new CategoryDTO();
+            categoryDTO.setId(business.getCategoryID().getId());
+            categoryDTO.setCategory(business.getCategoryID().getCategory());
+            categoryDTO.setDescription(business.getCategoryID().getDescription());
+
+            dto.setCategoryDTO(categoryDTO);
+        }
+        if (business.getConservationState() != null) {
+            ConservationStateDTO conservationStateDTO = new ConservationStateDTO();
+            conservationStateDTO.setId((business.getConservationState().getId()));
+            conservationStateDTO.setDescription(business.getConservationState().getDescription());
+
+            dto.setConservationState(conservationStateDTO);
+        }
+
+        return dto;
+    }
+
+    ///////////////////////////////////////
+    // converte objeto final order para dto
     private OrderDTO convertToDTO(Order toConvert){
-       OrderDTO converted = new OrderDTO();
+        OrderDTO converted = new OrderDTO();
 
-       converted.setId(toConvert.getId());
+        converted.setId(toConvert.getId());
 
 //         myUser;
 
@@ -194,10 +304,10 @@ public class OrderService {
         if(toConvert.getTelephone()!=null){
             TelephoneDTO telephone = new TelephoneDTO();
 
-                telephone.setId(toConvert.getTelephone().getId());
+            telephone.setId(toConvert.getTelephone().getId());
 
 
-                telephone = convertToDTOTelphone(toConvert.getTelephone());
+            telephone = convertToDTOTelphone(toConvert.getTelephone());
 
 
             converted.setTelephone(telephone);
@@ -208,9 +318,9 @@ public class OrderService {
         if(toConvert.getCard()!=null){
             CardDTO card = new CardDTO();
 
-                card.setCardNumber(toConvert.getCard().getCardNumber());
+            card.setCardNumber(toConvert.getCard().getCardNumber());
 
-                card = businessToCardDto(toConvert.getCard());
+            card = businessToCardDto(toConvert.getCard());
 
             converted.setCard(card);
         }
@@ -218,9 +328,9 @@ public class OrderService {
         if(toConvert.getDelivery()!=null){
             DeliveryDTO deliveryDTO = new DeliveryDTO();
 
-                deliveryDTO.setId(toConvert.getDelivery().getId());
+            deliveryDTO.setId(toConvert.getDelivery().getId());
 
-                deliveryDTO = businessToDeliveryDto(toConvert.getDelivery());
+            deliveryDTO = businessToDeliveryDto(toConvert.getDelivery());
 
             converted.setDelivery(deliveryDTO);
         }
@@ -261,17 +371,8 @@ public class OrderService {
         return converted;
     }
 
-    //convert to List()
-    private List<OrderDTO> convertList (List<Order> list){
-        List<OrderDTO> listDTO = new ArrayList<>();
-        for (Order a : list) {
-            listDTO.add(convertToDTO(a));
-        }
-
-        return listDTO;
-    }
-
-    //convert to final
+    ///////////////////////////////////////
+    // converte dto para objeto final order
     private Order convertToOrder(OrderDTO toConvert){
         Order converted = new Order();
 
@@ -295,9 +396,9 @@ public class OrderService {
 
 //        private AddressDTO address;
 
-            Address address ;
-            address = convertToAddress(toConvert.getAddress());
-            converted.setAddress(address);
+        Address address ;
+        address = convertToAddress(toConvert.getAddress());
+        converted.setAddress(address);
 
 
 //        private TelephoneDTO telephone;
@@ -354,7 +455,19 @@ public class OrderService {
         return converted;
     }
 
-    //convertUser
+    /////////////////////////////////////////////////
+    // converte lista de order para lista de orderDTO
+    private List<OrderDTO> convertList (List<Order> list){
+        List<OrderDTO> listDTO = new ArrayList<>();
+        for (Order a : list) {
+            listDTO.add(convertToDTO(a));
+        }
+
+        return listDTO;
+    }
+
+    ////////////////////////////////////////
+    // converte objeto final myUser para dto
     private MyUserDTO convertToUserDTO(MyUser toConvert){
         MyUserDTO converted = new MyUserDTO();
         //nascimento
@@ -380,6 +493,9 @@ public class OrderService {
         return converted;
 
     }
+
+    ////////////////////////////////////////
+    // converte dto para objeto final myUser
     private MyUser convertToUser(MyUserDTO toConvert){
         MyUser converted = new MyUser();
         //nascimento
@@ -404,8 +520,8 @@ public class OrderService {
 
     }
 
-    /////////////conversões de telefone////////
-    //convert Para telefone final
+    ///////////////////////////////////////////
+    // converte dto para objeto final telephone
     private Telephone convertToTelephone(TelephoneDTO toConvert){
         Telephone converted = new Telephone();
         if (toConvert.getId()!=null){
@@ -417,7 +533,8 @@ public class OrderService {
         return converted;
     }
 
-    //convert telefone DTO
+    ///////////////////////////////////////////
+    // converte objeto final telephone para dto
     private TelephoneDTO convertToDTOTelphone(Telephone toConvert){
         TelephoneDTO converted = new TelephoneDTO();
         if(toConvert.getId()!=null) {
@@ -429,8 +546,8 @@ public class OrderService {
         return converted;
     }
 
-
-//conversões de address
+    /////////////////////////////////////////
+    // converte dto para objeto final address
     private AddressDTO convertToAddressDTO(Address address){
         AddressDTO addressDTO = new AddressDTO();
         //id
@@ -459,6 +576,8 @@ public class OrderService {
 
     }
 
+    /////////////////////////////////////////
+    // converte objeto final address para dto
     private Address convertToAddress(AddressDTO addressDTO){
         Address address = new Address();
         //id
@@ -490,8 +609,8 @@ public class OrderService {
 
     }
 
-    //card Conversões
-
+    //////////////////////////////////////
+    // converte dto para objeto final card
     private Card dtoToCardBusiness(CardDTO dto) {
         Card business = new Card();
 
@@ -514,6 +633,8 @@ public class OrderService {
         return business;
     }
 
+    //////////////////////////////////////
+    // converte objeto final card para dto
     private CardDTO businessToCardDto(Card business) {
         CardDTO dto = new CardDTO();
 
@@ -531,18 +652,22 @@ public class OrderService {
         }
         return dto;
     }
+
+    //////////////////////////////////////////
+    // converte dto para objeto final delivery
     private Delivery dtoToDeliveryBusiness(DeliveryDTO dto){
         Delivery business = new Delivery();
         business.setDescricao(dto.getDescricao());
         return business;
     }
 
+    //////////////////////////////////////////
+    // converte objeto final delivery para dto
     private DeliveryDTO businessToDeliveryDto(Delivery business){
         DeliveryDTO dto = new DeliveryDTO();
         dto.setId(business.getId());
         dto.setDescricao(business.getDescricao());
         return dto;
     }
-
 
 }
