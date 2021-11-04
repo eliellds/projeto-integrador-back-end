@@ -44,11 +44,15 @@ public class CategorySERV {
 
     public CategoryDTO updateCategoryById(CategoryDTO dto, Long id){
         Optional<Category> optional = this.categoryREPO.findById(id);
+
         if (optional.isPresent()){
             Category category = optional.get();
 
             if(dto.getCategory() != null){
                 category.setCategory(dto.getCategory());
+            }
+
+            if(dto.getDescription() != null) {
                 category.setDescription(dto.getDescription());
             }
 

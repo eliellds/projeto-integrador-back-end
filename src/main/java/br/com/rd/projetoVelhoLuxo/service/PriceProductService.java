@@ -3,6 +3,7 @@ package br.com.rd.projetoVelhoLuxo.service;
 import br.com.rd.projetoVelhoLuxo.model.dto.*;
 import br.com.rd.projetoVelhoLuxo.model.embeddable.PriceProductKey;
 import br.com.rd.projetoVelhoLuxo.model.entity.Category;
+import br.com.rd.projetoVelhoLuxo.model.entity.ConservationState;
 import br.com.rd.projetoVelhoLuxo.model.entity.PriceProduct;
 import br.com.rd.projetoVelhoLuxo.model.entity.Products;
 import br.com.rd.projetoVelhoLuxo.repository.contract.PriceProductRepository;
@@ -39,8 +40,16 @@ public class PriceProductService {
             CategoryDTO categoryDTO = new CategoryDTO();
             categoryDTO.setId(business.getCategoryID().getId());
             categoryDTO.setCategory(business.getCategoryID().getCategory());
+            categoryDTO.setDescription(business.getCategoryID().getDescription());
 
             dto.setCategoryDTO(categoryDTO);
+        }
+        if (business.getConservationState() != null) {
+            ConservationStateDTO conservationState = new ConservationStateDTO();
+            conservationState.setId(business.getId());
+            conservationState.setDescription(business.getDescription());
+
+            dto.setConservationState(conservationState);
         }
         return dto;
     }
@@ -78,6 +87,7 @@ public class PriceProductService {
                 category.setId(dto.getCategoryDTO().getId());
             } else {
                 category.setCategory(dto.getCategoryDTO().getCategory());
+                category.setDescription(dto.getCategoryDTO().getDescription());
             }
 
             business.setCategoryID(category);
