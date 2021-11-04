@@ -81,23 +81,19 @@ public class OrderService {
                     delivery = deliveryRepository.getById(created.getDelivery().getId());
                 }
 
-            }else{
-                delivery = deliveryRepository.save(created.getDelivery());
             }
+
             created.setDelivery(delivery);
         }
         if(created.getCard().getIdBandeira() != null){
 
             Flag flag = new Flag();
-            if(flag.getId()!=null){
+            if(created.getCard().getIdBandeira().getId()!=null){
                 if(flagRepository.existsById(created.getCard().getIdBandeira().getId())){
 
                     flag = flagRepository.getById(created.getCard().getIdBandeira().getId());
 
                 }
-            }else{
-                flag = flagRepository.save(created.getCard().getIdBandeira());
-
             }
 
             created.getCard().setIdBandeira(flag);
@@ -153,6 +149,15 @@ public class OrderService {
 
         return convertList(orderRepository.findAllByMyUserId(id));
 
+    }
+
+    public OrderDTO findByIdOrder(Long id){
+            if(orderRepository.existsById(id)){
+
+               OrderDTO orderDTO = convertToDTO(orderRepository.getById(id));
+                return orderDTO;
+            }
+        return null;
     }
 
 
@@ -294,11 +299,11 @@ public class OrderService {
         }
 
 //        private AddressDTO address;
-
-            Address address ;
+        if(toConvert.getAddress()!=null) {
+            Address address;
             address = convertToAddress(toConvert.getAddress());
             converted.setAddress(address);
-
+        }
 
 //        private TelephoneDTO telephone;
         if(toConvert.getTelephone()!=null){
@@ -462,8 +467,8 @@ public class OrderService {
     private Address convertToAddress(AddressDTO addressDTO){
         Address address = new Address();
         //id
-        if(address.getId()!=null) {
-            address.setId(address.getId());
+        if(addressDTO.getId()!=null) {
+            address.setId(addressDTO.getId());
         }
         //cep
         address.setCep(addressDTO.getCep());
@@ -533,6 +538,9 @@ public class OrderService {
     }
     private Delivery dtoToDeliveryBusiness(DeliveryDTO dto){
         Delivery business = new Delivery();
+        if(dto.getId()!=null){
+        business.setId(dto.getId());
+        }
         business.setDescricao(dto.getDescricao());
         return business;
     }

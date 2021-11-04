@@ -22,4 +22,8 @@ public class OrderController {
     public List<OrderDTO> findByUser(@PathVariable("id") Long id){
         return service.findOrderByUser(id);
     }
+    @GetMapping("/get/{id}")
+    public OrderDTO getOrderById(@PathVariable("id") Long id){
+        return service.findByIdOrder(id);
+    }
 }
