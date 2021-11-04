@@ -37,28 +37,28 @@ public class StoreService {
         business.setEmail(dto.getEmail());
         business.setName(dto.getName());
         business.setStateRegistration(dto.getStateRegistration());
-        if (business.getTelephoneID() != null) {
-            TelephoneDTO telephoneDTO = new TelephoneDTO();
+        if (dto.getTelephoneID() != null) {
+            Telephone telephone = new Telephone();
 
-            telephoneDTO.setId(business.getTelephoneID().getId());
-            telephoneDTO.setNumber(business.getTelephoneID().getNumber());
+            telephone.setId(dto.getTelephoneID().getId());
+            telephone.setNumber(dto.getTelephoneID().getNumber());
 
-            dto.setTelephoneID(telephoneDTO);
+            business.setTelephoneID(telephone);
         }
-        if (business.getAddressID() != null) {
-            AddressDTO addressDTO = new AddressDTO();
+        if (dto.getAddressID() != null) {
+            Address address = new Address();
 
-            addressDTO.setId(business.getAddressID().getId());
-            addressDTO.setStreet(business.getAddressID().getStreet());
-            addressDTO.setNumber(business.getAddressID().getNumber());
-            addressDTO.setComplement(business.getAddressID().getComplement());
-            addressDTO.setCity(business.getAddressID().getCity());
-            addressDTO.setDistrict(business.getAddressID().getDistrict());
-            addressDTO.setState(business.getAddressID().getState());
-            addressDTO.setReference(business.getAddressID().getReference());
-            addressDTO.setCep(business.getAddressID().getCep());
+            address.setId(dto.getAddressID().getId());
+            address.setStreet(dto.getAddressID().getStreet());
+            address.setNumber(dto.getAddressID().getNumber());
+            address.setComplement(dto.getAddressID().getComplement());
+            address.setCity(dto.getAddressID().getCity());
+            address.setDistrict(dto.getAddressID().getDistrict());
+            address.setState(dto.getAddressID().getState());
+            address.setReference(dto.getAddressID().getReference());
+            address.setCep(dto.getAddressID().getCep());
 
-            dto.setAddressID(addressDTO);
+            business.setAddressID(address);
         }
 
         return business;
@@ -73,35 +73,28 @@ public class StoreService {
         dto.setCnpj(business.getCnpj());
         dto.setEmail(business.getEmail());
         dto.setStateRegistration(business.getStateRegistration());
-        if (dto.getTelephoneID() != null) {
-            Telephone telephone = new Telephone();
+        if (business.getTelephoneID() != null) {
+            TelephoneDTO telephone = new TelephoneDTO();
 
-            if (dto.getTelephoneID().getId() != null) {
-                telephone.setId(dto.getTelephoneID().getId());
-            } else {
-               telephone.setNumber(dto.getTelephoneID().getNumber());
-            }
+            telephone.setId(business.getTelephoneID().getId());
+            telephone.setNumber(business.getTelephoneID().getNumber());
 
-            business.setTelephoneID(telephone);
+            dto.setTelephoneID(telephone);
         }
-        if (dto.getAddressID() != null) {
-            Address address = new Address();
+        if (business.getAddressID() != null) {
+            AddressDTO address = new AddressDTO();
 
-            if (dto.getAddressID().getId() != null) {
-                address.setId(dto.getAddressID().getId());
-            } else {
-                address.setStreet(dto.getAddressID().getStreet());
-                address.setNumber(dto.getAddressID().getNumber());
-                address.setComplement(dto.getAddressID().getComplement());
-                address.setCity(dto.getAddressID().getCity());
-                address.setDistrict(dto.getAddressID().getDistrict());
-                address.setState(dto.getAddressID().getState());
-                address.setReference(dto.getAddressID().getReference());
-                address.setCep(dto.getAddressID().getCep());
+            address.setId(business.getAddressID().getId());
+            address.setStreet(business.getAddressID().getStreet());
+            address.setNumber(business.getAddressID().getNumber());
+            address.setComplement(business.getAddressID().getComplement());
+            address.setCity(business.getAddressID().getCity());
+            address.setDistrict(business.getAddressID().getDistrict());
+            address.setState(business.getAddressID().getState());
+            address.setReference(business.getAddressID().getReference());
+            address.setCep(business.getAddressID().getCep());
 
-            }
-
-            business.setAddressID(address);
+            dto.setAddressID(address);
         }
 
         return dto;
