@@ -8,4 +8,8 @@ public interface ItemsOrderRepositoryCustom {
 
     List<ItemsOrder> findFirst1ByCompositeKeyOrderIdOrderByCompositeKeyIdItemDesc(Long id);
 
+    List<ItemsOrder> findAllByCompositeKeyOrderIdOrderByCompositeKeyOrderIdDesc(Long id);
+
+    List<ItemsOrder> findAllByOrderByCompositeKeyOrderIdDesc();
+
 }

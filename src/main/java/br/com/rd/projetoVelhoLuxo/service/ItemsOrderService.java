@@ -66,8 +66,8 @@ public class ItemsOrderService {
                 }
 
                 // conferindo ultimo item do pedido e adicionando + 1 ao valor do id item atual
-                if (!findByOrderId(key.getOrder().getId()).isEmpty()) {
-                    List<ItemsOrderDTO> list = findByOrderId(toLink.getCompositeKey().getOrderDTO().getId());
+                if (!findOneByOrderId(key.getOrder().getId()).isEmpty()) {
+                    List<ItemsOrderDTO> list = findOneByOrderId(toLink.getCompositeKey().getOrderDTO().getId());
                     key.setIdItem(
                             (list.get(0).getCompositeKey().getIdItem()) + 1
                     );
@@ -114,9 +114,16 @@ public class ItemsOrderService {
 
     }
 
+    ///////////////////////////////
+    // encontra todos os itemsOrder
+    public List<ItemsOrderDTO> findAllList() {
+        List<ItemsOrder> list = itemsOrderRepository.findAllByOrderByCompositeKeyOrderIdDesc();
+        return listToDto(list);
+    }
+
     /////////////////////////////////////////////////
     // encontra lista de itemsOrder pelo compositeKey
-    private ItemsOrderDTO findByCompositeKey(Long idItem, Order order) {
+    public ItemsOrderDTO findByCompositeKey(Long idItem, Order order) {
         ItemsOrderKey key = new ItemsOrderKey();
         key.setIdItem(idItem);
         key.setOrder(order);
@@ -131,7 +138,11 @@ public class ItemsOrderService {
 
     }
 
-    private List<ItemsOrderDTO> findByOrderId(Long id) {
+    public List<ItemsOrderDTO> findAllByOrderId(Long id) {
+        return listToDto(itemsOrderRepository.findAllByCompositeKeyOrderIdOrderByCompositeKeyOrderIdDesc(id));
+    }
+
+    private List<ItemsOrderDTO> findOneByOrderId(Long id) {
         return listToDto(itemsOrderRepository.findFirst1ByCompositeKeyOrderIdOrderByCompositeKeyIdItemDesc(id));
 
     }
