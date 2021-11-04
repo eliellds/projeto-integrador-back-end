@@ -1,9 +1,9 @@
 package br.com.rd.projetoVelhoLuxo.repository.contract;
 
-import br.com.rd.projetoVelhoLuxo.model.entity.Entrega;
+import br.com.rd.projetoVelhoLuxo.model.entity.Invoice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface EntregaRepository extends JpaRepository<Entrega, Long> {
+public interface InvoiceRepository extends JpaRepository<Invoice, Long> {
 }

@@ -1,9 +1,10 @@
 package br.com.rd.projetoVelhoLuxo.repository.contract;
 
-import br.com.rd.projetoVelhoLuxo.model.entity.User;
+
+import br.com.rd.projetoVelhoLuxo.model.entity.MyUser;
 
 public interface UserRepositoryCustom {
 
-    User findByEmailEquals(String email);
+    MyUser findByEmailEquals(String email);
 
 }

@@ -31,4 +31,20 @@ public class PriceProductController {
     public PriceProductDTO searchId(@PathVariable("id") ProductsDTO id, @PathVariable("date")LocalDate date){
         return priceProductService.searchById(id, date);
     }
+
+    @GetMapping("/allpricesasc")
+    public List<PriceProductDTO> searchAllPricesAsc(){
+        return this.priceProductService.findAllPricesAsc();
+    }
+
+    @GetMapping("/allpricesdesc")
+    public List<PriceProductDTO> searchAllPricesDesc(){
+        return this.priceProductService.findAllPricesDesc();
+    }
+
+    @GetMapping("/allsaleprices")
+    public List<PriceProductDTO> findByOrderBySalePriceDesc(){
+        return this.priceProductService.findByOrderBySalePriceDesc();
+    }
+
 }

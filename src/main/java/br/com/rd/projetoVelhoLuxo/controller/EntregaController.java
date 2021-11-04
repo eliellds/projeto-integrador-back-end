@@ -1,7 +1,7 @@
 package br.com.rd.projetoVelhoLuxo.controller;
 
-import br.com.rd.projetoVelhoLuxo.model.dto.EntregaDTO;
-import br.com.rd.projetoVelhoLuxo.service.EntregaService;
+import br.com.rd.projetoVelhoLuxo.model.dto.DeliveryDTO;
+import br.com.rd.projetoVelhoLuxo.service.DeliveryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -12,32 +12,32 @@ import java.util.List;
 @RequestMapping("/entrega")
 public class EntregaController {
     @Autowired
-    EntregaService entregaService;
+    DeliveryService deliveryService;
 
     @PostMapping
-    public EntregaDTO create(@RequestBody EntregaDTO entrega){
-        return entregaService.addEntrega(entrega);
+    public DeliveryDTO create(@RequestBody DeliveryDTO entrega){
+        return deliveryService.addEntrega(entrega);
     }
 
     @GetMapping
-    public List<EntregaDTO> findAll(){
-        return entregaService.findAllEntrega();
+    public List<DeliveryDTO> findAll(){
+        return deliveryService.findAllEntrega();
     }
 
     @GetMapping("/{id}")
-    public EntregaDTO searchById(@PathVariable("id") Long id){
-        return entregaService.searchEntregaById(id);
+    public DeliveryDTO searchById(@PathVariable("id") Long id){
+        return deliveryService.searchEntregaById(id);
     }
 
     @PutMapping("/{id}")
-    public EntregaDTO updateById(@RequestBody EntregaDTO dto, @PathVariable("id") Long id){
-        return entregaService.updateById(dto, id);
+    public DeliveryDTO updateById(@RequestBody DeliveryDTO dto, @PathVariable("id") Long id){
+        return deliveryService.updateById(dto, id);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public void deleteById(@PathVariable("id") Long id){
-        entregaService.deleteById(id);
+        deliveryService.deleteById(id);
     }
 
 }

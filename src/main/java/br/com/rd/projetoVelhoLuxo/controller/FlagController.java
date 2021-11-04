@@ -24,6 +24,11 @@ public class FlagController {
         return flagService.findAllFlags();
     }
 
+    @GetMapping("/{id}")
+    public FlagDTO searchById(@PathVariable("id") Long id) {
+        return flagService.searchById(id);
+    }
+
     @PutMapping("/{id}")
     public FlagDTO updateById(@RequestBody FlagDTO dto, @PathVariable("id") Long id){
         return flagService.updateFlag(dto, id);

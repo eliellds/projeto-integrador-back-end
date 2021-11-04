@@ -62,6 +62,11 @@ public class ProductsSERV {
         return this.businessToDto(newProduct);
     }
 
+    //produtos mais recentes adicionados
+    public List<ProductsDTO> findAllByOrderByIdDesc(){
+        return listToDto(productsRepository.findFirst5ByOrderByIdDesc());
+    }
+
     public List<ProductsDTO> showProducts() {
         List<Products> allList = productsRepository.findAll();
         return this.listToDto(allList);
@@ -99,6 +104,10 @@ public class ProductsSERV {
 
             if (dto.getQuantity() != null) {
                 pAux.setQuantity(dto.getQuantity());
+            }
+
+            if (dto.getImage() != null) {
+                pAux.setImage(dto.getImage());
             }
 
             productsRepository.save(pAux);
@@ -142,6 +151,7 @@ public class ProductsSERV {
         business.setFeature(dto.getFeature());
         business.setYear(dto.getYear());
         business.setQuantity(dto.getQuantity());
+        business.setImage(dto.getImage());
 
         if (dto.getCategoryDTO() != null) {
             Category category = new Category();
@@ -150,6 +160,7 @@ public class ProductsSERV {
                 category.setId(dto.getCategoryDTO().getId());
             } else {
                 category.setCategory(dto.getCategoryDTO().getCategory());
+                category.setDescription(dto.getCategoryDTO().getDescription());
             }
             business.setCategoryID(category);
         }
@@ -175,16 +186,19 @@ public class ProductsSERV {
         dto.setFeature(business.getFeature());
         dto.setYear  (business.getYear());
         dto.setQuantity(business.getQuantity());
+        dto.setImage(business.getImage());
 
         if (business.getCategoryID() != null) {
             CategoryDTO categoryDTO = new CategoryDTO();
             categoryDTO.setId(business.getCategoryID().getId());
             categoryDTO.setCategory(business.getCategoryID().getCategory());
+            categoryDTO.setDescription(business.getCategoryID().getDescription());
 
             dto.setCategoryDTO(categoryDTO);
         }
         if (business.getConservationState() != null) {
             ConservationStateDTO conservationStateDTO = new ConservationStateDTO();
+            conservationStateDTO.setId((business.getConservationState().getId()));
             conservationStateDTO.setDescription(business.getConservationState().getDescription());
             dto.setConservationState(conservationStateDTO);
         }

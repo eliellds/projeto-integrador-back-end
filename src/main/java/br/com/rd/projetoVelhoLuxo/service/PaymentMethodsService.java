@@ -15,6 +15,7 @@ public class PaymentMethodsService {
     @Autowired
     PaymentMethodsRepository paymentMethodsRepository;
 
+//    Conversão  dto para business (método de pagamento)
     private PaymentMethods dtoToBusiness(PaymentMethodsDTO dto) {
         PaymentMethods business = new PaymentMethods();
         business.setId(dto.getId());
@@ -24,9 +25,12 @@ public class PaymentMethodsService {
         return business;
     }
 
+//    Conversão Business para DTO ( método de pagamento)
     private PaymentMethodsDTO businessToDto(PaymentMethods business) {
         PaymentMethodsDTO dto = new PaymentMethodsDTO();
-        dto.setId(business.getId());
+        if(business.getId()!=null){
+            dto.setId(business.getId());
+        }
         dto.setDescription(business.getDescription());
         dto.setInstallments(business.getInstallments());
 
@@ -41,17 +45,30 @@ public class PaymentMethodsService {
         return listDto;
     }
 
+//    Criar método de pagamento
     public PaymentMethodsDTO createPaymentMethod(PaymentMethodsDTO paymentMethod){
         PaymentMethods newPaymentMethod = this.dtoToBusiness(paymentMethod);
         newPaymentMethod = paymentMethodsRepository.save(newPaymentMethod);
         return this.businessToDto(newPaymentMethod);
     }
 
+//    Enocntrar todas as formas de pagamento
     public List<PaymentMethodsDTO> findAllPaymentMethods(){
         List<PaymentMethods> allList = paymentMethodsRepository.findAll();
         return this.listToDto(allList);
     }
 
+//    Buscar a forma de pagamento por ID
+    public PaymentMethodsDTO searchById(Long id) {
+        Optional<PaymentMethods> option = paymentMethodsRepository.findById(id);
+
+        if (option.isPresent()) {
+            return businessToDto(option.get());
+        }
+        return null;
+    }
+
+//    Atualizar a forma de pagamento
     public PaymentMethodsDTO updatePaymentMethod(PaymentMethodsDTO dto, Long id) {
         Optional<PaymentMethods> op = paymentMethodsRepository.findById(id);
 
@@ -71,6 +88,7 @@ public class PaymentMethodsService {
         return null;
     }
 
+//    Deletar a forma de pagamento
     public void deletePaymentMethod(Long id) {
         if (paymentMethodsRepository.existsById(id)){
             paymentMethodsRepository.deleteById(id);

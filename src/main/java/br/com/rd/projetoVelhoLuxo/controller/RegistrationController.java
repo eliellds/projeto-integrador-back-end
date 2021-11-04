@@ -1,6 +1,6 @@
 package br.com.rd.projetoVelhoLuxo.controller;
 
-import br.com.rd.projetoVelhoLuxo.model.dto.UserDTO;
+import br.com.rd.projetoVelhoLuxo.model.dto.MyUserDTO;
 import br.com.rd.projetoVelhoLuxo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,8 +17,8 @@ public class RegistrationController {
     UserService userService;
 
     @PostMapping
-    public UserDTO registerUser(@RequestBody UserDTO userDTO) {
-        return userService.createUser(userDTO);
+    public MyUserDTO registerUser(@RequestBody MyUserDTO myUserDTO) {
+        return userService.createUser(myUserDTO);
     }
 
 }

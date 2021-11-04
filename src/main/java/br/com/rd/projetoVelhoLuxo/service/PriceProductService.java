@@ -8,6 +8,7 @@ import br.com.rd.projetoVelhoLuxo.model.entity.Products;
 import br.com.rd.projetoVelhoLuxo.repository.contract.PriceProductRepository;
 import br.com.rd.projetoVelhoLuxo.repository.contract.ProductsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 
@@ -25,6 +26,7 @@ public class PriceProductService {
     @Autowired
     ProductsRepository productsREPO;
 
+//    Conversão Business para DTO (Produto)
     private ProductsDTO businessToDto(Products business) {
         ProductsDTO dto = new ProductsDTO();
         dto.setId(business.getId());
@@ -43,6 +45,7 @@ public class PriceProductService {
         return dto;
     }
 
+    //    Conversão Business para DTO (Preço Produto)
     private PriceProductDTO businessToDto(PriceProduct pp){
         PriceProductDTO dto = new PriceProductDTO();
         PriceProductKeyDTO key = new PriceProductKeyDTO();
@@ -57,6 +60,7 @@ public class PriceProductService {
         return dto;
     }
 
+    //    Conversão DTO para Business (Produto)
     private Products dtoToBusiness(ProductsDTO dto) {
         Products business = new Products();
         if(dto.getId() !=null){
@@ -81,6 +85,7 @@ public class PriceProductService {
         return business;
     }
 
+//    Conversão DTO para Business (Preço produto)
     private PriceProduct dtoToBusiness(PriceProductDTO dto){
         PriceProduct business = new PriceProduct();
         PriceProductKey key = new PriceProductKey();
@@ -96,6 +101,7 @@ public class PriceProductService {
         return business;
     }
 
+
     private List<PriceProductDTO> listToDto(List<PriceProduct> list){
         List<PriceProductDTO> listDto = new ArrayList<PriceProductDTO>();
         for (PriceProduct pp: list) {
@@ -104,6 +110,7 @@ public class PriceProductService {
         return listDto;
     }
 
+//    Criar Preço produto
     public PriceProductDTO createPriceProduct(PriceProductDTO priceProduct) throws Exception {
         PriceProduct pp = dtoToBusiness(priceProduct);
 
@@ -128,6 +135,7 @@ public class PriceProductService {
         return businessToDto(pp);
     }
 
+//    Encontrar Todos os Produtos
     public List<PriceProductDTO> findAll(){
         List<PriceProduct> list = priceProductRepository.findAll();
         return listToDto(list);
@@ -138,6 +146,7 @@ public class PriceProductService {
 
         Products p = dtoToBusiness(id);
         p.setId(id.getId());
+
         key.setProduct(p);
         key.setEffectiveDate(date);
         Optional<PriceProduct> pp = priceProductRepository.findById(key);
@@ -147,6 +156,36 @@ public class PriceProductService {
         }
 
         return null;
+    }
+
+//    Encontrar por preços menor para maior
+    public List<PriceProductDTO> findAllPricesAsc(){
+        List<PriceProduct> priceList = this.priceProductRepository.findByOrderByPriceAsc();
+        return listToDto(priceList);
+    }
+
+//    Encontrar por preços maior para menor
+    public List<PriceProductDTO> findAllPricesDesc(){
+        List<PriceProduct> priceList = this.priceProductRepository.findByOrderByPriceDesc();
+        return listToDto(priceList);
+    }
+
+//    Encontrar por maior desconto
+    public List<PriceProductDTO> findByOrderBySalePriceDesc(){
+        List<PriceProduct> priceList = this.priceProductRepository.findByOrderBySalePriceDesc();
+        return listToDto(priceList);
+    }
+
+    public List<PriceProductDTO> searchByDescription(String description) {
+        return listToDto(priceProductRepository.searchByDescription(description));
+    }
+
+    public List<PriceProductDTO> searchByOffers() {
+        return listToDto(priceProductRepository.searchByOffers());
+    }
+
+    public List<PriceProductDTO> searchByCategory(String categoryName) {
+        return listToDto(priceProductRepository.searchByCategory(categoryName));
     }
 
 }
