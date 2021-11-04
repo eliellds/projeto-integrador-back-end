@@ -30,32 +30,30 @@ public class UserAddressService {
         UserAddress linked = convertToUAddress(toLink);
 
         if (myUserRepository.existsById(linked.getId().getIdUser())) {
-            Address address;
+            Address address = new Address();
             MyUser myUser = myUserRepository.getById(linked.getId().getIdUser());
 
             linked.setMyUser(myUser);
             //verifica se o endereço não esta nulo
 
             //verifica se tem um id no endereço
-            if (linked.getId().getIdAddress() != null) {
+            if (toLink.getAddress() != null) {
                 //verifica se existe o id
-                if (addressRepository.existsById(linked.getId().getIdAddress())) {
+                if (toLink.getAddress().getId() != null) {
+                    if (addressRepository.existsById(toLink.getAddress().getId())) {
 
 
-                    address = addressRepository.getById(linked.getId().getIdAddress());
+                        address = addressRepository.getById(toLink.getAddress().getId());
 
-                    linked.setAddress(address);
 
+
+                    }
+                }else{
+                    address = addressRepository.save(convertToAddress(toLink.getAddress()));
                 }
             }
-
-            if (toLink.getAddress() != null) {
-                address = convertToAddress(toLink.getAddress());
-                address = addressRepository.save(address);
-
-                linked.setAddress(address);
-
-            }
+            linked.setAddress(address);
+            linked.getId().setIdAddress(address.getId());
             linked = repositoryUAddress.save(linked);
             return convertUAddressToViewDTO(linked);
 
@@ -120,27 +118,27 @@ public class UserAddressService {
         key.setIdUser(toConvert.getId().getIdUser());
 
         if(toConvert.getAddress()!=null){
-            AddressDTO addresDTO = new AddressDTO();
+            AddressDTO addressDTO = new AddressDTO();
             //id
-            addresDTO.setId(toConvert.getAddress().getId());
+            addressDTO.setId(toConvert.getAddress().getId());
             //cep
-            addresDTO.setCep(toConvert.getAddress().getCep());
+            addressDTO.setCep(toConvert.getAddress().getCep());
             //cidade
-            addresDTO.setCity(toConvert.getAddress().getCity());
+            addressDTO.setCity(toConvert.getAddress().getCity());
             //complemento
-            addresDTO.setComplement(toConvert.getAddress().getComplement());
+            addressDTO.setComplement(toConvert.getAddress().getComplement());
             //bairro
-            addresDTO.setDistrict(toConvert.getAddress().getDistrict());
+            addressDTO.setDistrict(toConvert.getAddress().getDistrict());
             //numero
-            addresDTO.setNumber(toConvert.getAddress().getNumber());
+            addressDTO.setNumber(toConvert.getAddress().getNumber());
             //referencia
-            addresDTO.setReference(toConvert.getAddress().getReference());
+            addressDTO.setReference(toConvert.getAddress().getReference());
             //estado
-            addresDTO.setState(toConvert.getAddress().getState());
+            addressDTO.setState(toConvert.getAddress().getState());
 
             //rua
-            addresDTO.setStreet(toConvert.getAddress().getStreet());
-            converted.setAddress(addresDTO);
+            addressDTO.setStreet(toConvert.getAddress().getStreet());
+            converted.setAddress(addressDTO);
 
         }
 
