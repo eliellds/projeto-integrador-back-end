@@ -200,7 +200,6 @@ public class ProductsSERV {
             ConservationStateDTO conservationStateDTO = new ConservationStateDTO();
             conservationStateDTO.setId((business.getConservationState().getId()));
             conservationStateDTO.setDescription(business.getConservationState().getDescription());
-
             dto.setConservationState(conservationStateDTO);
         }
 
