@@ -146,6 +146,7 @@ public class PriceProductService {
 
         Products p = dtoToBusiness(id);
         p.setId(id.getId());
+
         key.setProduct(p);
         key.setEffectiveDate(date);
         Optional<PriceProduct> pp = priceProductRepository.findById(key);

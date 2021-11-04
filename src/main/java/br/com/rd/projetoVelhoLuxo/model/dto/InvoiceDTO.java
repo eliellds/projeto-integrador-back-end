@@ -19,6 +19,6 @@ public class InvoiceDTO {
     private MyUserDTO userId;
     private TipoNfDTO invoiceTypeId;
     private OrderDTO orderId;
-//    private Loja lojaid;
+    private StoreDTO storeId;
 }
 
