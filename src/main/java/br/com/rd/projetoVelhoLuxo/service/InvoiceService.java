@@ -2,10 +2,7 @@ package br.com.rd.projetoVelhoLuxo.service;
 
 import br.com.rd.projetoVelhoLuxo.model.dto.*;
 import br.com.rd.projetoVelhoLuxo.model.entity.*;
-import br.com.rd.projetoVelhoLuxo.repository.contract.InvoiceRepository;
-import br.com.rd.projetoVelhoLuxo.repository.contract.MyUserRepository;
-import br.com.rd.projetoVelhoLuxo.repository.contract.OrderRepository;
-import br.com.rd.projetoVelhoLuxo.repository.contract.TipoNfRepository;
+import br.com.rd.projetoVelhoLuxo.repository.contract.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
@@ -26,6 +23,9 @@ public class InvoiceService {
 
     @Autowired
     OrderRepository orderRepository;
+
+    @Autowired
+    StoreRepository storeRepository;
 
 /*    conversão business to dto (Nota Fiscal)*/
     private InvoiceDTO businessToDto(Invoice business) {
@@ -298,6 +298,19 @@ public class InvoiceService {
                 invoiceType = this.tipoNfRepository.save(newInvoice.getInvoiceTypeId());
             }
            newInvoice.setInvoiceTypeId(invoiceType);
+        }
+
+//      Loja
+        if (newInvoice.getStoreId() != null) {
+            Long id = newInvoice.getStoreId().getId();
+            Store store;
+
+            if (id != null) {
+                store = this.storeRepository.getById(id);
+            } else {
+                store = this.storeRepository.save(newInvoice.getStoreId());
+            }
+            newInvoice.setStoreId(store);
         }
 
 //        Usuario
