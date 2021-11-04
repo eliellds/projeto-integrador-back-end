@@ -9,6 +9,7 @@ import br.com.rd.projetoVelhoLuxo.repository.contract.ProductsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -146,6 +147,17 @@ public class ItemsOrderService {
         return listToDto(itemsOrderRepository.findFirst1ByCompositeKeyOrderIdOrderByCompositeKeyIdItemDesc(id));
 
     }
+
+//    public ItemsOrderDTO deleteById(Long idItem, Long idOrder) {
+//        OrderDTO order = convertToDTO(orderRepository.getById(idOrder));
+//
+//        ItemsOrderDTO toDelete = findByCompositeKey(idItem, convertToOrder(order));
+//
+//        if (itemsOrderRepository.existsById(dtoToBusiness(toDelete).getCompositeKey())) {
+//            itemsOrderRepository.deleteById(dtoToBusiness(toDelete).getCompositeKey());
+//        }
+//        return toDelete;
+//    }
 
 //    ////////////////////////////////////////////////
 //    // encontra lista de itemsOrder pelo id de Order
