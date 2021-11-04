@@ -1,10 +1,7 @@
 package br.com.rd.projetoVelhoLuxo.service;
 
 
-import br.com.rd.projetoVelhoLuxo.model.dto.CategoryDTO;
-import br.com.rd.projetoVelhoLuxo.model.dto.InventoryDTO;
-import br.com.rd.projetoVelhoLuxo.model.dto.InventoryKeyDTO;
-import br.com.rd.projetoVelhoLuxo.model.dto.ProductsDTO;
+import br.com.rd.projetoVelhoLuxo.model.dto.*;
 import br.com.rd.projetoVelhoLuxo.model.embeddable.InventoryKey;
 import br.com.rd.projetoVelhoLuxo.model.entity.Category;
 import br.com.rd.projetoVelhoLuxo.model.entity.Inventory;
@@ -36,6 +33,14 @@ public class InventorySERV {
         prodDTO.setFeature(p.getFeature());
         prodDTO.setYear  (p.getYear());
         prodDTO.setQuantity(p.getQuantity());
+
+        if (p.getConservationState() != null) {
+            ConservationStateDTO conDto = new ConservationStateDTO();
+            conDto.setId(p.getConservationState().getId());
+            conDto.setDescription(p.getConservationState().getDescription());
+            prodDTO.setConservationState(conDto);
+        }
+
         if (p.getCategoryID() != null) {
             CategoryDTO categoryDTO = new CategoryDTO();
             categoryDTO.setId(p.getCategoryID().getId());
@@ -70,6 +75,11 @@ public class InventorySERV {
         p.setYear(prodDto.getYear());
         p.setQuantity(prodDto.getQuantity());
 
+        if (prodDto.getConservationState() != null) {
+            p.getConservationState().setId(prodDto.getConservationState().getId());
+            p.getConservationState().setDescription((prodDto.getConservationState().getDescription()));
+        }
+
         if (prodDto.getCategoryDTO() != null) {
             Category category = new Category();
             if (prodDto.getCategoryDTO().getId() != null) {
@@ -89,6 +99,7 @@ public class InventorySERV {
         Products prod = new Products();
 
         invKey.setId(invDto.getInventoryKey().getId());
+        prod.setId(invDto.getInventoryKey().getProducts().getId());
         invKey.setProducts(prod);
 
         inv.setInventoryKey(invKey);
@@ -106,14 +117,14 @@ public class InventorySERV {
         return listInvDTO;
     }
 
-    private InventoryDTO newInventory(InventoryDTO inventory) throws Exception{
+    public InventoryDTO newInventory(InventoryDTO inventory) throws Exception{
         Inventory inv = DtoToInv(inventory);
 
         if (inventoryREPO.existsById(inv.getInventoryKey())) {
             throw new Exception("Primary key already exists");
         }
 
-        if (inv.getInventoryKey().getId() != null) {
+        if (inv.getInventoryKey() != null) {
             if (productsREPO.existsById(inv.getInventoryKey().getProducts().getId())) {
                 inv.getInventoryKey().setProducts(productsREPO.getById(inv.getInventoryKey().getProducts().getId()));
             } else {
@@ -125,12 +136,12 @@ public class InventorySERV {
         return InvToDto(inv);
     }
 
-    private List<InventoryDTO> showAllInventory() {
+    public List<InventoryDTO> showAllInventory() {
         List<Inventory> list = inventoryREPO.findAll();
         return listToInvDto(list);
     }
 
-    private InventoryDTO showInventoryById(ProductsDTO prodDTO) {
+    public InventoryDTO showInventoryById(ProductsDTO prodDTO) {
         InventoryKey invKey = new InventoryKey();
 
         Products prod = dtoToProd(prodDTO);
@@ -144,24 +155,23 @@ public class InventorySERV {
         return null;
     }
 
-//    private InventoryDTO updateInventory(InventoryDTO invDTO, ProductsDTO prodDTO) {
-//        InventoryKey invKey = new InventoryKey();
-//
-//        Products prod = dtoToProd(prodDTO);
-//        prod.setId(prodDTO.getId());
-//        invKey.setProducts(prod);
-//        Optional<Inventory> opList = this.inventoryREPO.findById(invKey);
-//
-//        if (opList.isPresent()) {
-//            Inventory inv = opList.get();
-//
-//            if (invDTO.getInventoryKey().getProducts() != null) {
-//                inv.setInventoryKey(invKey.getProducts());
-//
-//            }
-//        }
-//
-//    }
+    public InventoryDTO updateInventory(InventoryDTO invDTO) {
+        InventoryKey invKey = new InventoryKey();
+
+        Products prod = dtoToProd(invDTO.getInventoryKey().getProducts());
+        invKey.setProducts(prod);
+        Optional<Inventory> opList = this.inventoryREPO.findById(invKey);
+
+        if (opList.isPresent()) {
+            Inventory inv = opList.get();
+
+                if (invDTO.getQty_products() != null) {
+                    inv.setQty_products(invDTO.getQty_products());
+                }
+                return InvToDto(inv);
+        }
+    return null;
+    }
 
 
 }
