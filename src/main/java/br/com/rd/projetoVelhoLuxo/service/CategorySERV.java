@@ -69,7 +69,7 @@ public class CategorySERV {
     private Category dtoToBusiness(CategoryDTO dto) {
         Category business = new Category();
         business.setCategory(dto.getCategory());
-        business.setCategory(dto.getDescription());
+        business.setDescription(dto.getDescription());
         return business;
     }
 
@@ -77,7 +77,7 @@ public class CategorySERV {
         CategoryDTO dto = new CategoryDTO();
         dto.setId(business.getId());
         dto.setCategory(business.getCategory());
-        dto.setCategory(business.getDescription());
+        dto.setDescription(business.getDescription());
         return dto;
     }
 }
