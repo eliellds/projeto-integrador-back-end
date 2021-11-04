@@ -51,6 +51,44 @@ public class InvoiceService {
             dto.setInvoiceTypeId(invoiceTypeDTO);
         }
 
+//        Loja
+        if (business.getStoreId() != null){
+            StoreDTO storeDTO = new StoreDTO();
+
+            storeDTO.setId(business.getStoreId().getId());
+            storeDTO.setName(business.getStoreId().getName());
+            storeDTO.setEmail(business.getStoreId().getEmail());
+            storeDTO.setCnpj(business.getStoreId().getCnpj());
+            storeDTO.setStateRegistration(business.getStoreId().getStateRegistration());
+
+            if (business.getStoreId().getTelephoneID() != null) {
+                TelephoneDTO telephoneDTO = new TelephoneDTO();
+
+                telephoneDTO.setId(business.getStoreId().getTelephoneID().getId());
+                telephoneDTO.setNumber(business.getStoreId().getTelephoneID().getNumber());
+
+                storeDTO.setTelephoneID(telephoneDTO);
+            }
+
+            if (business.getStoreId().getAddressID() != null) {
+                AddressDTO addressDTO= new AddressDTO();
+
+                addressDTO.setId(business.getStoreId().getAddressID().getId());
+                addressDTO.setStreet(business.getStoreId().getAddressID().getStreet());
+                addressDTO.setNumber(business.getStoreId().getAddressID().getNumber());
+                addressDTO.setComplement(business.getStoreId().getAddressID().getComplement());
+                addressDTO.setReference(business.getStoreId().getAddressID().getReference());
+                addressDTO.setCity(business.getStoreId().getAddressID().getCity());
+                addressDTO.setDistrict(business.getStoreId().getAddressID().getDistrict());
+                addressDTO.setState(business.getStoreId().getAddressID().getState());
+                addressDTO.setCep(business.getStoreId().getAddressID().getCep());
+
+                storeDTO.setAddressID(addressDTO);
+            }
+
+            dto.setStoreId(storeDTO);
+        }
+
 //      Usuário
         if (business.getUserId() != null){
             MyUserDTO userDTO = new MyUserDTO();
@@ -179,6 +217,22 @@ public class InvoiceService {
                 invoiceType.setDescription(dto.getInvoiceTypeId().getDescription());
             }
             business.setInvoiceTypeId(invoiceType);
+        }
+
+//        Loja
+        if (dto.getStoreId() != null){
+            Store store  = new Store();
+
+            if (dto.getStoreId().getId() != null){
+                store.setId(dto.getStoreId().getId());
+            } else {
+                store.setName(dto.getStoreId().getName());
+                store.setEmail(dto.getStoreId().getEmail());
+                store.setCnpj(dto.getStoreId().getCnpj());
+                store.setStateRegistration(dto.getStoreId().getStateRegistration());
+            }
+
+            business.setStoreId(store);
         }
 
 //      Usuário
