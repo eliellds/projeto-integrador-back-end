@@ -29,14 +29,4 @@ public class InvoiceController {
         return invoiceService.searchById(id);
     }
 
-//    @PutMapping("/{id}")
-//    public InvoiceDTO updateById(@RequestBody InvoiceDTO dto, @PathVariable("id") Long id){
-//        return invoiceService.updateInvoice(dto, id);
-//    }
-//
-//    @DeleteMapping("/{id}")
-//    @ResponseStatus(code = HttpStatus.NO_CONTENT)
-//    public void deleteById(@PathVariable("id") Long id){
-//        invoiceService.deleteInvoice(id);
-//    }
 }

@@ -57,4 +57,11 @@ public class ItemsOrderController {
         return null;
     }
 
+//    @DeleteMapping("/delete")
+//    public ItemsOrderDTO deleteById(@RequestParam("item") Long item,
+//                                    @RequestParam("order") Long order) {
+//        return itemsOrderService.deleteById(item, order);
+//    }
+
+
 }
