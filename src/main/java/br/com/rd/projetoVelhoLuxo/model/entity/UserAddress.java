@@ -6,7 +6,7 @@ import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 
-@Entity(name = "Endereco_Usuario")
+@Entity(name = "tb_endereco_usuario")
 @Data
 @EqualsAndHashCode
 public class UserAddress {
