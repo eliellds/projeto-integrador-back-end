@@ -9,10 +9,7 @@ import br.com.rd.projetoVelhoLuxo.repository.contract.ItemsOrderRepository;
 import br.com.rd.projetoVelhoLuxo.repository.contract.OrderRepository;
 import br.com.rd.projetoVelhoLuxo.repository.contract.ProductsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,9 +46,16 @@ public class ItemsOrderService {
         if (inventoryREPO.existsById(inventoryKey)) {
              inventoryOpt = inventoryREPO.findById(inventoryKey);
 
-            if (inventoryOpt.get().getQty_products() >= 1 && toLink.getQuantity() <= inventoryOpt.get().getQty_products()) {
-                inventoryOpt.get().setQty_products(Integer.parseInt
-                        (String.valueOf(inventoryOpt.get().getQty_products() - toLink.getQuantity())));
+            if (inventoryOpt.get().getQty_products() >= 1 &&
+                    toLink.getQuantity() <= inventoryOpt.get().getQty_products()) {
+
+                inventoryOpt.get().setQty_products(
+                        Integer.parseInt(
+                                String.valueOf(
+                                        inventoryOpt.get().getQty_products() - toLink.getQuantity()
+                                )
+                        )
+                );
             } else {
                 throw new Exception("Products quantity must be equal or smaller than inventory quantity!");
             }
