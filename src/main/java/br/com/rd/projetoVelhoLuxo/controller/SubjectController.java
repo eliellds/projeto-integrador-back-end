@@ -10,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/subjects")
+@CrossOrigin(origins = "http://localhost:3000", allowedHeaders = "*")
 public class SubjectController {
 
     @Autowired
@@ -22,6 +23,7 @@ public class SubjectController {
 
     @GetMapping
     public List<SubjectDTO> findAll() {
+
         return subjectService.findAll();
     }
 
