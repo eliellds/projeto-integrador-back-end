@@ -156,20 +156,23 @@ public class InventorySERV {
     }
 
     public InventoryDTO updateInventory(InventoryDTO invDTO) {
-        InventoryKey invKey = new InventoryKey();
 
-        Products prod = dtoToProd(invDTO.getInventoryKey().getProducts());
-        invKey.setProducts(prod);
-        Optional<Inventory> opList = this.inventoryREPO.findById(invKey);
 
-        if (opList.isPresent()) {
-            Inventory inv = opList.get();
 
-                if (invDTO.getQty_products() != null) {
-                    inv.setQty_products(invDTO.getQty_products());
-                }
-                return InvToDto(inv);
-        }
+//        InventoryKey invKey = new InventoryKey();
+//
+//        Products prod = dtoToProd(invDTO.getInventoryKey().getProducts());
+//        invKey.setProducts(prod);
+//        Optional<Inventory> opList = this.inventoryREPO.findById(invKey);
+//
+//        if (opList.isPresent()) {
+//            Inventory inv = opList.get();
+//
+//                if (invDTO.getQty_products() != null) {
+//                    inv.setQty_products(invDTO.getQty_products());
+//                }
+//                return InvToDto(inv);
+//        }
     return null;
     }
 
