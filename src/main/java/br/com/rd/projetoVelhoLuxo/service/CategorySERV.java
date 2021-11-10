@@ -44,11 +44,15 @@ public class CategorySERV {
 
     public CategoryDTO updateCategoryById(CategoryDTO dto, Long id){
         Optional<Category> optional = this.categoryREPO.findById(id);
+
         if (optional.isPresent()){
             Category category = optional.get();
 
             if(dto.getCategory() != null){
                 category.setCategory(dto.getCategory());
+            }
+
+            if(dto.getDescription() != null) {
                 category.setDescription(dto.getDescription());
             }
 
@@ -69,7 +73,7 @@ public class CategorySERV {
     private Category dtoToBusiness(CategoryDTO dto) {
         Category business = new Category();
         business.setCategory(dto.getCategory());
-        business.setCategory(dto.getDescription());
+        business.setDescription(dto.getDescription());
         return business;
     }
 
@@ -77,7 +81,7 @@ public class CategorySERV {
         CategoryDTO dto = new CategoryDTO();
         dto.setId(business.getId());
         dto.setCategory(business.getCategory());
-        dto.setCategory(business.getDescription());
+        dto.setDescription(business.getDescription());
         return dto;
     }
 }

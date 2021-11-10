@@ -18,8 +18,12 @@ public class OrderController {
         return service.create(toCreate);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/user/{id}")
     public List<OrderDTO> findByUser(@PathVariable("id") Long id){
         return service.findOrderByUser(id);
+    }
+    @GetMapping("/{id}")
+    public OrderDTO getOrderById(@PathVariable("id") Long id){
+        return service.findByIdOrder(id);
     }
 }

@@ -45,6 +45,7 @@ public class InventorySERV {
             CategoryDTO categoryDTO = new CategoryDTO();
             categoryDTO.setId(p.getCategoryID().getId());
             categoryDTO.setCategory(p.getCategoryID().getCategory());
+            categoryDTO.setDescription(p.getCategoryID().getDescription());
 
             prodDTO.setCategoryDTO(categoryDTO);
         }
@@ -86,6 +87,7 @@ public class InventorySERV {
                 category.setId(prodDto.getCategoryDTO().getId());
             } else {
                 category.setCategory(prodDto.getCategoryDTO().getCategory());
+                category.setDescription((prodDto.getCategoryDTO().getDescription()));
             }
 
             p.setCategoryID(category);

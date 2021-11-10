@@ -21,8 +21,7 @@ public interface PriceProductRepositoryCustom {
             "OR cl_caracteristica_produto LIKE '%' :descript '%' " +
             "OR cl_ano_fabricacao LIKE '%' :descript '%' " +
             "OR cl_nm_categoria LIKE '%' :descript '%' " +
-            "GROUP BY id_produto " +
-            "ORDER BY data_vigencia DESC",
+            "ORDER BY data_vigencia DESC ",
     nativeQuery = true)
     List<PriceProduct> searchByDescription(@Param("descript") String description);
 
@@ -34,11 +33,12 @@ public interface PriceProductRepositoryCustom {
     List<PriceProduct> searchByOffers();
 
     // metodo para retornar lista de produtos por categoria
-    @Query(value = "SELECT * FROM tb_preco_produto " +
+    @Query(value = "SELECT * FROM " +
+            "tb_preco_produto " +
             "INNER JOIN tb_produtos ON (tb_produtos.id = tb_preco_produto.id_produto) " +
             "INNER JOIN tb_categoria ON (tb_categoria.id = tb_produtos.cl_id_categoria) " +
             "WHERE cl_nm_categoria LIKE '%' :category '%' " +
-            "GROUP BY id_produto " +
+            "AND data_vigencia = (SELECT  MAX(data_vigencia) from tb_preco_produto WHERE cl_nm_categoria LIKE '%' :category '%') " +
             "ORDER BY data_vigencia DESC",
     nativeQuery = true)
     List<PriceProduct> searchByCategory(@Param("category") String category);

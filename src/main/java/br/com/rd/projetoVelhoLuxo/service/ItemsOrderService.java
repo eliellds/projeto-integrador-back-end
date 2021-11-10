@@ -1,8 +1,10 @@
 package br.com.rd.projetoVelhoLuxo.service;
 
 import br.com.rd.projetoVelhoLuxo.model.dto.*;
+import br.com.rd.projetoVelhoLuxo.model.embeddable.InventoryKey;
 import br.com.rd.projetoVelhoLuxo.model.embeddable.ItemsOrderKey;
 import br.com.rd.projetoVelhoLuxo.model.entity.*;
+import br.com.rd.projetoVelhoLuxo.repository.contract.InventoryREPO;
 import br.com.rd.projetoVelhoLuxo.repository.contract.ItemsOrderRepository;
 import br.com.rd.projetoVelhoLuxo.repository.contract.OrderRepository;
 import br.com.rd.projetoVelhoLuxo.repository.contract.ProductsRepository;
@@ -25,10 +27,41 @@ public class ItemsOrderService {
     @Autowired
     OrderRepository orderRepository;
 
+    @Autowired
+    InventoryREPO inventoryREPO;
+
     //////////////////////////////////
     // cria relacao de item com pedido
     public ItemsOrderDTO linkItemsToOrder(ItemsOrderDTO toLink) throws Exception {
         ItemsOrder itemOrder = new ItemsOrder();
+
+        Products products = productsRepository.getById(toLink.getProductsDTO().getId());
+
+        InventoryKey inventoryKey = new InventoryKey();
+        inventoryKey.setId(1L);
+        inventoryKey.setProducts(products);
+
+        Optional<Inventory> inventoryOpt;
+
+        if (inventoryREPO.existsById(inventoryKey)) {
+             inventoryOpt = inventoryREPO.findById(inventoryKey);
+
+            if (inventoryOpt.get().getQty_products() >= 1 &&
+                    toLink.getQuantity() <= inventoryOpt.get().getQty_products()) {
+
+                inventoryOpt.get().setQty_products(
+                        Integer.parseInt(
+                                String.valueOf(
+                                        inventoryOpt.get().getQty_products() - toLink.getQuantity()
+                                )
+                        )
+                );
+            } else {
+                throw new Exception("Products quantity must be equal or smaller than inventory quantity!");
+            }
+        } else {
+            throw new Exception("Product not found!");
+        }
 
         itemOrder.setTotalPrice(toLink.getTotalPrice());
         itemOrder.setQuantity(toLink.getQuantity());
@@ -109,6 +142,7 @@ public class ItemsOrderService {
         }
 
         itemOrder = itemsOrderRepository.save(itemOrder);
+        inventoryREPO.save(inventoryOpt.get());
 
         return businessToDto(itemOrder);
 
@@ -146,6 +180,17 @@ public class ItemsOrderService {
         return listToDto(itemsOrderRepository.findFirst1ByCompositeKeyOrderIdOrderByCompositeKeyIdItemDesc(id));
 
     }
+
+//    public ItemsOrderDTO deleteById(Long idItem, Long idOrder) {
+//        OrderDTO order = convertToDTO(orderRepository.getById(idOrder));
+//
+//        ItemsOrderDTO toDelete = findByCompositeKey(idItem, convertToOrder(order));
+//
+//        if (itemsOrderRepository.existsById(dtoToBusiness(toDelete).getCompositeKey())) {
+//            itemsOrderRepository.deleteById(dtoToBusiness(toDelete).getCompositeKey());
+//        }
+//        return toDelete;
+//    }
 
 //    ////////////////////////////////////////////////
 //    // encontra lista de itemsOrder pelo id de Order
