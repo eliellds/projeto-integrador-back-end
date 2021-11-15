@@ -118,6 +118,9 @@ public class ContactService {
 
                 contact.setSubject(subject);
             }
+            if (dto.getName() != null) {
+                contact.setName(dto.getName());
+            }
             if (dto.getPhoneNumber() != null) {
                 contact.setPhoneNumber(dto.getPhoneNumber());
             }
@@ -192,6 +195,7 @@ public class ContactService {
             business.setSubject(subject);
         }
 
+        business.setName(dto.getName());
         business.setPhoneNumber(dto.getPhoneNumber());
         business.setEmail(dto.getEmail());
         business.setContent(dto.getContent());
@@ -224,6 +228,7 @@ public class ContactService {
             dto.setSubject(subject);
         }
 
+        dto.setName(business.getName());
         dto.setPhoneNumber(business.getPhoneNumber());
         dto.setEmail(business.getEmail());
         dto.setContent(business.getContent());
