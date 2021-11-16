@@ -42,11 +42,11 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
                 // abaixo, endpoints sem restrições de acesso por login
                 .authorizeRequests()
                     .antMatchers("/", "/login", "/home", "/contacts",
-                                            "/products/*", "/categories", "/categories/*",
+                                            "/products/**", "/categories", "/categories/**",
                                             "/products/recentlyAdd", "/sign-up", "/products/older",
                                             "/products/newer", "/search", "/prices","/subjects",
-                                            "/inventories", "/states", "/states/*",
-                                            "/subjects", "/subjects/*").permitAll()
+                                            "/inventories", "/states", "/states/**",
+                                            "/subjects", "/subjects/**", "/sales").permitAll()
                     .anyRequest().authenticated()
                     .and()
 //                .formLogin()

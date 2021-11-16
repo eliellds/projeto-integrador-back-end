@@ -2,13 +2,16 @@ package br.com.rd.projetoVelhoLuxo.service;
 
 import br.com.rd.projetoVelhoLuxo.model.dto.TelephoneDTO;
 import br.com.rd.projetoVelhoLuxo.model.dto.MyUserDTO;
+import br.com.rd.projetoVelhoLuxo.model.dto.response.UserHeaderDTO;
 import br.com.rd.projetoVelhoLuxo.model.entity.MyUser;
 import br.com.rd.projetoVelhoLuxo.model.entity.Telephone;
 import br.com.rd.projetoVelhoLuxo.repository.contract.MyUserRepository;
 import br.com.rd.projetoVelhoLuxo.repository.contract.TelephoneRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -106,6 +109,18 @@ public class UserService {
         List<MyUser> list = userRepository.findAll();
 
         return convertListToDTO(list);
+    }
+
+    public UserHeaderDTO findByEmail(String email) {
+        if (userRepository.findByEmailEquals(email) != null) {
+            MyUser myUser = userRepository.findByEmailEquals(email);
+            return new UserHeaderDTO(myUser.getId(),
+                                     myUser.getFirstName(),
+                                     myUser.getLastName(),
+                                     myUser.getEmail());
+        } else {
+            throw new BadCredentialsException("User not found!");
+        }
     }
 
     //recuperar usuario
