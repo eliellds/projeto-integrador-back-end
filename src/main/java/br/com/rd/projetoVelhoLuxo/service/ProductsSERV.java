@@ -101,7 +101,7 @@ public class ProductsSERV {
 
     //produtos mais recentes adicionados
     public List<ProductViewDTO> findAllByOrderByIdDesc(){
-        List<ProductsDTO> toConvert = listToDto(productsRepository.findFirst5ByOrderByIdDesc());
+        List<ProductsDTO> toConvert = listToDto(productsRepository.findFirst8ByOrderByIdDesc());
         return convertListToDTOView(toConvert);
 
     }
