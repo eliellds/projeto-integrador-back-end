@@ -2,6 +2,7 @@ package br.com.rd.projetoVelhoLuxo.controller;
 
 
 import br.com.rd.projetoVelhoLuxo.model.dto.PriceProductDTO;
+import br.com.rd.projetoVelhoLuxo.model.dto.ProductViewDTO;
 import br.com.rd.projetoVelhoLuxo.model.dto.ProductsDTO;
 import br.com.rd.projetoVelhoLuxo.model.entity.PriceProduct;
 import br.com.rd.projetoVelhoLuxo.service.PriceProductService;
@@ -49,8 +50,8 @@ public class ProductCONTR {
     }
 
     @GetMapping("/category/{categoryName}")
-    public List<PriceProductDTO> searchByCategory(@PathVariable("categoryName") String categoryName) {
-        return priceProductService.searchByCategory(categoryName);
+    public List<ProductViewDTO> searchByCategory(@PathVariable("categoryName") String categoryName) {
+        return productsSERV.searchByCategory(categoryName);
     }
 
     @GetMapping("/newer")

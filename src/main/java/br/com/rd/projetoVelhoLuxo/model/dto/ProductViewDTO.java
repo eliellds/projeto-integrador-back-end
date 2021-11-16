@@ -8,6 +8,5 @@ public class ProductViewDTO {
     private ProductsDTO product;
     private Double price;
     private Double salePrice;
-    private SalesDTO sales;
     private Integer qty;
 }
