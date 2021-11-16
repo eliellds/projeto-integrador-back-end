@@ -50,25 +50,8 @@ public class ContactService {
             contact.setSubject(subject);
         }
 
-        if (contact.getStatus() != null) {
-            ContactStatus status = contact.getStatus();
-
-            if (contact.getStatus().getId() != null) {
-                Long id = contact.getStatus().getId();
-
-                if (statusRepository.existsById(id)) {
-                    status = statusRepository.getById(id);
-                } else {
-                    status.setId(null);
-                }
-
-            }
-
-            contact.setStatus(status);
-        }
-
         contact.setContactDate(LocalDateTime.now());
-        contact.setStatus(statusRepository.getById(3L));
+        contact.setStatus(statusRepository.getById(1L));
 
         contact = contactRepository.save(contact);
         return businessToDto(contact);
