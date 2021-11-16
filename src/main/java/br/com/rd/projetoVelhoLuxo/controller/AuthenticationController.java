@@ -5,18 +5,17 @@ import br.com.rd.projetoVelhoLuxo.model.dto.response.AuthenticationResponseDTO;
 import br.com.rd.projetoVelhoLuxo.service.util.JwtUtil;
 import br.com.rd.projetoVelhoLuxo.service.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/login")
+@CrossOrigin(origins = "http://localhost:3000", allowedHeaders = "*")
 public class AuthenticationController {
 
     @Autowired
@@ -28,8 +27,9 @@ public class AuthenticationController {
     @Autowired
     private JwtUtil jwtTokenUtil;
 
-    @PostMapping("/login") // endpoint para logar com email e senha de usuário já registrado
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequestDTO authenticationRequest) throws Exception {
+    @PostMapping // endpoint para logar com email e senha de usuário já registrado
+//    @PostMapping
+    public ResponseEntity<?> createAuthenticationToken(@RequestBody  AuthenticationRequestDTO authenticationRequest) throws Exception {
 
         try {
             // authenticationManager verifica as credenciais passadas (email e senha)
