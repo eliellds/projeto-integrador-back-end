@@ -100,8 +100,10 @@ public class ProductsSERV {
     }
 
     //produtos mais recentes adicionados
-    public List<ProductsDTO> findAllByOrderByIdDesc(){
-        return listToDto(productsRepository.findFirst5ByOrderByIdDesc());
+    public List<ProductViewDTO> findAllByOrderByIdDesc(){
+        List<ProductsDTO> toConvert = listToDto(productsRepository.findFirst5ByOrderByIdDesc());
+        return convertListToDTOView(toConvert);
+
     }
 
     public List<ProductsDTO> showProducts() {
@@ -178,8 +180,10 @@ public class ProductsSERV {
         return listToDto(productsRepository.findAllByOrderByYearAsc());
      }
 
-     public List<ProductsDTO> searchByOffers() {
-        return listToDto(productsRepository.searchByOffers());
+     public List<ProductViewDTO> searchByOffers() {
+         List<ProductsDTO> toConvert = listToDto(productsRepository.searchByOffers());
+
+         return convertListToDTOView(toConvert);
      }
 
     private Products dtoToBusiness(ProductsDTO dto) {

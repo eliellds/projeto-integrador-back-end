@@ -22,16 +22,16 @@ public class HomeController {
     @Autowired
     CategorySERV categorySERV;
 
-    @GetMapping
-    public List<List> getHomeLists() {
-        List<List> list = new ArrayList<>();
-        List<CategoryDTO> categories = categorySERV.showCategory();
-        List<ProductsDTO> products = productsSERV.searchByOffers();
-
-        list.add(categories);
-        list.add(products);
-
-        return list;
-    }
+//    @GetMapping
+//    public List<List> getHomeLists() {
+//        List<List> list = new ArrayList<>();
+//        List<CategoryDTO> categories = categorySERV.showCategory();
+//        List<ProductsDTO> products = productsSERV.searchByOffers();
+//
+//        list.add(categories);
+//        list.add(products);
+//
+//        return list;
+//    }
 
 }

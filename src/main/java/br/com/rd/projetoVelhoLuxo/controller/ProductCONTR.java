@@ -15,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/products")
+@CrossOrigin(origins = "http://localhost:3000", allowedHeaders = "*")
 public class ProductCONTR {
 
     @Autowired
@@ -65,12 +66,12 @@ public class ProductCONTR {
     }
 
     @GetMapping("/offers")
-    public List<PriceProductDTO> searchByOffers() {
-        return priceProductService.searchByOffers();
+    public List<ProductViewDTO> searchByOffers() {
+        return productsSERV.searchByOffers();
     }
 
     @GetMapping("/recentlyAdd")
-    public List<ProductsDTO> searchByNewerAdd(){
+    public List<ProductViewDTO> searchByNewerAdd(){
         return productsSERV.findAllByOrderByIdDesc();
     }
 }
