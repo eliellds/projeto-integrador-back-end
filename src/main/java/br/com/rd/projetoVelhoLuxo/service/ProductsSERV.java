@@ -163,8 +163,9 @@ public class ProductsSERV {
         return message;
      }
 
-     public List<ProductsDTO> searchByDescription(String description) {
-        return listToDto(productsRepository.searchByDescription(description));
+     public List<ProductViewDTO> searchByDescription(String description) {
+        List<ProductsDTO> toConvert = listToDto(productsRepository.searchByDescription2(description));
+        return convertListToDTOView(toConvert);
      }
 
      public List<ProductViewDTO> searchByCategory(String categoryName) {

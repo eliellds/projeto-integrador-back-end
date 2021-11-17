@@ -1,6 +1,7 @@
 package br.com.rd.projetoVelhoLuxo.controller;
 
 import br.com.rd.projetoVelhoLuxo.model.dto.PriceProductDTO;
+import br.com.rd.projetoVelhoLuxo.model.dto.ProductViewDTO;
 import br.com.rd.projetoVelhoLuxo.model.dto.ProductsDTO;
 import br.com.rd.projetoVelhoLuxo.model.dto.SearchDTO;
 import br.com.rd.projetoVelhoLuxo.service.PriceProductService;
@@ -41,7 +42,7 @@ public class SearchController {
     }
 
     @GetMapping("/product")
-    public  List<ProductsDTO> searchByProductDescription(@RequestParam("description") String description) {
+    public  List<ProductViewDTO> searchByProductDescription(@RequestParam("description") String description) {
         return productsSERV.searchByDescription(description);
     }
 
