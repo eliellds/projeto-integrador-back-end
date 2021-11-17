@@ -14,6 +14,7 @@ import java.util.List;
 // controller para gravar as buscas e retornar os resultados buscados
 @RestController
 @RequestMapping("/search")
+@CrossOrigin(origins = "http://localhost:3000", allowedHeaders = "*")
 public class SearchController {
 
     @Autowired
