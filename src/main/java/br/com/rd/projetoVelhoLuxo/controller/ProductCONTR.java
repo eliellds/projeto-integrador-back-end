@@ -74,4 +74,10 @@ public class ProductCONTR {
     public List<ProductViewDTO> searchByNewerAdd(){
         return productsSERV.findAllByOrderByIdDesc();
     }
+
+    @GetMapping("/emphasis")
+    public List<ProductViewDTO> emphasisDiscount(){
+        return productsSERV.emphasisDiscount();
+    }
+
 }

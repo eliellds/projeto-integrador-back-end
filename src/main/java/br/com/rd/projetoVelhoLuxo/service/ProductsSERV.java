@@ -101,9 +101,15 @@ public class ProductsSERV {
 
     //produtos mais recentes adicionados
     public List<ProductViewDTO> findAllByOrderByIdDesc(){
-        List<ProductsDTO> toConvert = listToDto(productsRepository.findFirst5ByOrderByIdDesc());
+        List<ProductsDTO> toConvert = listToDto(productsRepository.findFirst8ByOrderByIdDesc());
         return convertListToDTOView(toConvert);
 
+    }
+
+    public List<ProductViewDTO> emphasisDiscount(){
+        List<ProductsDTO> toConvert = listToDto(productsRepository.highDiscountEmphasis());
+
+        return convertListToDTOView(toConvert);
     }
 
     public List<ProductsDTO> showProducts() {
@@ -163,8 +169,9 @@ public class ProductsSERV {
         return message;
      }
 
-     public List<ProductsDTO> searchByDescription(String description) {
-        return listToDto(productsRepository.searchByDescription(description));
+     public List<ProductViewDTO> searchByDescription(String description) {
+        List<ProductsDTO> toConvert = listToDto(productsRepository.searchByDescription2(description));
+        return convertListToDTOView(toConvert);
      }
 
      public List<ProductViewDTO> searchByCategory(String categoryName) {
