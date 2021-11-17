@@ -117,10 +117,10 @@ public class ProductsSERV {
         return this.listToDto(allList);
     }
 
-    public ProductsDTO showProductsById(Long id) {
+    public ProductViewDTO showProductsById(Long id) {
         Optional<Products> opProducts = productsRepository.findById(id);
         if (opProducts.isPresent()) {
-            return businessToDto(opProducts.get());
+            return convertToDTOView(businessToDto(opProducts.get()));
         }
         return null;
     }
@@ -161,13 +161,13 @@ public class ProductsSERV {
         return null;
      }
 
-     public ProductsDTO deleteProduct(Long id) {
-        ProductsDTO message = this.showProductsById(id);
-        if (productsRepository.existsById(id)) {
-            productsRepository.deleteById(id);
-        }
-        return message;
-     }
+//     public ProductsDTO deleteProduct(Long id) {
+//        ProductsDTO message = this.showProductsById(id);
+//        if (productsRepository.existsById(id)) {
+//            productsRepository.deleteById(id);
+//        }
+//        return message;
+//     }
 
      public List<ProductViewDTO> searchByDescription(String description) {
         List<ProductsDTO> toConvert = listToDto(productsRepository.searchByDescription2(description));

@@ -35,7 +35,7 @@ public class ProductCONTR {
     }
 
     @GetMapping("/{id}")
-    public ProductsDTO showProductsById(@PathVariable("id") Long id) {
+    public ProductViewDTO showProductsById(@PathVariable("id") Long id) {
         return productsSERV.showProductsById(id);
     }
 
@@ -44,11 +44,11 @@ public class ProductCONTR {
         return productsSERV.updateProduct(product, id);
     }
 
-    @DeleteMapping("/{id}")
-    @ResponseStatus(code = HttpStatus.ACCEPTED)
-    public ProductsDTO deleteProducts(@PathVariable("id") Long id) {
-        return productsSERV.deleteProduct(id);
-    }
+//    @DeleteMapping("/{id}")
+//    @ResponseStatus(code = HttpStatus.ACCEPTED)
+//    public ProductsDTO deleteProducts(@PathVariable("id") Long id) {
+//        return productsSERV.deleteProduct(id);
+//    }
 
     @GetMapping("/category/{categoryName}")
     public List<ProductViewDTO> searchByCategory(@PathVariable("categoryName") String categoryName) {
