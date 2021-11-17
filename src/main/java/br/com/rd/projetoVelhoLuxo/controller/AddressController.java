@@ -9,6 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping ("address")
+@CrossOrigin(origins = "http://localhost:3000", allowedHeaders = "*")
 public class AddressController {
     @Autowired
     AddressService service;

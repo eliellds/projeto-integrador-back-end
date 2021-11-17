@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface PriceProductRepository extends JpaRepository <PriceProduct, PriceProductKey>,
                                                 PriceProductRepositoryCustom {
-
+    PriceProduct findByPriceProductKeyProductsId(Long id);
     List<PriceProduct> findByOrderByPriceAsc();
     List<PriceProduct> findByOrderByPriceDesc();
     List<PriceProduct> findByOrderBySalePriceDesc();

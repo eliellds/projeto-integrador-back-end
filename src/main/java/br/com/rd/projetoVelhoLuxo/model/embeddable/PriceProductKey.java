@@ -13,7 +13,7 @@ public class PriceProductKey implements Serializable {
 
     @ManyToOne (fetch = FetchType.EAGER)
     @JoinColumn(nullable = false, name = "id_produto")
-    private Products product;
+    private Products products;
 
     @Column (nullable = false, name = "data_vigencia")
     private LocalDate effectiveDate;

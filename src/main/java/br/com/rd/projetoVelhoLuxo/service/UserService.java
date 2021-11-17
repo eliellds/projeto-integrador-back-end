@@ -117,7 +117,9 @@ public class UserService {
             return new UserHeaderDTO(myUser.getId(),
                                      myUser.getFirstName(),
                                      myUser.getLastName(),
-                                     myUser.getEmail());
+                                     myUser.getCpf(),
+                                     myUser.getEmail(),
+                                     myUser.getTelephone().getNumber());
         } else {
             throw new BadCredentialsException("User not found!");
         }
