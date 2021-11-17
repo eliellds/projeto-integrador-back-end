@@ -3,13 +3,11 @@ package br.com.rd.projetoVelhoLuxo.service;
 import br.com.rd.projetoVelhoLuxo.model.dto.*;
 import br.com.rd.projetoVelhoLuxo.model.embeddable.PriceProductKey;
 import br.com.rd.projetoVelhoLuxo.model.entity.Category;
-import br.com.rd.projetoVelhoLuxo.model.entity.ConservationState;
 import br.com.rd.projetoVelhoLuxo.model.entity.PriceProduct;
 import br.com.rd.projetoVelhoLuxo.model.entity.Products;
 import br.com.rd.projetoVelhoLuxo.repository.contract.PriceProductRepository;
 import br.com.rd.projetoVelhoLuxo.repository.contract.ProductsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 
@@ -59,7 +57,7 @@ public class PriceProductService {
         PriceProductDTO dto = new PriceProductDTO();
         PriceProductKeyDTO key = new PriceProductKeyDTO();
 
-        key.setProduct(businessToDto(pp.getPriceProductKey().getProduct()));
+        key.setProduct(businessToDto(pp.getPriceProductKey().getProducts()));
         key.setEffectiveDate(pp.getPriceProductKey().getEffectiveDate());
 
         dto.setPriceProductKey(key);
@@ -101,7 +99,7 @@ public class PriceProductService {
         PriceProductKey key = new PriceProductKey();
         Products produto = dtoToBusiness(dto.getPriceProductKey().getProduct());
 
-        key.setProduct(produto);
+        key.setProducts(produto);
         key.setEffectiveDate(dto.getPriceProductKey().getEffectiveDate());
 
         business.setPriceProductKey(key);
@@ -130,14 +128,14 @@ public class PriceProductService {
 
 //       Long id = pp.getPriceProductKey().getProduct().getId())
 
-        if(pp.getPriceProductKey().getProduct() != null){
-            if (pp.getPriceProductKey().getProduct().getId() != null) {
-                if(productsREPO.existsById(pp.getPriceProductKey().getProduct().getId())){
-                    pp.getPriceProductKey().setProduct(productsREPO.getById(pp.getPriceProductKey().getProduct().getId()));
+        if(pp.getPriceProductKey().getProducts() != null){
+            if (pp.getPriceProductKey().getProducts().getId() != null) {
+                if(productsREPO.existsById(pp.getPriceProductKey().getProducts().getId())){
+                    pp.getPriceProductKey().setProducts(productsREPO.getById(pp.getPriceProductKey().getProducts().getId()));
                 }
             }else{
-                Products products = productsREPO.save(pp.getPriceProductKey().getProduct());
-                pp.getPriceProductKey().setProduct(products);
+                Products products = productsREPO.save(pp.getPriceProductKey().getProducts());
+                pp.getPriceProductKey().setProducts(products);
             }
         }
 
@@ -157,7 +155,7 @@ public class PriceProductService {
         Products p = dtoToBusiness(id);
         p.setId(id.getId());
 
-        key.setProduct(p);
+        key.setProducts(p);
         key.setEffectiveDate(date);
         Optional<PriceProduct> pp = priceProductRepository.findById(key);
 

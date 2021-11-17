@@ -1,14 +1,11 @@
 package br.com.rd.projetoVelhoLuxo.service;
 
 import br.com.rd.projetoVelhoLuxo.model.dto.ConservationStateDTO;
-import br.com.rd.projetoVelhoLuxo.model.entity.Category;
-import br.com.rd.projetoVelhoLuxo.model.entity.ConservationState;
-import br.com.rd.projetoVelhoLuxo.model.entity.Products;
+import br.com.rd.projetoVelhoLuxo.model.dto.ProductViewDTO;
+import br.com.rd.projetoVelhoLuxo.model.entity.*;
 import br.com.rd.projetoVelhoLuxo.model.dto.CategoryDTO;
 import br.com.rd.projetoVelhoLuxo.model.dto.ProductsDTO;
-import br.com.rd.projetoVelhoLuxo.repository.contract.CategoryREPO;
-import br.com.rd.projetoVelhoLuxo.repository.contract.ConservationStateRepository;
-import br.com.rd.projetoVelhoLuxo.repository.contract.ProductsRepository;
+import br.com.rd.projetoVelhoLuxo.repository.contract.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,13 +23,51 @@ public class ProductsSERV {
     CategoryREPO categoryREPO;
     @Autowired
     ConservationStateRepository conservationStateRepository;
+    @Autowired
+    PriceProductRepository price;
+    @Autowired
+    InventoryREPO inventory;
 
-    public List<ProductsDTO> listToDto(List<Products> list) {
+
+    private List<ProductsDTO> listToDto(List<Products> list) {
         List<ProductsDTO> listDto = new ArrayList<>();
         for (Products p : list) {
             listDto.add(this.businessToDto(p));
         }
         return listDto;
+    }
+//    public List<ProductViewDTO> getListByCategory(String category){
+//        List<ProductViewDTO> listView = new ArrayList<>();
+//
+//        return listView;
+//    }
+
+    private List<ProductViewDTO> convertListToDTOView(List<ProductsDTO> listDTO){
+        List<ProductViewDTO> convertedList = new ArrayList<>();
+        for (ProductsDTO dto: listDTO) {
+
+            convertedList.add(convertToDTOView(dto));
+        }
+
+        return convertedList;
+    }
+
+
+    private ProductViewDTO convertToDTOView(ProductsDTO toConvert){
+        ProductViewDTO converted = new ProductViewDTO();
+        converted.setProduct(toConvert);
+        PriceProduct toAddPrice = price.findByPriceProductKeyProductsId(converted.getProduct().getId());
+        if(toAddPrice != null) {
+            converted.setPrice(toAddPrice.getPrice());
+            if (toAddPrice.getSalePrice() != null) {
+                converted.setSalePrice(toAddPrice.getSalePrice());
+            }
+        }
+        Inventory qtyToAdd = inventory.findByInventoryKeyProductsId(converted.getProduct().getId());
+        converted.setQty(qtyToAdd.getQty_products());
+
+
+        return converted;
     }
 
 
@@ -65,8 +100,10 @@ public class ProductsSERV {
     }
 
     //produtos mais recentes adicionados
-    public List<ProductsDTO> findAllByOrderByIdDesc(){
-        return listToDto(productsRepository.findFirst5ByOrderByIdDesc());
+    public List<ProductViewDTO> findAllByOrderByIdDesc(){
+        List<ProductsDTO> toConvert = listToDto(productsRepository.findFirst8ByOrderByIdDesc());
+        return convertListToDTOView(toConvert);
+
     }
 
     public List<ProductsDTO> showProducts() {
@@ -126,12 +163,14 @@ public class ProductsSERV {
         return message;
      }
 
-     public List<ProductsDTO> searchByDescription(String description) {
-        return listToDto(productsRepository.searchByDescription(description));
+     public List<ProductViewDTO> searchByDescription(String description) {
+        List<ProductsDTO> toConvert = listToDto(productsRepository.searchByDescription2(description));
+        return convertListToDTOView(toConvert);
      }
 
-     public List<ProductsDTO> searchByCategory(String categoryName) {
-        return listToDto(productsRepository.findAllByCategoryIDCategoryContaining(categoryName));
+     public List<ProductViewDTO> searchByCategory(String categoryName) {
+         List<ProductsDTO> toConverted = listToDto(productsRepository.findAllByCategoryIDCategoryContaining(categoryName));
+        return convertListToDTOView(toConverted);
      }
 
      public List<ProductsDTO> searchByYearNewer() {
@@ -142,8 +181,10 @@ public class ProductsSERV {
         return listToDto(productsRepository.findAllByOrderByYearAsc());
      }
 
-     public List<ProductsDTO> searchByOffers() {
-        return listToDto(productsRepository.searchByOffers());
+     public List<ProductViewDTO> searchByOffers() {
+         List<ProductsDTO> toConvert = listToDto(productsRepository.searchByOffers());
+
+         return convertListToDTOView(toConvert);
      }
 
     private Products dtoToBusiness(ProductsDTO dto) {

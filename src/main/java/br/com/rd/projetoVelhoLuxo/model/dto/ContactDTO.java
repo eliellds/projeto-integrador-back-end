@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 public class ContactDTO {
 
     private Long id;
+    private String name;
     private SubjectDTO subject;
     private String phoneNumber;
     private String email;

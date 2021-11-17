@@ -2,6 +2,7 @@ package br.com.rd.projetoVelhoLuxo.controller;
 
 
 import br.com.rd.projetoVelhoLuxo.model.dto.PriceProductDTO;
+import br.com.rd.projetoVelhoLuxo.model.dto.ProductViewDTO;
 import br.com.rd.projetoVelhoLuxo.model.dto.ProductsDTO;
 import br.com.rd.projetoVelhoLuxo.model.entity.PriceProduct;
 import br.com.rd.projetoVelhoLuxo.service.PriceProductService;
@@ -14,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/products")
+@CrossOrigin(origins = "http://localhost:3000", allowedHeaders = "*")
 public class ProductCONTR {
 
     @Autowired
@@ -49,8 +51,8 @@ public class ProductCONTR {
     }
 
     @GetMapping("/category/{categoryName}")
-    public List<PriceProductDTO> searchByCategory(@PathVariable("categoryName") String categoryName) {
-        return priceProductService.searchByCategory(categoryName);
+    public List<ProductViewDTO> searchByCategory(@PathVariable("categoryName") String categoryName) {
+        return productsSERV.searchByCategory(categoryName);
     }
 
     @GetMapping("/newer")
@@ -64,12 +66,12 @@ public class ProductCONTR {
     }
 
     @GetMapping("/offers")
-    public List<PriceProductDTO> searchByOffers() {
-        return priceProductService.searchByOffers();
+    public List<ProductViewDTO> searchByOffers() {
+        return productsSERV.searchByOffers();
     }
 
     @GetMapping("/recentlyAdd")
-    public List<ProductsDTO> searchByNewerAdd(){
+    public List<ProductViewDTO> searchByNewerAdd(){
         return productsSERV.findAllByOrderByIdDesc();
     }
 }

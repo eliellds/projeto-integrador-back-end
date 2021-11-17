@@ -11,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/contacts")
+@CrossOrigin(origins = "http://localhost:3000", allowedHeaders = "*")
 public class ContactController {
 
     @Autowired

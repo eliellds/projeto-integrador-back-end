@@ -50,25 +50,8 @@ public class ContactService {
             contact.setSubject(subject);
         }
 
-        if (contact.getStatus() != null) {
-            ContactStatus status = contact.getStatus();
-
-            if (contact.getStatus().getId() != null) {
-                Long id = contact.getStatus().getId();
-
-                if (statusRepository.existsById(id)) {
-                    status = statusRepository.getById(id);
-                } else {
-                    status.setId(null);
-                }
-
-            }
-
-            contact.setStatus(status);
-        }
-
         contact.setContactDate(LocalDateTime.now());
-        contact.setStatus(statusRepository.getById(3L));
+        contact.setStatus(statusRepository.getById(1L));
 
         contact = contactRepository.save(contact);
         return businessToDto(contact);
@@ -117,6 +100,9 @@ public class ContactService {
                 }
 
                 contact.setSubject(subject);
+            }
+            if (dto.getName() != null) {
+                contact.setName(dto.getName());
             }
             if (dto.getPhoneNumber() != null) {
                 contact.setPhoneNumber(dto.getPhoneNumber());
@@ -192,6 +178,7 @@ public class ContactService {
             business.setSubject(subject);
         }
 
+        business.setName(dto.getName());
         business.setPhoneNumber(dto.getPhoneNumber());
         business.setEmail(dto.getEmail());
         business.setContent(dto.getContent());
@@ -224,6 +211,7 @@ public class ContactService {
             dto.setSubject(subject);
         }
 
+        dto.setName(business.getName());
         dto.setPhoneNumber(business.getPhoneNumber());
         dto.setEmail(business.getEmail());
         dto.setContent(business.getContent());

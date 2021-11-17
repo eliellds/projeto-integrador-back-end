@@ -18,6 +18,8 @@ public class Contact {
     @JoinColumn(name = "cl_id_assunto", nullable = false)
     private Subject subject;
 
+    @Column(name = "cl_nome", length = 50)
+    private String name;
     @Column(name = "cl_nr_telefone", length = 11)
     private String phoneNumber;
     @Column(nullable = false, name = "cl_email", length = 100)
