@@ -106,6 +106,12 @@ public class ProductsSERV {
 
     }
 
+    public List<ProductViewDTO> emphasisDiscount(){
+        List<ProductsDTO> toConvert = listToDto(productsRepository.highDiscountEmphasis());
+
+        return convertListToDTOView(toConvert);
+    }
+
     public List<ProductsDTO> showProducts() {
         List<Products> allList = productsRepository.findAll();
         return this.listToDto(allList);
