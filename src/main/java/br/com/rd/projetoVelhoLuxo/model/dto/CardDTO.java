@@ -6,7 +6,7 @@ import java.time.LocalDate;
 
 @Data
 public class CardDTO {
-    private Long cardNumber;
+    private String cardNumber;
     private String name;
     private String cpf;
     private LocalDate birthDate;
