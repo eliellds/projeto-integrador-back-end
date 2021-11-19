@@ -91,7 +91,7 @@ public class CardService {
         return this.listToDto(allList);
     }
 
-    public CardDTO searchById(Long id) {
+    public CardDTO searchById(String id) {
         Optional<Card> option = cardRepository.findById(id);
 
         if (option.isPresent()) {
@@ -101,7 +101,7 @@ public class CardService {
     }
 
 
-    public CardDTO updateCard(CardDTO dto, Long numero) {
+    public CardDTO updateCard(CardDTO dto, String numero) {
         Optional<Card> op = cardRepository.findById(numero);
 
         if(op.isPresent()){
@@ -142,7 +142,7 @@ public class CardService {
         return null;
     }
 
-    public void deleteCard(Long number) {
+    public void deleteCard(String number) {
         if (cardRepository.existsById(number)){
             cardRepository.deleteById(number);
         }
