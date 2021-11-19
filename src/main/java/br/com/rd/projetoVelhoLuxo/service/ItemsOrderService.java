@@ -1,6 +1,7 @@
 package br.com.rd.projetoVelhoLuxo.service;
 
 import br.com.rd.projetoVelhoLuxo.model.dto.*;
+import br.com.rd.projetoVelhoLuxo.model.dto.response.OrderDashboardDTO;
 import br.com.rd.projetoVelhoLuxo.model.embeddable.InventoryKey;
 import br.com.rd.projetoVelhoLuxo.model.embeddable.ItemsOrderKey;
 import br.com.rd.projetoVelhoLuxo.model.entity.*;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -148,6 +150,49 @@ public class ItemsOrderService {
 
     }
 
+    public List<OrderDashboardDTO> findByUser(Long id) {
+        List<ItemsOrder> list = itemsOrderRepository.findAllByCompositeKeyOrderMyUserIdOrderByCompositeKeyOrderIdDesc(id);
+        return listToViewDTO(list);
+    }
+
+    private List<OrderDashboardDTO> listToViewDTO(List<ItemsOrder> businessList) {
+        List<OrderDashboardDTO> dashList = new ArrayList<>();
+
+        Long order = 0L;
+
+        for (ItemsOrder convert : businessList) {
+
+            if (!convert.getCompositeKey().getOrder().getId().equals(order)) {
+                dashList.add(businessToDashDTO(convert));
+                order = convert.getCompositeKey().getOrder().getId();
+            }
+
+        }
+
+        return dashList;
+    }
+
+    private OrderDashboardDTO businessToDashDTO(ItemsOrder business) {
+        OrderDashboardDTO dto = new OrderDashboardDTO();
+
+        dto.setOrderNumber(business.getCompositeKey().getOrder().getId());
+        dto.setStatus("Aguardando pagamento");
+        dto.setDate(business.getCompositeKey().getOrder().getDateOrder());
+        dto.setPrice(business.getTotalPrice());
+
+        List<ProductsDTO> products = new ArrayList<>();
+        List<ItemsOrder> items = itemsOrderRepository.findAllByCompositeKeyOrderIdOrderByCompositeKeyOrderIdDesc(business.getCompositeKey().getOrder().getId());
+
+        for (ItemsOrder order : items) {
+            products.add(businessToDto(order.getProduct()));
+        }
+
+        dto.setProductList(products);
+
+        return dto;
+    }
+
+
     ///////////////////////////////
     // encontra todos os itemsOrder
     public List<ItemsOrderDTO> findAllList() {
@@ -180,25 +225,6 @@ public class ItemsOrderService {
         return listToDto(itemsOrderRepository.findFirst1ByCompositeKeyOrderIdOrderByCompositeKeyIdItemDesc(id));
 
     }
-
-//    public ItemsOrderDTO deleteById(Long idItem, Long idOrder) {
-//        OrderDTO order = convertToDTO(orderRepository.getById(idOrder));
-//
-//        ItemsOrderDTO toDelete = findByCompositeKey(idItem, convertToOrder(order));
-//
-//        if (itemsOrderRepository.existsById(dtoToBusiness(toDelete).getCompositeKey())) {
-//            itemsOrderRepository.deleteById(dtoToBusiness(toDelete).getCompositeKey());
-//        }
-//        return toDelete;
-//    }
-
-//    ////////////////////////////////////////////////
-//    // encontra lista de itemsOrder pelo id de Order
-//    public List<ItemsOrderDTO> findAllByOrderId(Long orderId) {
-//
-//        return listToDto(itemsOrderRepository.findAllByOrderId(orderId));
-//
-//    }
 
     ////////////////////////////////////////////////////
     // converter lista de objeto final order para lista de dto

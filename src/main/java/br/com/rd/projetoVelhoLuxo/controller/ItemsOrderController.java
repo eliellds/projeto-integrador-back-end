@@ -1,6 +1,7 @@
 package br.com.rd.projetoVelhoLuxo.controller;
 
 import br.com.rd.projetoVelhoLuxo.model.dto.ItemsOrderDTO;
+import br.com.rd.projetoVelhoLuxo.model.dto.response.OrderDashboardDTO;
 import br.com.rd.projetoVelhoLuxo.model.entity.Order;
 import br.com.rd.projetoVelhoLuxo.repository.contract.OrderRepository;
 import br.com.rd.projetoVelhoLuxo.service.ItemsOrderService;
@@ -13,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/itemsOrder")
+@CrossOrigin(origins = "http://localhost:3000", allowedHeaders = "*")
 public class ItemsOrderController {
 
     @Autowired
@@ -57,6 +59,11 @@ public class ItemsOrderController {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @GetMapping("/user/{id}")
+    public List<OrderDashboardDTO> findByUser(@PathVariable("id") Long id) {
+        return itemsOrderService.findByUser(id);
     }
 
 //    @DeleteMapping("/delete")
