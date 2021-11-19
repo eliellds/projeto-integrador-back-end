@@ -10,6 +10,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/flags")
+@CrossOrigin(origins = "http://localhost:3000", allowedHeaders = "*")
+
 public class FlagController {
     @Autowired
     FlagService flagService;
