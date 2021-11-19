@@ -46,7 +46,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
                                             "/products/recentlyAdd", "/sign-up", "/products/older",
                                             "/products/newer", "/search/**", "/prices","/subjects",
                                             "/inventories", "/states", "/states/*","/sign-up",
-                                            "/subjects", "/subjects/**",
+                                            "/subjects", "/subjects/**","/flags/**",
                                             "/products/newer", "/search", "/prices","/subjects",
                                             "/inventories", "/states", "/states/**",
                                             "/subjects", "/subjects/**", "/sales").permitAll()
