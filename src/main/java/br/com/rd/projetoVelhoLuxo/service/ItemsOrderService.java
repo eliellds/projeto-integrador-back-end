@@ -178,7 +178,7 @@ public class ItemsOrderService {
         dto.setOrderNumber(business.getCompositeKey().getOrder().getId());
         dto.setStatus("Aguardando pagamento");
         dto.setDate(business.getCompositeKey().getOrder().getDateOrder());
-        dto.setPrice(business.getTotalPrice());
+        dto.setPrice(business.getCompositeKey().getOrder().getAmount());
 
         List<ProductsDTO> products = new ArrayList<>();
         List<ItemsOrder> items = itemsOrderRepository.findAllByCompositeKeyOrderIdOrderByCompositeKeyOrderIdDesc(business.getCompositeKey().getOrder().getId());

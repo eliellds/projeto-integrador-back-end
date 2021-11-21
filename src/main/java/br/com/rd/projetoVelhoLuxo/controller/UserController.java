@@ -36,7 +36,13 @@ public class UserController {
 
     @GetMapping("/email/{email}")
     private UserHeaderDTO findByEmail(@PathVariable("email") String email) {
-        return service.findByEmail(email);
+        try {
+            return service.findByEmail(email);
+        } catch (Exception e) {
+            System.out.println("E-mail não encontrado " + e);
+        }
+        return null;
+
     }
 
     @DeleteMapping("/{id}")
