@@ -1,15 +1,26 @@
 package br.com.rd.projetoVelhoLuxo.service;
 
+import br.com.rd.projetoVelhoLuxo.enums.StatusEmail;
 import br.com.rd.projetoVelhoLuxo.model.dto.TelephoneDTO;
 import br.com.rd.projetoVelhoLuxo.model.dto.MyUserDTO;
+import br.com.rd.projetoVelhoLuxo.model.dto.response.UserHeaderDTO;
+import br.com.rd.projetoVelhoLuxo.model.entity.EmailModel;
 import br.com.rd.projetoVelhoLuxo.model.entity.MyUser;
 import br.com.rd.projetoVelhoLuxo.model.entity.Telephone;
+import br.com.rd.projetoVelhoLuxo.repository.contract.EmailRepository;
 import br.com.rd.projetoVelhoLuxo.repository.contract.MyUserRepository;
 import br.com.rd.projetoVelhoLuxo.repository.contract.TelephoneRepository;
+import javassist.Loader;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailException;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,11 +30,18 @@ public class UserService {
     MyUserRepository userRepository;
     @Autowired
     TelephoneRepository telephoneRepository;
+    @Autowired
+    EmailRepository emailRepository;
+    @Autowired
+    private JavaMailSender emailSender;
 
     public MyUserDTO createUser(MyUserDTO toCreate){
         String encryptedPassword = new BCryptPasswordEncoder().encode(toCreate.getPassword());
         toCreate.setPassword(encryptedPassword);
         MyUser create= convertToUser(toCreate);
+
+        sendSingUpEmail(toCreate);
+
         //verifica se tem o "produto"
         if(create.getTelephone()!=null){
             //verifica se tem um id
@@ -106,6 +124,34 @@ public class UserService {
         List<MyUser> list = userRepository.findAll();
 
         return convertListToDTO(list);
+    }
+
+    public UserHeaderDTO findByEmail(String email) {
+        if (userRepository.findByEmailEquals(email) != null) {
+            MyUser myUser = userRepository.findByEmailEquals(email);
+            return new UserHeaderDTO(myUser.getId(),
+                                     myUser.getFirstName(),
+                                     myUser.getLastName(),
+                                     myUser.getCpf(),
+                                     myUser.getEmail(),
+                                     myUser.getTelephone().getNumber());
+        } else {
+            throw new BadCredentialsException("User not found!");
+        }
+    }
+
+    public UserHeaderDTO findByCpf(String cpf) {
+        if (userRepository.findByCpfEquals(cpf) != null) {
+            MyUser myUser = userRepository.findByCpfEquals(cpf);
+            return new UserHeaderDTO(myUser.getId(),
+                    myUser.getFirstName(),
+                    myUser.getLastName(),
+                    myUser.getCpf(),
+                    myUser.getEmail(),
+                    myUser.getTelephone().getNumber());
+        } else {
+            throw new BadCredentialsException("User not found!");
+        }
     }
 
     //recuperar usuario
@@ -211,5 +257,33 @@ public class UserService {
             converted.setNumber(toConvert.getNumber());
         }
         return converted;
+    }
+
+    public void sendSingUpEmail(MyUserDTO toCreate){
+        EmailModel email = new EmailModel();
+
+        email.setSendDateEmail(LocalDateTime.now());
+        email.setOwnerRef(toCreate.getId());
+        email.setEmailTo(toCreate.getEmail());
+        email.setEmailFrom("velholuxosac@gmail.com");
+        email.setSubject("Bem-vindo ao Velho Luxo!");
+        email.setText(String.format ("Olá! %s Bem-vindo(a) ao nosso antiquário Velho Luxo. \nAproveite nossos produtos exclusivos e com quadidade garantida. \nQualquer dúvida não hesite em nos procurar. \nA equipe Velho Luxo agradece!", toCreate.getFirstName()));
+        try {
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setFrom(email.getEmailFrom());
+            message.setTo(email.getEmailTo());
+            message.setSubject(email.getSubject());
+            message.setText(email.getText());
+
+            emailSender.send(message);
+
+            email.setStatusEmail(StatusEmail.SENT);
+
+        } catch (MailException e){
+            email.setStatusEmail(StatusEmail.ERROR);
+
+        } finally {
+            emailRepository.save(email);
+        }
     }
 }

@@ -11,7 +11,7 @@ public class Card {
 
     @Id
     @Column(nullable = false, name = "cl_nr_cartao")
-    private Long cardNumber;
+    private String cardNumber;
 
     @Column(nullable = false, name = "cl_nm_titular")
     private String name;

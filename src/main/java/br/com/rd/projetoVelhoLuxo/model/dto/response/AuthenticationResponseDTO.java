@@ -6,9 +6,11 @@ import lombok.Data;
 public class AuthenticationResponseDTO {
 
     private final String jwt;
+    private final String email;
 
-    public AuthenticationResponseDTO(String jwt) {
+    public AuthenticationResponseDTO(String jwt, String email) {
         this.jwt = jwt;
+        this.email = email;
     }
 
 }

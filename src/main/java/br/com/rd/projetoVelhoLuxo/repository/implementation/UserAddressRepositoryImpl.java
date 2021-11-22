@@ -15,7 +15,7 @@ public class UserAddressRepositoryImpl implements UserAddressRepositoryCustom {
     EntityManager em;
     @Override
     public List<UserAddress> findAllByUserId(Long id) {
-        Query sql = em.createNativeQuery("SELECT * FROM endereco_usuario WHERE cl_id_usuario = ?", UserAddress.class);
+        Query sql = em.createNativeQuery("SELECT * FROM tb_endereco_usuario WHERE cl_id_usuario = ?", UserAddress.class);
 
         sql.setParameter(1, id);
         List<UserAddress> list = sql.getResultList();

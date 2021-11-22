@@ -12,4 +12,6 @@ public interface ItemsOrderRepositoryCustom {
 
     List<ItemsOrder> findAllByOrderByCompositeKeyOrderIdDesc();
 
+    List<ItemsOrder> findAllByCompositeKeyOrderMyUserIdOrderByCompositeKeyOrderIdDesc(Long id);
+
 }
