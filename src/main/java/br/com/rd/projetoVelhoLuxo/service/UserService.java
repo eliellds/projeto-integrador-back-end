@@ -267,7 +267,7 @@ public class UserService {
         email.setEmailTo(toCreate.getEmail());
         email.setEmailFrom("velholuxosac@gmail.com");
         email.setSubject("Bem-vindo ao Velho Luxo!");
-        email.setText(String.format ("Olá! %s Bem-vindo(a) ao nosso antiquário Velho Luxo. \nAproveite nossos produtos exclusivos e com quadidade garantida. \nQualquer dúvida não hesite em nos procurar. \nA equipe Velho Luxo agradece!", toCreate.getFirstName()));
+        email.setText(String.format ("Olá! %s Bem-vindo(a) ao nosso antiquário Velho Luxo. \nAproveite nossos produtos exclusivos e com qualidade garantida. \nQualquer dúvida não hesite em nos procurar. \nA equipe Velho Luxo agradece!", toCreate.getFirstName()));
         try {
             SimpleMailMessage message = new SimpleMailMessage();
             message.setFrom(email.getEmailFrom());
