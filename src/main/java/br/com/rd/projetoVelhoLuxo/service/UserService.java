@@ -125,6 +125,20 @@ public class UserService {
         }
     }
 
+    public UserHeaderDTO findByCpf(String cpf) {
+        if (userRepository.findByCpfEquals(cpf) != null) {
+            MyUser myUser = userRepository.findByCpfEquals(cpf);
+            return new UserHeaderDTO(myUser.getId(),
+                    myUser.getFirstName(),
+                    myUser.getLastName(),
+                    myUser.getCpf(),
+                    myUser.getEmail(),
+                    myUser.getTelephone().getNumber());
+        } else {
+            throw new BadCredentialsException("User not found!");
+        }
+    }
+
     //recuperar usuario
     public MyUserDTO findById(Long id){
         if(userRepository.existsById(id)){

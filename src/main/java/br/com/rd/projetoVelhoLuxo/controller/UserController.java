@@ -45,6 +45,17 @@ public class UserController {
 
     }
 
+    @GetMapping("/cpf/{cpf}")
+    private UserHeaderDTO findByCpf(@PathVariable("cpf") String cpf) {
+        try {
+            return service.findByCpf(cpf);
+        } catch (Exception e) {
+            System.out.println("CPF não encontrado " + e);
+        }
+        return null;
+
+    }
+
     @DeleteMapping("/{id}")
     private  void deleteById(@PathVariable("id") Long id){
          service.deleteById(id);
