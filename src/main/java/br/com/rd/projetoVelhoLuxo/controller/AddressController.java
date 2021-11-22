@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping ("address")
+@RequestMapping ("/address")
 @CrossOrigin(origins = "http://localhost:3000", allowedHeaders = "*")
 public class AddressController {
     @Autowired
@@ -31,8 +31,10 @@ public class AddressController {
 
     @PutMapping
     public AddressDTO updateById(@RequestBody AddressDTO beUpdate){
+        System.out.println(beUpdate);
         return service.updateById(beUpdate);
     }
+
     @DeleteMapping("/delete/{id}")
     public void deleteById(@PathVariable("id") Long id){
         service.deleteById(id);
