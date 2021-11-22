@@ -11,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/userAddress")
+@CrossOrigin(origins = "http://localhost:3000", allowedHeaders = "*")
 public class UserAddressController {
     @Autowired
     UserAddressService service;

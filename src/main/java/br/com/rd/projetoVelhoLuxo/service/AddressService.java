@@ -80,7 +80,7 @@ AddressRepository addressRepository;
             }
 
             //rua
-            if(beUpdate.getState()!= null) {
+            if(beUpdate.getStreet()!= null) {
                 updated.setStreet(beUpdate.getStreet());
             }
             updated = addressRepository.save(updated);

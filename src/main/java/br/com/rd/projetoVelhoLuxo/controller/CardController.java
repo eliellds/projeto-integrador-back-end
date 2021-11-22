@@ -25,18 +25,18 @@ public class CardController {
     }
 
     @GetMapping("/{id}")
-    public CardDTO searchById(@PathVariable("id") Long id) {
+    public CardDTO searchById(@PathVariable("id") String id) {
         return cardService.searchById(id);
     }
 
     @PutMapping("/{number}")
-    public CardDTO updateByNumber(@RequestBody CardDTO dto, @PathVariable("number") Long number){
+    public CardDTO updateByNumber(@RequestBody CardDTO dto, @PathVariable("number") String number){
         return cardService.updateCard(dto, number);
     }
 
     @DeleteMapping("/{number}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
-    public void deleteByNumber(@PathVariable("number") Long number){
+    public void deleteByNumber(@PathVariable("number") String number){
         cardService.deleteCard(number);
     }
 

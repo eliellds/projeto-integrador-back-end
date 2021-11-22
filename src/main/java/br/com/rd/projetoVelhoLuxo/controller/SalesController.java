@@ -9,6 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/sales")
+@CrossOrigin(origins = "http://localhost:3000", allowedHeaders = "*")
 public class SalesController {
 
     @Autowired

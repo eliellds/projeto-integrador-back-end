@@ -53,7 +53,7 @@ public class AuthenticationController {
         final String jwt = jwtTokenUtil.generateToken(userDetails);
 
         // por fim, retorna para a view um token jwt através da classe AuthenticationResponseDTO
-        return ResponseEntity.ok(new AuthenticationResponseDTO(jwt));
+        return ResponseEntity.ok(new AuthenticationResponseDTO(jwt, authenticationRequest.getUsername()));
     }
 
 }
