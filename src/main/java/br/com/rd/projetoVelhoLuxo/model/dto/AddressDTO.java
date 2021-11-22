@@ -3,7 +3,7 @@ package br.com.rd.projetoVelhoLuxo.model.dto;
 import lombok.Data;
 
 @Data
-public class AddressDTO {
+public class  AddressDTO {
 
     private Long id;
 

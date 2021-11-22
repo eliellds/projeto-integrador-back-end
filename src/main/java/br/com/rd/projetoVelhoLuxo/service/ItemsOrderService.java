@@ -100,16 +100,16 @@ public class ItemsOrderService {
                     throw new NullPointerException("Order must be inserted!");
                 }
 
-                // conferindo ultimo item do pedido e adicionando + 1 ao valor do id item atual
-                if (!findOneByOrderId(key.getOrder().getId()).isEmpty()) {
-                    List<ItemsOrderDTO> list = findOneByOrderId(toLink.getCompositeKey().getOrderDTO().getId());
-                    key.setIdItem(
-                            (list.get(0).getCompositeKey().getIdItem()) + 1
-                    );
-
-                } else {
-                    key.setIdItem(1L);
-                }
+//                // conferindo ultimo item do pedido e adicionando + 1 ao valor do id item atual
+//                if (!findOneByOrderId(key.getOrder().getId()).isEmpty()) {
+//                    List<ItemsOrderDTO> list = findOneByOrderId(toLink.getCompositeKey().getOrderDTO().getId());
+//                    key.setIdItem(
+//                            (list.get(0).getCompositeKey().getIdItem()) + 1
+//                    );
+//
+//                } else {
+//                    key.setIdItem(1L);
+//                }
 
             } else {
                 throw new Exception("Composite key already exists!");
