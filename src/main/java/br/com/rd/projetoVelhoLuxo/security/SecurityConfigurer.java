@@ -50,7 +50,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
                                             "/products/newer", "/search", "/prices","/subjects",
                                             "/inventories", "/states", "/states/**",
                                             "/subjects", "/subjects/**", "/sales", "/address", "/userAddress",
-                                            "/user/email/**", "/user/cpf/**").permitAll()
+                                            "/user/email/**", "/user/checkEmail/**", "/user/cpf/**").permitAll()
                     .anyRequest().authenticated()
                     .and()
 //                .formLogin()

@@ -45,8 +45,19 @@ public class UserController {
 
     }
 
+    @GetMapping("/checkEmail/{email}")
+    private Boolean findEmailExists(@PathVariable("email") String email) {
+        try {
+            return service.findEmailExists(email);
+        } catch (Exception e) {
+            System.out.println("E-mail não cadastrado " + e);
+        }
+        return null;
+
+    }
+
     @GetMapping("/cpf/{cpf}")
-    private UserHeaderDTO findByCpf(@PathVariable("cpf") String cpf) {
+    private Boolean findByCpf(@PathVariable("cpf") String cpf) {
         try {
             return service.findByCpf(cpf);
         } catch (Exception e) {

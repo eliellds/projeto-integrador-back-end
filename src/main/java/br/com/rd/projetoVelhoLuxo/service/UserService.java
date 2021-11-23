@@ -132,25 +132,25 @@ public class UserService {
             return new UserHeaderDTO(myUser.getId(),
                                      myUser.getFirstName(),
                                      myUser.getLastName(),
-                                     myUser.getCpf(),
-                                     myUser.getEmail(),
-                                     myUser.getTelephone().getNumber());
+                                     myUser.getEmail());
         } else {
             throw new BadCredentialsException("User not found!");
         }
     }
 
-    public UserHeaderDTO findByCpf(String cpf) {
-        if (userRepository.findByCpfEquals(cpf) != null) {
-            MyUser myUser = userRepository.findByCpfEquals(cpf);
-            return new UserHeaderDTO(myUser.getId(),
-                    myUser.getFirstName(),
-                    myUser.getLastName(),
-                    myUser.getCpf(),
-                    myUser.getEmail(),
-                    myUser.getTelephone().getNumber());
+    public Boolean findEmailExists(String email) throws Exception {
+        if (userRepository.findByEmailEquals(email) != null) {
+            return true;
         } else {
-            throw new BadCredentialsException("User not found!");
+            throw new Exception("E-mail not found!");
+        }
+    }
+
+    public Boolean findByCpf(String cpf) throws Exception {
+        if (userRepository.findByCpfEquals(cpf) != null) {
+            return true;
+        } else {
+            throw new Exception("User not found!");
         }
     }
 
