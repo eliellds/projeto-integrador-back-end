@@ -10,7 +10,7 @@ import java.time.LocalDate;
 public class Card {
 
     @Id
-    @Column(nullable = false, name = "cl_nr_cartao")
+    @Column(nullable = false, name = "cl_nr_cartao",length = 555)
     private String cardNumber;
 
     @Column(nullable = false, name = "cl_nm_titular")

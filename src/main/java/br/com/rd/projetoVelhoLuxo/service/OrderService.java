@@ -1,12 +1,17 @@
 package br.com.rd.projetoVelhoLuxo.service;
 
+import br.com.rd.projetoVelhoLuxo.enums.StatusEmail;
 import br.com.rd.projetoVelhoLuxo.model.dto.*;
 import br.com.rd.projetoVelhoLuxo.model.entity.*;
 import br.com.rd.projetoVelhoLuxo.repository.contract.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailException;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,9 +33,15 @@ public class OrderService {
     FlagRepository flagRepository;
     @Autowired
     PaymentMethodsRepository paymentRepository;
+    @Autowired
+    EmailRepository emailRepository;
+    @Autowired
+    private JavaMailSender emailSender;
 
     public OrderDTO create(OrderDTO toCreate){
         Order created = convertToOrder(toCreate);
+
+        sendConfirmationOrderEmail(toCreate);
 
         if(toCreate.getAddress()!=null) {
             Address address = new Address();
@@ -550,6 +561,33 @@ public class OrderService {
         dto.setId(business.getId());
         dto.setDescricao(business.getDescricao());
         return dto;
+    }
+
+    public void sendConfirmationOrderEmail(OrderDTO toCreate){
+        EmailModel email = new EmailModel();
+
+        email.setSendDateEmail(LocalDateTime.now());
+        email.setOwnerRef(toCreate.getId());
+        email.setEmailTo(toCreate.getMyUser().getEmail());
+        email.setEmailFrom("velholuxosac@gmail.com");
+        email.setSubject("Pedido realizado com sucesso!");
+        email.setText(String.format ("Olá! Recebemos seu pedido. \nAguarde a confirmação de pagamento e os dados para rastreio. \nQualquer dúvida não hesite em nos procurar. \nA equipe Velho Luxo agradece!", toCreate.getMyUser().getFirstName()));
+        try {
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setFrom(email.getEmailFrom());
+            message.setTo(email.getEmailTo());
+            message.setSubject(email.getSubject());
+            message.setText(email.getText());
+
+            emailSender.send(message);
+            email.setStatusEmail(StatusEmail.SENT);
+
+        } catch (MailException e){
+            email.setStatusEmail(StatusEmail.ERROR);
+
+        } finally {
+            emailRepository.save(email);
+        }
     }
 
 

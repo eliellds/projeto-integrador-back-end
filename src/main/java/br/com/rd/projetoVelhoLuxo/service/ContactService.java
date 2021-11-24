@@ -1,15 +1,22 @@
 package br.com.rd.projetoVelhoLuxo.service;
 
+import br.com.rd.projetoVelhoLuxo.enums.StatusEmail;
 import br.com.rd.projetoVelhoLuxo.model.dto.ContactDTO;
 import br.com.rd.projetoVelhoLuxo.model.dto.ContactStatusDTO;
+import br.com.rd.projetoVelhoLuxo.model.dto.MyUserDTO;
 import br.com.rd.projetoVelhoLuxo.model.dto.SubjectDTO;
 import br.com.rd.projetoVelhoLuxo.model.entity.Contact;
 import br.com.rd.projetoVelhoLuxo.model.entity.ContactStatus;
+import br.com.rd.projetoVelhoLuxo.model.entity.EmailModel;
 import br.com.rd.projetoVelhoLuxo.model.entity.Subject;
 import br.com.rd.projetoVelhoLuxo.repository.contract.ContactRepository;
 import br.com.rd.projetoVelhoLuxo.repository.contract.ContactStatusRepository;
+import br.com.rd.projetoVelhoLuxo.repository.contract.EmailRepository;
 import br.com.rd.projetoVelhoLuxo.repository.contract.SubjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailException;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLIntegrityConstraintViolationException;
@@ -29,6 +36,12 @@ public class ContactService {
 
     @Autowired
     ContactStatusRepository statusRepository;
+
+    @Autowired
+    EmailRepository emailRepository;
+
+    @Autowired
+    private JavaMailSender emailSender;
 
     public ContactDTO create(ContactDTO newContact) throws SQLIntegrityConstraintViolationException {
         Contact contact = dtoToBusiness(newContact);
@@ -50,10 +63,13 @@ public class ContactService {
             contact.setSubject(subject);
         }
 
+        contact.setEmail(contact.getEmail());
         contact.setContactDate(LocalDateTime.now());
         contact.setStatus(statusRepository.getById(1L));
-
         contact = contactRepository.save(contact);
+        newContact = businessToDto(contact);
+        sendContactEmail(newContact);
+
         return businessToDto(contact);
     }
 
@@ -228,6 +244,36 @@ public class ContactService {
         }
 
         return dto;
+    }
+
+    public void sendContactEmail(ContactDTO toCreate){
+        EmailModel email = new EmailModel();
+
+        email.setSendDateEmail(LocalDateTime.now());
+        email.setOwnerRef(toCreate.getId());
+        email.setEmailTo("velholuxosac@gmail.com");
+        email.setEmailFrom(toCreate.getEmail());
+        email.setSubject(toCreate.getSubject().getSubjectDescription());
+        email.setText(toCreate.getContent());
+        try {
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setFrom(email.getEmailFrom());
+            message.setTo(email.getEmailTo());
+            message.setSubject(email.getSubject());
+            message.setText("Nome do contato: " + toCreate.getName() + "\n" +
+                            "E-mail de contato: " + email.getEmailFrom() + "\n" +
+                            "Corpo da mensagem: \n" + email.getText());
+
+            emailSender.send(message);
+
+            email.setStatusEmail(StatusEmail.SENT);
+
+        } catch (MailException e){
+            email.setStatusEmail(StatusEmail.ERROR);
+
+        } finally {
+            emailRepository.save(email);
+        }
     }
 
 }

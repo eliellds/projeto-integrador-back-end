@@ -49,8 +49,8 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
                                             "/subjects", "/subjects/**","/flags/**",
                                             "/products/newer", "/search", "/prices","/subjects",
                                             "/inventories", "/states", "/states/**",
-                                            "/subjects", "/subjects/**", "/sales",
-                                            "/user/email/**", "/user/cpf/**").permitAll()
+                                            "/subjects", "/subjects/**", "/sales", "/address", "/userAddress",
+                                            "/user/email/**", "/user/checkEmail/**", "/user/cpf/**").permitAll()
                     .anyRequest().authenticated()
                     .and()
 //                .formLogin()
