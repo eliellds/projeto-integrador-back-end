@@ -61,7 +61,7 @@ public class ItemsOrderService {
             } else {
                 throw new Exception("Products quantity must be equal or smaller than inventory quantity!");
             }
-        } else {
+        }            else {
             throw new Exception("Product not found!");
         }
 
