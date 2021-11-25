@@ -262,6 +262,7 @@ public class ContactService {
             message.setSubject(email.getSubject());
             message.setText("Nome do contato: " + toCreate.getName() + "\n" +
                             "E-mail de contato: " + email.getEmailFrom() + "\n" +
+                            "Telefone de contato: " + toCreate.getPhoneNumber() + "\n" +
                             "Corpo da mensagem: \n" + email.getText());
 
             emailSender.send(message);
