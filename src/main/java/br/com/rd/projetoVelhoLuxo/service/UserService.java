@@ -327,12 +327,12 @@ public class UserService {
         newEmail.setEmailTo(email);
         newEmail.setEmailFrom("velholuxosac@gmail.com");
         newEmail.setSubject("Link para recuperação de senha.");
-        newEmail.setText("<p>Olá.</p>" +
-                        "<p>Você esqueceu a sua senha, é preciso redefini-la.</p>" +
-                        "<p>Clique no link e realize a alteração.</p>" +
-                        "<p><a href=\" " + resetPasswordLink + "\" > Mudar minha senha.</p>" +
-                        "<p>Ignore essa mensagem se você lembrou sua senha ou não fez a solicitação.</p>" +
-                        "<p>A equipe velho luxo agradece.</p>");
+        newEmail.setText("Olá.\n" +
+                        "Você esqueceu a sua senha, é preciso redefini-la.\n" +
+                        "Clique no link e realize a alteração.\n" +
+                        "Link: " + resetPasswordLink + "\n \n" +
+                        "Ignore essa mensagem se você lembrou sua senha ou não fez a solicitação.\n" +
+                        "A equipe Velho Luxo agradece.");
         try {
             SimpleMailMessage message = new SimpleMailMessage();
             message.setFrom(newEmail.getEmailFrom());
