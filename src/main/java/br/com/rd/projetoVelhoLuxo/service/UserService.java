@@ -1,5 +1,6 @@
 package br.com.rd.projetoVelhoLuxo.service;
 
+import br.com.rd.projetoVelhoLuxo.exception.UserNotFoundException;
 import br.com.rd.projetoVelhoLuxo.enums.StatusEmail;
 import br.com.rd.projetoVelhoLuxo.model.dto.TelephoneDTO;
 import br.com.rd.projetoVelhoLuxo.model.dto.MyUserDTO;
@@ -10,19 +11,20 @@ import br.com.rd.projetoVelhoLuxo.model.entity.Telephone;
 import br.com.rd.projetoVelhoLuxo.repository.contract.EmailRepository;
 import br.com.rd.projetoVelhoLuxo.repository.contract.MyUserRepository;
 import br.com.rd.projetoVelhoLuxo.repository.contract.TelephoneRepository;
-import javassist.Loader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
+
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -34,6 +36,8 @@ public class UserService {
     EmailRepository emailRepository;
     @Autowired
     private JavaMailSender emailSender;
+    @Autowired
+    PasswordEncoder encoder;
 
     public MyUserDTO createUser(MyUserDTO toCreate){
         String encryptedPassword = new BCryptPasswordEncoder().encode(toCreate.getPassword());
@@ -200,7 +204,7 @@ public class UserService {
 
     }
     //convert para usuario final
-    private MyUser convertToUser(MyUserDTO toConvert){
+    public MyUser convertToUser(MyUserDTO toConvert){
         MyUser converted = new MyUser();
         //nascimento
         converted.setBorn(toConvert.getBorn());
@@ -285,5 +289,70 @@ public class UserService {
         } finally {
             emailRepository.save(email);
         }
+    }
+
+//    Reset de senha
+
+    public void updateResetPasswordToken(String token, String email) throws UserNotFoundException{
+        Optional <MyUser> user = Optional.ofNullable(userRepository.findByEmailEquals(email));
+
+        if (user.isPresent()){
+            user.get().setResetPasswordToken(token);
+            userRepository.save(user.get());
+        }else{
+            throw new UserNotFoundException("E-mail de usuário não encontrado" + email);
+        }
+    }
+
+    public MyUserDTO get(String resetPasswordToken){
+        return convertToDTO(userRepository.findByResetPasswordToken(resetPasswordToken));
+    }
+
+    public void updatePassword(MyUserDTO userDTO, String newPassword){
+        MyUser myUser = convertToUser(userDTO);
+        myUser.setId(userDTO.getId());
+        myUser.setPassword(encoder.encode(newPassword));
+        myUser.setResetPasswordToken(null);
+
+        userRepository.save(myUser);
+    }
+
+    public void sendPasswordRecoveryEmail(String email, String resetPasswordLink){
+        Optional<MyUser> user = Optional.ofNullable(userRepository.findByEmailEquals(email));
+
+        EmailModel newEmail = new EmailModel();
+
+        newEmail.setSendDateEmail(LocalDateTime.now());
+        newEmail.setOwnerRef(user.get().getId());
+        newEmail.setEmailTo(email);
+        newEmail.setEmailFrom("velholuxosac@gmail.com");
+        newEmail.setSubject("Link para recuperação de senha.");
+        newEmail.setText("<p>Olá.</p>" +
+                        "<p>Você esqueceu a sua senha, é preciso redefini-la.</p>" +
+                        "<p>Clique no link e realize a alteração.</p>" +
+                        "<p><a href=\" " + resetPasswordLink + "\" > Mudar minha senha.</p>" +
+                        "<p>Ignore essa mensagem se você lembrou sua senha ou não fez a solicitação.</p>" +
+                        "<p>A equipe velho luxo agradece.</p>");
+        try {
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setFrom(newEmail.getEmailFrom());
+            message.setTo(newEmail.getEmailTo());
+            message.setSubject(newEmail.getSubject());
+            message.setText(newEmail.getText());
+
+            emailSender.send(message);
+
+            newEmail.setStatusEmail(StatusEmail.SENT);
+
+        } catch (MailException e){
+           newEmail.setStatusEmail(StatusEmail.ERROR);
+
+        } finally {
+            emailRepository.save(newEmail);
+        }
+    }
+
+    public MyUserDTO getByResetPasswordToken(String token){
+        return convertToDTO(userRepository.findByResetPasswordToken(token));
     }
 }
