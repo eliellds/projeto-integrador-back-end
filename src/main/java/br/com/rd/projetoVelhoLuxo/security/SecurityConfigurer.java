@@ -41,7 +41,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
                 // abaixo, endpoints sem restrições de acesso por login
                 .authorizeRequests()
-                    .antMatchers("/", "/login", "/home", "/contacts",
+                    .antMatchers("/", "/login/**", "/home", "/contacts",
                                             "/products/**", "/categories", "/categories/**",
                                             "/products/recentlyAdd", "/sign-up", "/products/older",
                                             "/products/newer", "/search/**", "/prices","/subjects",

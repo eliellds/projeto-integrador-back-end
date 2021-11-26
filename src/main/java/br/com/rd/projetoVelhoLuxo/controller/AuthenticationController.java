@@ -1,7 +1,9 @@
 package br.com.rd.projetoVelhoLuxo.controller;
 
 import br.com.rd.projetoVelhoLuxo.model.dto.request.AuthenticationRequestDTO;
+import br.com.rd.projetoVelhoLuxo.model.dto.request.TokenRequestDTO;
 import br.com.rd.projetoVelhoLuxo.model.dto.response.AuthenticationResponseDTO;
+import br.com.rd.projetoVelhoLuxo.model.dto.response.TokenResponseDTO;
 import br.com.rd.projetoVelhoLuxo.service.util.JwtUtil;
 import br.com.rd.projetoVelhoLuxo.service.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,8 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Date;
 
 @RestController
 @RequestMapping("/login")
@@ -54,6 +58,11 @@ public class AuthenticationController {
 
         // por fim, retorna para a view um token jwt através da classe AuthenticationResponseDTO
         return ResponseEntity.ok(new AuthenticationResponseDTO(jwt, authenticationRequest.getUsername()));
+    }
+
+    @GetMapping("/{token}")
+    public ResponseEntity<?> isTokenExpired(@PathVariable("token") String token) {
+        return ResponseEntity.ok(new TokenResponseDTO(jwtTokenUtil.extractExpiration(token).getTime())) ;
     }
 
 }
