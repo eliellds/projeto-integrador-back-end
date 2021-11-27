@@ -274,6 +274,10 @@ public class OrderService {
             converted.setBankSlip(toConvert.getBankSlip());
         }
 
+        if(toConvert.getIdStore()!=null){
+            converted.setIdStore(toConvert.getIdStore());
+        }
+
         return converted;
     }
 
@@ -365,6 +369,10 @@ public class OrderService {
 //        private String bank_slip;
         if(toConvert.getBankSlip()!=null){
             converted.setBankSlip(toConvert.getBankSlip());
+        }
+
+        if(toConvert.getIdStore()!=null){
+            converted.setIdStore(toConvert.getIdStore());
         }
 
         return converted;

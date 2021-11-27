@@ -19,5 +19,6 @@ public class OrderDTO {
     private Double totalDiscounts;
     private Double amount;
     private String bankSlip;
+    private Long idStore;
 
 }
