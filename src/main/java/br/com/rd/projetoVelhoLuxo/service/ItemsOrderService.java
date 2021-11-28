@@ -180,6 +180,7 @@ public class ItemsOrderService {
         dto.setStatus("Aguardando pagamento");
         dto.setDate(business.getCompositeKey().getOrder().getDateOrder());
         dto.setPrice(business.getCompositeKey().getOrder().getAmount());
+        dto.setDeliveryDate(business.getCompositeKey().getOrder().getDeliveryDate());
 
         List<ProductsDTO> products = new ArrayList<>();
         List<ItemsOrder> items = itemsOrderRepository.findAllByCompositeKeyOrderIdOrderByCompositeKeyOrderIdDesc(business.getCompositeKey().getOrder().getId());

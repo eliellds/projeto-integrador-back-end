@@ -14,5 +14,6 @@ public class OrderDashboardDTO {
     private LocalDate date;
     private String status;
     private Double price;
+    private LocalDate deliveryDate;
 
 }
