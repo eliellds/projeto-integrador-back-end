@@ -5,10 +5,7 @@ import br.com.rd.projetoVelhoLuxo.model.dto.response.OrderDashboardDTO;
 import br.com.rd.projetoVelhoLuxo.model.embeddable.InventoryKey;
 import br.com.rd.projetoVelhoLuxo.model.embeddable.ItemsOrderKey;
 import br.com.rd.projetoVelhoLuxo.model.entity.*;
-import br.com.rd.projetoVelhoLuxo.repository.contract.InventoryREPO;
-import br.com.rd.projetoVelhoLuxo.repository.contract.ItemsOrderRepository;
-import br.com.rd.projetoVelhoLuxo.repository.contract.OrderRepository;
-import br.com.rd.projetoVelhoLuxo.repository.contract.ProductsRepository;
+import br.com.rd.projetoVelhoLuxo.repository.contract.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,15 +29,19 @@ public class ItemsOrderService {
     @Autowired
     InventoryREPO inventoryREPO;
 
+    @Autowired
+    StoreRepository storeRepository;
+
     //////////////////////////////////
     // cria relacao de item com pedido
     public ItemsOrderDTO linkItemsToOrder(ItemsOrderDTO toLink) throws Exception {
         ItemsOrder itemOrder = new ItemsOrder();
 
         Products products = productsRepository.getById(toLink.getProductsDTO().getId());
+        Store store = storeRepository.getById(toLink.getCompositeKey().getOrderDTO().getIdStore());
 
         InventoryKey inventoryKey = new InventoryKey();
-        inventoryKey.setId(1L);
+        inventoryKey.setId(store.getId());
         inventoryKey.setProducts(products);
 
         Optional<Inventory> inventoryOpt;
