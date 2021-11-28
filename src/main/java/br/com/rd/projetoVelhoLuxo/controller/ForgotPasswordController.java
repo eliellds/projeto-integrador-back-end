@@ -3,20 +3,16 @@ package br.com.rd.projetoVelhoLuxo.controller;
 import br.com.rd.projetoVelhoLuxo.exception.UserNotFoundException;
 import br.com.rd.projetoVelhoLuxo.model.dto.MyUserDTO;
 import br.com.rd.projetoVelhoLuxo.model.dto.NewPasswordDTO;
-import br.com.rd.projetoVelhoLuxo.model.dto.PasswordDTO;
 import br.com.rd.projetoVelhoLuxo.model.dto.PasswordRecoveryDTO;
 import br.com.rd.projetoVelhoLuxo.service.UserService;
 import net.bytebuddy.utility.RandomString;
-import org.hibernate.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.Positive;
-
 @RestController
-@RequestMapping
+@CrossOrigin(origins = "http://localhost:3000", allowedHeaders = "*")
 public class ForgotPasswordController {
 
     @Autowired
