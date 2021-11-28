@@ -15,4 +15,5 @@ public class MyUserDTO {
     private TelephoneDTO telephone;
     private LocalDate born;
     private String password;
+    private String resetPasswordToken;
 }

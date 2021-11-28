@@ -9,6 +9,7 @@ public interface MyUserRepository extends JpaRepository<MyUser, Long> {
 
     MyUser findByEmailEquals(String email);
     MyUser findByCpfEquals(String cpf);
+    MyUser findByResetPasswordToken(String token);
 
 }
 

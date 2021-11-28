@@ -31,6 +31,8 @@ public class MyUser {
     private LocalDate born;
     @Column(name = "cl_senha",nullable = false)
     private String password;
+    @Column(name = "cl_token_reset_senha")
+    private String resetPasswordToken;
 
 //    private Boolean enabled;
 //    private Boolean tokenExpired;

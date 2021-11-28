@@ -72,4 +72,7 @@ public class Order {
     @Column(name="cl_nr_boleto")
     private String bankSlip;
 
+    @Column(name="cl_id_loja")
+    private Long idStore;
+
 }
