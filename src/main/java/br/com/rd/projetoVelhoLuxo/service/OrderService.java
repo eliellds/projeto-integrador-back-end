@@ -2,6 +2,7 @@ package br.com.rd.projetoVelhoLuxo.service;
 
 import br.com.rd.projetoVelhoLuxo.enums.StatusEmail;
 import br.com.rd.projetoVelhoLuxo.model.dto.*;
+import br.com.rd.projetoVelhoLuxo.model.dto.response.OrderDashboardDTO;
 import br.com.rd.projetoVelhoLuxo.model.entity.*;
 import br.com.rd.projetoVelhoLuxo.repository.contract.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class OrderService {
@@ -37,6 +39,8 @@ public class OrderService {
     EmailRepository emailRepository;
     @Autowired
     private JavaMailSender emailSender;
+    @Autowired
+    OrderStatusRepository orderStatusRepository;
 
     public OrderDTO create(OrderDTO toCreate){
         Order created = convertToOrder(toCreate);
@@ -146,8 +150,9 @@ public class OrderService {
 
             created.setPayment(pay);
         }
+        created.setStatus(orderStatusRepository.getById(1L)); // sempre criado com status aguardando pagamento
         LocalDate today = LocalDate.now();
-        LocalDate deliveryDate = LocalDate.now().plusDays(120);
+        LocalDate deliveryDate = LocalDate.now().plusDays(120); // sempre criado com entrega prevista para 120 diass
 
         created.setDateOrder(today);
         created.setDeliveryDate(deliveryDate);
@@ -171,7 +176,30 @@ public class OrderService {
         return null;
     }
 
+    // Atualiza o status do pedido passando o id do pedido no path e o id do status no body
+    public OrderDTO updateOrderStatusByIdOrder(OrderDTO dto, Long id) {
+        Optional<Order> option = orderRepository.findById(id);
 
+        if (option.isPresent()) {
+            Order order = option.get();
+            OrderStatus status = new OrderStatus();
+
+            if (dto.getStatus().getId() != null) {
+                status = orderStatusRepository.getById(dto.getStatus().getId());
+            }
+
+            if (dto.getStatus().getStatusDescription() != null) {
+                status.setStatusDescription(dto.getStatus().getStatusDescription());
+                orderStatusRepository.save(status);
+            }
+
+            order.setStatus(status);
+            orderRepository.save((order));
+
+            return convertToDTO(order);
+        }
+        return null;
+    }
 
 
     //Conversões
@@ -278,7 +306,20 @@ public class OrderService {
             converted.setIdStore(toConvert.getIdStore());
         }
 
+        if(toConvert.getStatus()!=null) {
+            converted.setStatus(businessToDtoStatus(toConvert.getStatus()));
+        }
+
         return converted;
+    }
+
+    // Converte Status do Pedido business para Status do Pedido DTO
+    private OrderStatusDTO businessToDtoStatus(OrderStatus business) {
+        OrderStatusDTO dto = new OrderStatusDTO();
+        dto.setId(business.getId());
+        dto.setStatusDescription(business.getStatusDescription());
+
+        return dto;
     }
 
     //convert to List()

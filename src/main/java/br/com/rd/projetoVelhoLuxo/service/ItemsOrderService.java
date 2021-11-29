@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -177,18 +176,14 @@ public class ItemsOrderService {
         OrderDashboardDTO dto = new OrderDashboardDTO();
 
         dto.setOrderNumber(business.getCompositeKey().getOrder().getId());
-        dto.setStatus("Aguardando pagamento");
+        dto.setStatus(business.getCompositeKey().getOrder().getStatus().getStatusDescription());
         dto.setDate(business.getCompositeKey().getOrder().getDateOrder());
         dto.setPrice(business.getCompositeKey().getOrder().getAmount());
+        dto.setDeliveryDate(business.getCompositeKey().getOrder().getDeliveryDate());
 
-        List<ProductsDTO> products = new ArrayList<>();
         List<ItemsOrder> items = itemsOrderRepository.findAllByCompositeKeyOrderIdOrderByCompositeKeyOrderIdDesc(business.getCompositeKey().getOrder().getId());
 
-        for (ItemsOrder order : items) {
-            products.add(businessToDto(order.getProduct()));
-        }
-
-        dto.setProductList(products);
+        dto.setProductList(listToDto(items));
 
         return dto;
     }

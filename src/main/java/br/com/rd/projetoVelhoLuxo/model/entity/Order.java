@@ -75,4 +75,8 @@ public class Order {
     @Column(name="cl_id_loja")
     private Long idStore;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="cl_id_status_pedido")
+    private OrderStatus status;
+
 }

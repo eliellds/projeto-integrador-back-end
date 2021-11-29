@@ -20,5 +20,6 @@ public class OrderDTO {
     private Double amount;
     private String bankSlip;
     private Long idStore;
+    private OrderStatusDTO status;
 
 }
