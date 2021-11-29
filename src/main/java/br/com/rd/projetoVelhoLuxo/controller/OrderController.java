@@ -29,4 +29,9 @@ public class OrderController {
     public OrderDTO getOrderById(@PathVariable("id") Long id){
         return service.findByIdOrder(id);
     }
+
+    @PutMapping("/{id}")
+    public OrderDTO updateOrderStatusByIdOrder(@RequestBody OrderDTO dto, @PathVariable("id") Long id) {
+        return service.updateOrderStatusByIdOrder(dto, id);
+    }
 }
