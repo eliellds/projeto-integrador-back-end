@@ -181,14 +181,9 @@ public class ItemsOrderService {
         dto.setPrice(business.getCompositeKey().getOrder().getAmount());
         dto.setDeliveryDate(business.getCompositeKey().getOrder().getDeliveryDate());
 
-        List<ProductsDTO> products = new ArrayList<>();
         List<ItemsOrder> items = itemsOrderRepository.findAllByCompositeKeyOrderIdOrderByCompositeKeyOrderIdDesc(business.getCompositeKey().getOrder().getId());
 
-        for (ItemsOrder order : items) {
-            products.add(businessToDto(order.getProduct()));
-        }
-
-        dto.setProductList(products);
+        dto.setProductList(listToDto(items));
 
         return dto;
     }
