@@ -152,10 +152,9 @@ public class OrderService {
         }
         created.setStatus(orderStatusRepository.getById(1L)); // sempre criado com status aguardando pagamento
         LocalDate today = LocalDate.now();
-        LocalDate deliveryDate = LocalDate.now().plusDays(120); // sempre criado com entrega prevista para 120 diass
 
         created.setDateOrder(today);
-        created.setDeliveryDate(deliveryDate);
+        created.setDeliveryDate(toCreate.getDeliveryDate());
 
         created = orderRepository.save(created);
 
