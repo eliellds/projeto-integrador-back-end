@@ -179,6 +179,7 @@ public class ItemsOrderService {
         dto.setStatus(business.getCompositeKey().getOrder().getStatus().getStatusDescription());
         dto.setDate(business.getCompositeKey().getOrder().getDateOrder());
         dto.setPrice(business.getCompositeKey().getOrder().getAmount());
+        dto.setIdStatus(business.getCompositeKey().getOrder().getStatus().getId());
         dto.setDeliveryDate(business.getCompositeKey().getOrder().getDeliveryDate());
         dto.setPaymentID(business.getCompositeKey().getOrder().getPayment().getId());
 

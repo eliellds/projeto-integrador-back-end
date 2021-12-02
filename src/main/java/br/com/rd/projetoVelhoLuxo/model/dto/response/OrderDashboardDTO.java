@@ -18,5 +18,6 @@ public class OrderDashboardDTO {
     private Double price;
     private LocalDate deliveryDate;
     private Long paymentID;
+    private Long idStatus;
 
 }
