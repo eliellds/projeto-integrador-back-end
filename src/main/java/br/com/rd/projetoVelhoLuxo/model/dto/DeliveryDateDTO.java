@@ -5,8 +5,9 @@ import lombok.Data;
 @Data
 public class DeliveryDateDTO {
 
-    Long id;
-    String state;
-    Long addDate;
+    private Long id;
+    private String state;
+    private Long addDate;
+    private Double deliveryPrice;
 
 }

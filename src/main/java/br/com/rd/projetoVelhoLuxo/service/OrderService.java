@@ -103,19 +103,23 @@ public class OrderService {
 
             created.setDelivery(delivery);
         }
-        if(created.getCard().getIdBandeira() != null){
 
-            Flag flag = new Flag();
-            if(created.getCard().getIdBandeira().getId()!=null){
-                if(flagRepository.existsById(created.getCard().getIdBandeira().getId())){
+        if(created.getCard() != null) {
 
-                    flag = flagRepository.getById(created.getCard().getIdBandeira().getId());
+            if (created.getCard().getIdBandeira() != null) {
 
+                Flag flag = new Flag();
+                if (created.getCard().getIdBandeira().getId() != null) {
+                    if (flagRepository.existsById(created.getCard().getIdBandeira().getId())) {
+
+                        flag = flagRepository.getById(created.getCard().getIdBandeira().getId());
+
+                    }
                 }
+
+                created.getCard().setIdBandeira(flag);
+
             }
-
-            created.getCard().setIdBandeira(flag);
-
         }
 
         //
