@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserAddressService {
@@ -184,5 +185,19 @@ public class UserAddressService {
 
 
         return converted;
+    }
+
+//   deletar endereço
+    public void deleteById(UserAddressCompositeKeyDTO toConvert){
+        UserAddressCompositeKey key = new UserAddressCompositeKey();
+        if(toConvert.getIdAddress()!=null) {
+            key.setIdAddress(toConvert.getIdAddress());
+        }
+        key.setIdUser(toConvert.getIdUser());
+
+        Optional<UserAddress> beDel = repositoryUAddress.findById(key);
+        if(beDel.isPresent()){
+            repositoryUAddress.deleteById(key);
+        }
     }
 }
