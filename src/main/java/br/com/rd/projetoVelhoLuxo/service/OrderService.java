@@ -11,11 +11,14 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import java.text.DateFormat;
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 @Service
 public class OrderService {
@@ -41,11 +44,11 @@ public class OrderService {
     private JavaMailSender emailSender;
     @Autowired
     OrderStatusRepository orderStatusRepository;
+    @Autowired
+    ItemsOrderRepository itemsOrderRepository;
 
     public OrderDTO create(OrderDTO toCreate){
         Order created = convertToOrder(toCreate);
-
-        sendConfirmationOrderEmail(toCreate);
 
         if(toCreate.getAddress()!=null) {
             Address address = new Address();
@@ -611,15 +614,76 @@ public class OrderService {
         return dto;
     }
 
-    public void sendConfirmationOrderEmail(OrderDTO toCreate){
+    private String renderPayment(OrderDTO order) {
+
+        Locale ptBr = new Locale("pt", "BR");
+
+        if (order.getPayment().getId() == 1) {
+            return order.getPayment().getDescription();
+        } else if (order.getPayment().getId() >=2 && order.getPayment().getId() <= 3) {
+            return order.getPayment().getDescription() + " " +
+                    order.getCard().getFlag().getDescription() + " " +
+                    order.getPayment().getInstallments();
+        } else if (order.getPayment().getId() >= 4 && order.getPayment().getId() <= 12) {
+            String installments = NumberFormat.getCurrencyInstance(ptBr)
+                    .format(order.getAmount() / Integer.parseInt(order.getPayment().getInstallments()));
+            return order.getPayment().getDescription() + " " +
+                    order.getCard().getFlag().getDescription() + " " +
+                    order.getPayment().getInstallments() + "x de " +
+                    (installments);
+        }
+        return null;
+    }
+
+    private String renderOrderItem(Long orderId){
+        List <ItemsOrder> list = itemsOrderRepository.findAllByCompositeKeyOrderIdOrderByCompositeKeyOrderIdDesc(orderId);
+        StringBuilder productList = new StringBuilder();
+        Locale ptBr = new Locale("pt", "BR");
+
+        for (ItemsOrder item : list) {
+            String unit = NumberFormat.getCurrencyInstance(ptBr).format(item.getTotalPrice()/item.getQuantity());
+            String total = NumberFormat.getCurrencyInstance(ptBr).format(item.getTotalPrice());
+            productList.append("Produto: ").append(item.getProduct().getProduct()).append("\n")
+                    .append("Quantidade: ").append(item.getQuantity()).append("\n")
+                    .append("Valor unitário: ").append(unit).append("\n")
+                    .append("Valor agregado: ").append(total).append("\n\n");
+        }
+
+        return productList.toString();
+    }
+
+    public Boolean sendConfirmationOrderEmail(OrderDTO toCreate) throws ParseException {
         EmailModel email = new EmailModel();
+        Locale ptBr = new Locale("pt", "BR");
+        String fretFormat = NumberFormat.getCurrencyInstance(ptBr).format(toCreate.getDeliveryValue());
+        String totalFormat = NumberFormat.getCurrencyInstance(ptBr).format(toCreate.getAmount());
+        String strDate = toCreate.getDateOrder().toString();
+        SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+        Date data = formato.parse(strDate);
+        formato.applyPattern("dd/MM/yyyy");
+        String dataFormatada = formato.format(data);
 
         email.setSendDateEmail(LocalDateTime.now());
         email.setOwnerRef(toCreate.getId());
         email.setEmailTo(toCreate.getMyUser().getEmail());
         email.setEmailFrom("velholuxosac@gmail.com");
         email.setSubject("Pedido realizado com sucesso!");
-        email.setText(String.format ("Olá! Recebemos seu pedido. \nAguarde a confirmação de pagamento e os dados para rastreio. \nQualquer dúvida não hesite em nos procurar. \nA equipe Velho Luxo agradece!", toCreate.getMyUser().getFirstName()));
+        email.setText(String.format ("Olá, " + toCreate.getMyUser().getFirstName() +
+                "\nAgradecemos sua aquisição no Velho Luxo Antiquário. " +
+                "\nQualquer dúvida não hesite em nos procurar. " +
+                "\nA equipe Velho Luxo agradece!\n" +
+                "\n" +
+                "Número do pedido: " + toCreate.getId() + "\n\n" +
+                renderOrderItem(toCreate.getId()) + "\n" +
+                "Nome do cliente: " + toCreate.getMyUser().getFirstName() + " " + toCreate.getMyUser().getLastName() + "\n" +
+                "Data do pedido: " + dataFormatada + "\n" +
+                "Frete: " + fretFormat + "\n" +
+                "Forma de pagamento: " + renderPayment(toCreate) + "\n" +
+                "\n" +
+                "Total: " + totalFormat + "\n\n" +
+                "Esta mensagem servirá como o seu recibo.\n" +
+                "Você também pode visualizar o seu histórico de compras a qualquer momento em http://localhost:3000/dashboard/myorder",
+                toCreate.getMyUser().getFirstName()));
         try {
             SimpleMailMessage message = new SimpleMailMessage();
             message.setFrom(email.getEmailFrom());
@@ -632,9 +696,11 @@ public class OrderService {
 
         } catch (MailException e){
             email.setStatusEmail(StatusEmail.ERROR);
+            return false;
 
         } finally {
             emailRepository.save(email);
+            return true;
         }
     }
 

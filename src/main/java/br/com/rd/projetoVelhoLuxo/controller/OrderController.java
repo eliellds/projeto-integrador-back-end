@@ -34,4 +34,14 @@ public class OrderController {
     public OrderDTO updateOrderStatusByIdOrder(@RequestBody OrderDTO dto, @PathVariable("id") Long id) {
         return service.updateOrderStatusByIdOrder(dto, id);
     }
+
+    @PostMapping("/mail")
+    public Boolean sendMail(@RequestBody OrderDTO toCreate) throws Exception {
+        try {
+            return service.sendConfirmationOrderEmail(toCreate);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
 }
