@@ -180,6 +180,7 @@ public class ItemsOrderService {
         dto.setDate(business.getCompositeKey().getOrder().getDateOrder());
         dto.setPrice(business.getCompositeKey().getOrder().getAmount());
         dto.setDeliveryDate(business.getCompositeKey().getOrder().getDeliveryDate());
+        dto.setPaymentID(business.getCompositeKey().getOrder().getPayment().getId());
 
         List<ItemsOrder> items = itemsOrderRepository.findAllByCompositeKeyOrderIdOrderByCompositeKeyOrderIdDesc(business.getCompositeKey().getOrder().getId());
 
