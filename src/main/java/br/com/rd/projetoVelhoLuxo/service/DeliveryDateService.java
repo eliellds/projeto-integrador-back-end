@@ -1,10 +1,7 @@
 package br.com.rd.projetoVelhoLuxo.service;
 
-import br.com.rd.projetoVelhoLuxo.model.dto.DeliveryDTO;
 import br.com.rd.projetoVelhoLuxo.model.dto.DeliveryDateDTO;
-import br.com.rd.projetoVelhoLuxo.model.dto.SubjectDTO;
 import br.com.rd.projetoVelhoLuxo.model.entity.DeliveryDate;
-import br.com.rd.projetoVelhoLuxo.model.entity.Subject;
 import br.com.rd.projetoVelhoLuxo.repository.contract.DeliveryDateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,6 +32,7 @@ public class DeliveryDateService {
         DeliveryDate business = new DeliveryDate();
         business.setState(dto.getState());
         business.setAddDate(dto.getAddDate());
+        business.setDeliveryPrice(dto.getDeliveryPrice());
 
         return business;
     }
@@ -44,6 +42,7 @@ public class DeliveryDateService {
         dto.setId(business.getId());
         dto.setState(business.getState());
         dto.setAddDate(business.getAddDate());
+        dto.setDeliveryPrice(business.getDeliveryPrice());
 
         return dto;
     }

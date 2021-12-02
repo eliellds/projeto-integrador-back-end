@@ -4,7 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 
-@Entity(name = "tb_data_entrega")
+@Entity(name = "tb_prazo_frete")
 @Data
 public class DeliveryDate {
 
@@ -19,4 +19,6 @@ public class DeliveryDate {
     @Column(nullable = false, name = "cl_acrescimo_data", length = 20)
     private Long addDate;
 
+    @Column(name = "cl_valor_frete")
+    private Double deliveryPrice;
 }
