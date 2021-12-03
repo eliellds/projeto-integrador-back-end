@@ -6,11 +6,17 @@ import br.com.rd.projetoVelhoLuxo.model.dto.response.OrderDashboardDTO;
 import br.com.rd.projetoVelhoLuxo.model.entity.*;
 import br.com.rd.projetoVelhoLuxo.repository.contract.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMailMessage;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import javax.mail.BodyPart;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
@@ -647,10 +653,10 @@ public class OrderService {
         for (ItemsOrder item : list) {
             String unit = NumberFormat.getCurrencyInstance(ptBr).format(item.getTotalPrice()/item.getQuantity());
             String total = NumberFormat.getCurrencyInstance(ptBr).format(item.getTotalPrice());
-            productList.append("Produto: ").append(item.getProduct().getProduct()).append("\n")
-                    .append("Quantidade: ").append(item.getQuantity()).append("\n")
-                    .append("Valor unitário: ").append(unit).append("\n")
-                    .append("Valor agregado: ").append(total).append("\n\n");
+            productList.append("<div><b>Produto:</b> ").append(item.getProduct().getProduct()).append("<br>\n")
+                    .append("<b>Quantidade:</b> ").append(item.getQuantity()).append("<br>\n")
+                    .append("<b>Valor unitário:</b> ").append(unit).append("<br>\n")
+                    .append("<b>Valor agregado:</b> ").append(total).append("</div><br><br>\n\n");
         }
 
         return productList.toString();
@@ -672,28 +678,39 @@ public class OrderService {
         email.setEmailTo(toCreate.getMyUser().getEmail());
         email.setEmailFrom("velholuxosac@gmail.com");
         email.setSubject("Pedido realizado com sucesso!");
-        email.setText(String.format ("Olá, " + toCreate.getMyUser().getFirstName() +
-                "\nAgradecemos sua aquisição no Velho Luxo Antiquário. " +
-                "\nQualquer dúvida não hesite em nos procurar. " +
-                "\nA equipe Velho Luxo agradece!\n" +
-                "\n" +
-                "Número do pedido: " + toCreate.getId() + "\n\n" +
+        email.setText(String.format ("<h1><b>Olá, " + toCreate.getMyUser().getFirstName() + ".</b></h1>" +
+                "\n<p>Agradecemos sua aquisição no Velho Luxo Antiquário. " +
+                "\n<br>Qualquer dúvida não hesite em nos procurar. " +
+                "\n<br>A equipe Velho Luxo agradece!</p><br>\n" +
+                "\n<br>" +
+                "<hr><h2><b>Número do pedido:</b> " + toCreate.getId() + "<br><br>\n\n" + "</h2>" +
                 renderOrderItem(toCreate.getId()) + "\n" +
-                "Nome do cliente: " + toCreate.getMyUser().getFirstName() + " " + toCreate.getMyUser().getLastName() + "\n" +
-                "Data do pedido: " + dataFormatada + "\n" +
-                "Frete: " + fretFormat + "\n" +
-                "Forma de pagamento: " + renderPayment(toCreate) + "\n" +
-                "\n" +
-                "Total: " + totalFormat + "\n\n" +
-                "Esta mensagem servirá como o seu recibo.\n" +
-                "Você também pode visualizar o seu histórico de compras a qualquer momento em http://localhost:3000/dashboard/myorder",
+                "<div><b>Nome do cliente:</b> " + toCreate.getMyUser().getFirstName() + " " + toCreate.getMyUser().getLastName() + "<br>\n" +
+                "<b>Data do pedido:</b> " + dataFormatada + "<br>\n" +
+                "<b>Frete:</b> " + fretFormat + "<br>\n" +
+                "<b>Forma de pagamento:</b> " + renderPayment(toCreate) + "</div>" + "<br>\n" +
+                "\n<br>" +
+                "<div><b>Total:</b> " + totalFormat + "</div><br><br>\n\n" +
+                "<hr><p>Esta mensagem servirá como o seu recibo.<br>\n" +
+                "Você também pode visualizar o seu histórico de compras a qualquer momento em http://localhost:3000/dashboard/myorder</p>" +
+                "\n\n<br><br><hr><img src='cid:logoImage' /><br>\n" +
+                "<div>Velho Luxo Antiquário - Todos os direitos reservados</div><br>\n" +
+                "<div>E-COMMERCE DE COLEÇÃO E DECORAÇÃO ANTIGAS E VALIOSAS LMTD.<br>\n" +
+                "CNPJ: 21.636.886/0001-34 <br>\n" +
+                "RUA FRANCISCO MARENGO, 1111 - 1 ANDAR<br>\n" +
+                "TATUAPÉ - São Paulo/SP - CEP: 03313-000<br>\n</div>",
                 toCreate.getMyUser().getFirstName()));
         try {
-            SimpleMailMessage message = new SimpleMailMessage();
-            message.setFrom(email.getEmailFrom());
-            message.setTo(email.getEmailTo());
-            message.setSubject(email.getSubject());
-            message.setText(email.getText());
+            MimeMessage message = emailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+
+            helper.setFrom(email.getEmailFrom());
+            helper.setTo(email.getEmailTo());
+            helper.setSubject(email.getSubject());
+            helper.setText(email.getText(), true);
+
+            ClassPathResource resource = new ClassPathResource("/static/images/velho-luxo.png");
+            helper.addInline("logoImage", resource);
 
             emailSender.send(message);
             email.setStatusEmail(StatusEmail.SENT);
