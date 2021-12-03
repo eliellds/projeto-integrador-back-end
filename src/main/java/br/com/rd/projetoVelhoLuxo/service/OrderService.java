@@ -622,7 +622,7 @@ public class OrderService {
 
         Locale ptBr = new Locale("pt", "BR");
 
-        if (order.getPayment().getId() == 1) {
+        if (order.getPayment().getId() == 1 || order.getPayment().getId() == 13) {
             return order.getPayment().getDescription();
         } else if (order.getPayment().getId() >=2 && order.getPayment().getId() <= 3) {
             return order.getPayment().getDescription() + " " +
