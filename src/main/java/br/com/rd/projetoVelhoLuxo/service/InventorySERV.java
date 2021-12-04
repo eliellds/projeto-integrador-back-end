@@ -143,12 +143,12 @@ public class InventorySERV {
         return listToInvDto(list);
     }
 
-    public InventoryDTO showInventoryById(ProductsDTO prodDTO) {
+    public InventoryDTO showInventoryById(Long idStore, Long idProd) {
         InventoryKey invKey = new InventoryKey();
 
-        Products prod = dtoToProd(prodDTO);
-        prod.setId(prodDTO.getId());
+        Products prod = productsREPO.getById(idProd);
         invKey.setProducts(prod);
+        invKey.setId(idStore);
         Optional<Inventory> opList = this.inventoryREPO.findById(invKey);
 
         if (opList.isPresent()) {

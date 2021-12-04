@@ -656,7 +656,7 @@ public class OrderService {
             productList.append("<div><b>Produto:</b> ").append(item.getProduct().getProduct()).append("<br>\n")
                     .append("<b>Quantidade:</b> ").append(item.getQuantity()).append("<br>\n")
                     .append("<b>Valor unitário:</b> ").append(unit).append("<br>\n")
-                    .append("<b>Valor agregado:</b> ").append(total).append("</div><br><br>\n\n");
+                    .append("<b>Valor agregado:</b> ").append(total).append("</div><br>\n\n");
         }
 
         return productList.toString();
@@ -678,7 +678,8 @@ public class OrderService {
         email.setEmailTo(toCreate.getMyUser().getEmail());
         email.setEmailFrom("velholuxosac@gmail.com");
         email.setSubject("Pedido realizado com sucesso!");
-        email.setText(String.format ("<h1><b>Olá, " + toCreate.getMyUser().getFirstName() + ".</b></h1>" +
+        email.setText(String.format ("<img src='cid:logoImage' /><br>" +
+                "<h1><b>Olá, " + toCreate.getMyUser().getFirstName() + ".</b></h1>" +
                 "\n<p>Agradecemos sua aquisição no Velho Luxo Antiquário. " +
                 "\n<br>Qualquer dúvida não hesite em nos procurar. " +
                 "\n<br>A equipe Velho Luxo agradece!</p><br>\n" +

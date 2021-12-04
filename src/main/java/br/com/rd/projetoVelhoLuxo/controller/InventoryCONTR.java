@@ -11,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/inventories")
+@CrossOrigin(origins = "http://localhost:3000", allowedHeaders = "*")
 public class InventoryCONTR {
 
     @Autowired
@@ -26,9 +27,9 @@ public class InventoryCONTR {
         return inventorySERV.showAllInventory();
     }
 
-    @GetMapping("{id}")
-    public InventoryDTO showInvById(@PathVariable("id") ProductsDTO id) {
-        return inventorySERV.showInventoryById(id);
+    @GetMapping("/{idStore}/{idProd}")
+    public InventoryDTO showInvById(@PathVariable("idStore") Long idStore, @PathVariable("idProd") Long idProd) {
+        return inventorySERV.showInventoryById(idStore, idProd);
     }
 
     @PutMapping("/{id}")
