@@ -12,15 +12,19 @@ import br.com.rd.projetoVelhoLuxo.repository.contract.EmailRepository;
 import br.com.rd.projetoVelhoLuxo.repository.contract.MyUserRepository;
 import br.com.rd.projetoVelhoLuxo.repository.contract.TelephoneRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -271,19 +275,34 @@ public class UserService {
         email.setEmailTo(toCreate.getEmail());
         email.setEmailFrom("velholuxosac@gmail.com");
         email.setSubject("Bem-vindo ao Velho Luxo!");
-        email.setText(String.format ("Olá! %s Bem-vindo(a) ao nosso antiquário Velho Luxo. \nAproveite nossos produtos exclusivos e com qualidade garantida. \nQualquer dúvida não hesite em nos procurar. \nA equipe Velho Luxo agradece!", toCreate.getFirstName()));
+        email.setText(String.format ("<img src='cid:logoImage' /><br>" +
+                "<h1><b>Olá, %s!</b></h1><br> <h2><b>Bem-vindo(a) ao nosso antiquário Velho Luxo.</b></h2><br> " +
+                "\n<h4>Aproveite nossos produtos exclusivos e com qualidade garantida.<br> " +
+                "\nQualquer dúvida não hesite em nos procurar.<br> " +
+                "\nA equipe Velho Luxo agradece!</h4>" +
+                "\n\n<br><br><hr><img src='cid:logoImage' /><br>\n" +
+                "<div>Velho Luxo Antiquário - Todos os direitos reservados</div><br>\n" +
+                "<div>E-COMMERCE DE COLEÇÃO E DECORAÇÃO ANTIGAS E VALIOSAS LMTD.<br>\n" +
+                "CNPJ: 21.636.886/0001-34 <br>\n" +
+                "RUA FRANCISCO MARENGO, 1111 - 1 ANDAR<br>\n" +
+                "TATUAPÉ - São Paulo/SP - CEP: 03313-000<br>\n</div>", toCreate.getFirstName()));
         try {
-            SimpleMailMessage message = new SimpleMailMessage();
-            message.setFrom(email.getEmailFrom());
-            message.setTo(email.getEmailTo());
-            message.setSubject(email.getSubject());
-            message.setText(email.getText());
+            MimeMessage message = emailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+
+            helper.setFrom(email.getEmailFrom());
+            helper.setTo(email.getEmailTo());
+            helper.setSubject(email.getSubject());
+            helper.setText(email.getText(), true);
+
+            ClassPathResource resource = new ClassPathResource("/static/images/velho-luxo.png");
+            helper.addInline("logoImage", resource);
 
             emailSender.send(message);
 
             email.setStatusEmail(StatusEmail.SENT);
 
-        } catch (MailException e){
+        } catch (MailException | MessagingException e){
             email.setStatusEmail(StatusEmail.ERROR);
 
         } finally {
