@@ -10,12 +10,9 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMailMessage;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
-import javax.mail.BodyPart;
-import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import java.text.DateFormat;
 import java.text.NumberFormat;
@@ -656,7 +653,7 @@ public class OrderService {
             productList.append("<div><b>Produto:</b> ").append(item.getProduct().getProduct()).append("<br>\n")
                     .append("<b>Quantidade:</b> ").append(item.getQuantity()).append("<br>\n")
                     .append("<b>Valor unitário:</b> ").append(unit).append("<br>\n")
-                    .append("<b>Valor agregado:</b> ").append(total).append("</div><br>\n\n");
+                    .append("<b>Valor agregado:</b> ").append(total).append("</div><br><br>\n\n");
         }
 
         return productList.toString();

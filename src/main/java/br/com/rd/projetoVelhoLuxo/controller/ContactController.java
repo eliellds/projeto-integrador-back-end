@@ -5,6 +5,7 @@ import br.com.rd.projetoVelhoLuxo.service.ContactService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
