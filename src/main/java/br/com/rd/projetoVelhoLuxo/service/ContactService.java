@@ -52,7 +52,8 @@ public class ContactService {
     @Autowired
     private JavaMailSender emailSender;
 
-    public ContactDTO create(ContactDTO newContact) throws SQLIntegrityConstraintViolationException {
+    public ContactDTO create(ContactDTO newContact,
+                             MultipartFile multi) throws SQLIntegrityConstraintViolationException {
         Contact contact = dtoToBusiness(newContact);
 
         if (contact.getSubject() != null) {
@@ -77,7 +78,7 @@ public class ContactService {
         contact.setStatus(statusRepository.getById(1L));
         contact = contactRepository.save(contact);
         newContact = businessToDto(contact);
-        sendContactEmail(newContact);
+        sendContactEmail(newContact, multi);
 
         return businessToDto(contact);
     }
@@ -255,7 +256,8 @@ public class ContactService {
         return dto;
     }
 
-    public void sendContactEmail(ContactDTO toCreate){
+    public void sendContactEmail(ContactDTO toCreate,
+                                 MultipartFile multi){
         EmailModel email = new EmailModel();
 
         email.setSendDateEmail(LocalDateTime.now());
@@ -280,13 +282,13 @@ public class ContactService {
             ClassPathResource resource = new ClassPathResource("static/images/velho-luxo.png");
             helper.addInline("logoImage", resource);
 
-            if (!toCreate.getMultipartFile().isEmpty()){
-                String fileName = StringUtils.cleanPath(toCreate.getMultipartFile().getOriginalFilename());
+            if (!multi.isEmpty()){
+                String fileName = StringUtils.cleanPath(multi.getOriginalFilename());
 
                 InputStreamSource source = new InputStreamSource() {
                     @Override
                     public InputStream getInputStream() throws IOException {
-                        return toCreate.getMultipartFile().getInputStream();
+                        return multi.getInputStream();
                     }
                 };
                 helper.addAttachment(fileName, source);

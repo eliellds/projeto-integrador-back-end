@@ -17,6 +17,5 @@ public class ContactDTO {
     private LocalDateTime contactDate;
     private LocalDateTime replyDate;
     private ContactStatusDTO status;
-    private MultipartFile multipartFile;
 
 }
