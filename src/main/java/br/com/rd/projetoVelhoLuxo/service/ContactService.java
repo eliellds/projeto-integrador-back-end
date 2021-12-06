@@ -14,14 +14,20 @@ import br.com.rd.projetoVelhoLuxo.repository.contract.ContactStatusRepository;
 import br.com.rd.projetoVelhoLuxo.repository.contract.EmailRepository;
 import br.com.rd.projetoVelhoLuxo.repository.contract.SubjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.InputStreamSource;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -46,7 +52,7 @@ public class ContactService {
     @Autowired
     private JavaMailSender emailSender;
 
-    public ContactDTO create(ContactDTO newContact) throws SQLIntegrityConstraintViolationException {
+    public ContactDTO create(ContactDTO newContact, MultipartFile multipartFile) throws SQLIntegrityConstraintViolationException {
         Contact contact = dtoToBusiness(newContact);
 
         if (contact.getSubject() != null) {
@@ -71,7 +77,7 @@ public class ContactService {
         contact.setStatus(statusRepository.getById(1L));
         contact = contactRepository.save(contact);
         newContact = businessToDto(contact);
-        sendContactEmail(newContact);
+        sendContactEmail(newContact, multipartFile);
 
         return businessToDto(contact);
     }
@@ -249,7 +255,7 @@ public class ContactService {
         return dto;
     }
 
-    public void sendContactEmail(ContactDTO toCreate){
+    public void sendContactEmail(ContactDTO toCreate, MultipartFile multipartFile){
         EmailModel email = new EmailModel();
 
         email.setSendDateEmail(LocalDateTime.now());
@@ -268,7 +274,24 @@ public class ContactService {
             helper.setText("Nome do contato: " + toCreate.getName() + "<br>\n" +
                             "E-mail de contato: " + email.getEmailFrom() + "<br>\n" +
                             "Telefone de contato: " + toCreate.getPhoneNumber() + "<br>\n" +
-                            "Corpo da mensagem: <br>\n<p>" + email.getText() + "<p><br>", true);
+                            "Corpo da mensagem: <br>\n<p>" + email.getText() + "<p><br>" +
+                            "<hr><img src='cid:logoImage' />", true);
+
+            ClassPathResource resource = new ClassPathResource("static/images/velho-luxo.png");
+            helper.addInline("logoImage", resource);
+
+            if (!multipartFile.isEmpty()){
+                String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+
+                InputStreamSource source = new InputStreamSource() {
+                    @Override
+                    public InputStream getInputStream() throws IOException {
+                        return multipartFile.getInputStream();
+                    }
+                };
+                helper.addAttachment(fileName, source);
+            }
+
 
             emailSender.send(message);
 

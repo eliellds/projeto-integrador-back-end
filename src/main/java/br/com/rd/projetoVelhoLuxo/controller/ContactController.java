@@ -5,6 +5,7 @@ import br.com.rd.projetoVelhoLuxo.service.ContactService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
@@ -18,9 +19,10 @@ public class ContactController {
     ContactService contactService;
 
     @PostMapping
-    public ContactDTO create(@RequestBody ContactDTO newStatus) {
+    public ContactDTO create(@RequestBody ContactDTO newStatus,
+                             @RequestParam("attachment") MultipartFile multipartFile) {
         try {
-            return contactService.create(newStatus);
+            return contactService.create(newStatus, multipartFile);
         } catch (SQLIntegrityConstraintViolationException e) {
             e.printStackTrace();
         }
