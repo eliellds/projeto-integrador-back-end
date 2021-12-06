@@ -32,7 +32,6 @@ public class AuthenticationController {
     private JwtUtil jwtTokenUtil;
 
     @PostMapping // endpoint para logar com email e senha de usuário já registrado
-//    @PostMapping
     public ResponseEntity<?> createAuthenticationToken(@RequestBody  AuthenticationRequestDTO authenticationRequest) throws Exception {
 
         try {
