@@ -282,7 +282,7 @@ public class ContactService {
             ClassPathResource resource = new ClassPathResource("static/images/velho-luxo.png");
             helper.addInline("logoImage", resource);
 
-            if (!multi.isEmpty()){
+            if (multi != null && !multi.isEmpty()){
                 String fileName = StringUtils.cleanPath(multi.getOriginalFilename());
 
                 InputStreamSource source = new InputStreamSource() {
