@@ -9,6 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.print.attribute.standard.Media;
 import java.io.IOException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
@@ -21,7 +22,10 @@ public class ContactController {
     @Autowired
     ContactService contactService;
 
-    @PostMapping(consumes = {MediaType.ALL_VALUE})
+    @PostMapping(
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
     public void create(@RequestBody MultipartFile multi,
                              @RequestParam("subject") Long subjectId,
                              @RequestParam("name") String name,
