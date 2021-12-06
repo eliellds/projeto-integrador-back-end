@@ -1,6 +1,7 @@
 package br.com.rd.projetoVelhoLuxo.model.dto;
 
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 
@@ -16,5 +17,6 @@ public class ContactDTO {
     private LocalDateTime contactDate;
     private LocalDateTime replyDate;
     private ContactStatusDTO status;
+    private MultipartFile multipartFile;
 
 }

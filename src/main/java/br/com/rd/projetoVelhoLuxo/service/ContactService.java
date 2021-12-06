@@ -52,7 +52,7 @@ public class ContactService {
     @Autowired
     private JavaMailSender emailSender;
 
-    public ContactDTO create(ContactDTO newContact, MultipartFile multipartFile) throws SQLIntegrityConstraintViolationException {
+    public ContactDTO create(ContactDTO newContact) throws SQLIntegrityConstraintViolationException {
         Contact contact = dtoToBusiness(newContact);
 
         if (contact.getSubject() != null) {
@@ -77,7 +77,7 @@ public class ContactService {
         contact.setStatus(statusRepository.getById(1L));
         contact = contactRepository.save(contact);
         newContact = businessToDto(contact);
-        sendContactEmail(newContact, multipartFile);
+        sendContactEmail(newContact);
 
         return businessToDto(contact);
     }
@@ -255,7 +255,7 @@ public class ContactService {
         return dto;
     }
 
-    public void sendContactEmail(ContactDTO toCreate, MultipartFile multipartFile){
+    public void sendContactEmail(ContactDTO toCreate){
         EmailModel email = new EmailModel();
 
         email.setSendDateEmail(LocalDateTime.now());
@@ -280,18 +280,17 @@ public class ContactService {
             ClassPathResource resource = new ClassPathResource("static/images/velho-luxo.png");
             helper.addInline("logoImage", resource);
 
-            if (!multipartFile.isEmpty()){
-                String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+            if (!toCreate.getMultipartFile().isEmpty()){
+                String fileName = StringUtils.cleanPath(toCreate.getMultipartFile().getOriginalFilename());
 
                 InputStreamSource source = new InputStreamSource() {
                     @Override
                     public InputStream getInputStream() throws IOException {
-                        return multipartFile.getInputStream();
+                        return toCreate.getMultipartFile().getInputStream();
                     }
                 };
                 helper.addAttachment(fileName, source);
             }
-
 
             emailSender.send(message);
 
