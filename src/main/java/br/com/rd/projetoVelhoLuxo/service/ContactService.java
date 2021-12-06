@@ -17,8 +17,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -256,20 +259,22 @@ public class ContactService {
         email.setSubject(toCreate.getSubject().getSubjectDescription());
         email.setText(toCreate.getContent());
         try {
-            SimpleMailMessage message = new SimpleMailMessage();
-            message.setFrom(email.getEmailFrom());
-            message.setTo(email.getEmailTo());
-            message.setSubject(email.getSubject());
-            message.setText("Nome do contato: " + toCreate.getName() + "\n" +
-                            "E-mail de contato: " + email.getEmailFrom() + "\n" +
-                            "Telefone de contato: " + toCreate.getPhoneNumber() + "\n" +
-                            "Corpo da mensagem: \n" + email.getText());
+            MimeMessage message = emailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+
+            helper.setFrom(email.getEmailFrom());
+            helper.setTo(email.getEmailTo());
+            helper.setSubject(email.getSubject());
+            helper.setText("Nome do contato: " + toCreate.getName() + "<br>\n" +
+                            "E-mail de contato: " + email.getEmailFrom() + "<br>\n" +
+                            "Telefone de contato: " + toCreate.getPhoneNumber() + "<br>\n" +
+                            "Corpo da mensagem: <br>\n<p>" + email.getText() + "<p><br>", true);
 
             emailSender.send(message);
 
             email.setStatusEmail(StatusEmail.SENT);
 
-        } catch (MailException e){
+        } catch (MailException | MessagingException e){
             email.setStatusEmail(StatusEmail.ERROR);
 
         } finally {
