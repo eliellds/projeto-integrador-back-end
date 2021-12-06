@@ -52,8 +52,7 @@ public class ContactService {
     @Autowired
     private JavaMailSender emailSender;
 
-    public ContactDTO create(ContactDTO newContact,
-                             MultipartFile multi) throws SQLIntegrityConstraintViolationException {
+    public ContactDTO create(ContactDTO newContact) throws SQLIntegrityConstraintViolationException {
         Contact contact = dtoToBusiness(newContact);
 
         if (contact.getSubject() != null) {
@@ -78,7 +77,7 @@ public class ContactService {
         contact.setStatus(statusRepository.getById(1L));
         contact = contactRepository.save(contact);
         newContact = businessToDto(contact);
-        sendContactEmail(newContact, multi);
+        sendContactEmail(newContact);
 
         return businessToDto(contact);
     }
@@ -256,8 +255,7 @@ public class ContactService {
         return dto;
     }
 
-    public void sendContactEmail(ContactDTO toCreate,
-                                 MultipartFile multi){
+    public void sendContactEmail(ContactDTO toCreate){
         EmailModel email = new EmailModel();
 
         email.setSendDateEmail(LocalDateTime.now());
@@ -281,18 +279,6 @@ public class ContactService {
 
             ClassPathResource resource = new ClassPathResource("static/images/velho-luxo.png");
             helper.addInline("logoImage", resource);
-
-            if (!multi.isEmpty()){
-                String fileName = StringUtils.cleanPath(multi.getOriginalFilename());
-
-                InputStreamSource source = new InputStreamSource() {
-                    @Override
-                    public InputStream getInputStream() throws IOException {
-                        return multi.getInputStream();
-                    }
-                };
-                helper.addAttachment(fileName, source);
-            }
 
             emailSender.send(message);
 

@@ -19,10 +19,9 @@ public class ContactController {
     ContactService contactService;
 
     @PostMapping
-    public ContactDTO create(@RequestBody ContactDTO newStatus,
-                             @RequestParam("file") MultipartFile multi) {
+    public ContactDTO create(@RequestBody ContactDTO newStatus) {
         try {
-            return contactService.create(newStatus, multi);
+            return contactService.create(newStatus);
         } catch (SQLIntegrityConstraintViolationException e) {
             e.printStackTrace();
         }
