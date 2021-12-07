@@ -33,7 +33,6 @@ public class ContactController {
                              @RequestParam("email") String email,
                              @RequestParam("content") String content) {
         try {
-            System.out.println(multi);
             SubjectDTO newSubject = new SubjectDTO();
             newSubject.setId(subjectId);
             ContactDTO newStatus = new ContactDTO();
