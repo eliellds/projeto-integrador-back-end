@@ -1,12 +1,16 @@
 package br.com.rd.projetoVelhoLuxo.controller;
 
 import br.com.rd.projetoVelhoLuxo.model.dto.ContactDTO;
+import br.com.rd.projetoVelhoLuxo.model.dto.SubjectDTO;
 import br.com.rd.projetoVelhoLuxo.service.ContactService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.print.attribute.standard.Media;
+import java.io.IOException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 
@@ -18,14 +22,29 @@ public class ContactController {
     @Autowired
     ContactService contactService;
 
-    @PostMapping
-    public ContactDTO create(@RequestBody ContactDTO newStatus) {
+    @PostMapping(
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public void create(@RequestBody MultipartFile multi,
+                             @RequestParam("subject") Long subjectId,
+                             @RequestParam("name") String name,
+                             @RequestParam("phoneNumber") String number,
+                             @RequestParam("email") String email,
+                             @RequestParam("content") String content) {
         try {
-            return contactService.create(newStatus);
+            SubjectDTO newSubject = new SubjectDTO();
+            newSubject.setId(subjectId);
+            ContactDTO newStatus = new ContactDTO();
+            newStatus.setSubject(newSubject);
+            newStatus.setName(name);
+            newStatus.setPhoneNumber(number);
+            newStatus.setEmail(email);
+            newStatus.setContent(content);
+            contactService.create(newStatus, multi);
         } catch (SQLIntegrityConstraintViolationException e) {
             e.printStackTrace();
         }
-        return null;
     }
 
     @GetMapping
